@@ -1,0 +1,2 @@
+SAM2 is a product of Meta. 
+Details on the project can be found here: https://github.com/facebookresearch/sam2.
