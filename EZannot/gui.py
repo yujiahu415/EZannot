@@ -777,7 +777,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							'iscrowd':0
 							})
 
-		with open(os.path.join(self.result_path,'_annotations.coco.json'),'w') as json_file:
+		with open(os.path.join(self.result_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
 		wx.MessageBox('Annotations exported successfully.','Success',wx.ICON_INFORMATION)
 
