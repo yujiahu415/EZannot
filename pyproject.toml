@@ -1,0 +1,65 @@
+[build-system]
+requires=['pdm-backend']
+build-backend='pdm.backend'
+
+[project]
+name='Cellan'
+description='Analyze cell images.'
+authors=[{name='Yujia Hu',email='yujiahu415@gmail.com'}]
+dependencies=[
+	'numpy<=1.26.4',
+	'scipy',
+	'scikit-image'
+	'readlif',
+	'tifffile',
+	'imagecodecs',
+	'opencv-python',
+	'opencv-contrib-python',
+	'openpyxl',
+	'xlsxwriter',
+	'pandas',
+	'wxPython',
+	'packaging',
+	'requests',
+	'torch',
+	'torchvision',
+	'torchaudio'
+]
+requires-python='>=3.9,<3.11'
+readme='README.md'
+license={text='GPL-3.0'}
+keywords=['Image analysis','Cell detection and classification','Pixel analysis']
+classifiers=[
+	'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+	'Operating System :: OS Independent',
+	'Programming Language :: Python :: 3',
+	'Programming Language :: Python :: 3 :: Only',
+	'Programming Language :: Python :: 3.9',
+	'Programming Language :: Python :: 3.10',
+]
+dynamic=['version']
+
+[project.urls]
+Homepage='https://github.com/yujiahu415/Cellan'
+
+[project.scripts]
+Cellan='Cellan.__main__:main'
+
+[tool.pdm]
+distribution=true
+
+[tool.pdm.version]
+source='file'
+path='Cellan/__init__.py'
+
+[tool.pdm.dev-dependencies]
+docs=[
+	'sphinx>=7.2.6',
+	'sphinx-autobuild>=2021.3.14',
+	'sphinx-copybutton>=0.5.2',
+	'myst-parser>=2.0.0',
+	'furo>=2023.9.10',
+	'sphinx-inline-tabs>=2023.4.21',
+]
+
+
