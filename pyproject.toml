@@ -12,16 +12,15 @@ dependencies=[
 	'opencv-python',
 	'opencv-contrib-python',
 	'pillow',
-	'pandas',
 	'wxPython',
 	'packaging',
 	'requests',
 	'screeninfo',
-	'torch',
-	'torchvision',
+	'torch>=2.5.1',
+	'torchvision>=0.20.1',
 	'torchaudio'
 ]
-requires-python='>=3.11'
+requires-python='>=3.10'
 readme='README.md'
 license={text='GPL-3.0'}
 keywords=['Image annotation','AI-assisted annotation','Image augmentation']
