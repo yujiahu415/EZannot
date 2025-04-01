@@ -622,7 +622,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				'name':class_name,
 				'supercategory':'none'})
 
-		image_count=0
+		image_id=0
+		annotation_id=0
 		parent_path=os.path.dirname(self.image_paths[0])
 
 		for image_name in self.information:
@@ -662,20 +663,20 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					code=None
 
 				if 'brihbril' in m:
-					beta=np.random.uniform(0.5,1.8)
+					beta=np.random.uniform(0.6,1.6)
 				elif 'brih' in m:
-					beta=np.random.uniform(1.2,1.8)
+					beta=np.random.uniform(1.1,1.6)
 				elif 'bril' in m:
-					beta=np.random.uniform(0.5,0.9)
+					beta=np.random.uniform(0.6,0.9)
 				else:
 					beta=None
 
 				if 'exphexpl' in m:
-					expo=np.random.uniform(-30,30)
+					expo=np.random.uniform(-25,25)
 				elif 'exph' in m:
-					expo=np.random.uniform(10,30)
+					expo=np.random.uniform(10,25)
 				elif 'expl' in m:
-					expo=np.random.uniform(-30,10)
+					expo=np.random.uniform(-25,-10)
 				else:
 					expo=None
 
@@ -703,17 +704,14 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				if blur is not None:
 					image=cv2.GaussianBlur(image,(blur,blur),0)
 
-				image_count+=1
-
 				new_name=image_name.split('.'+image_name.split('.')[-1])[0]+'_'+str(m)+'.'+image_name.split('.')[-1]
 				cv2.imwrite(os.path.join(self.result_path,new_name),image)
 
 				coco_format['images'].append({
-					'id':image_count,
+					'id':image_id,
 					'width':image.shape[1],
 					'height':image.shape[0],
 					'file_name':new_name})
-
 
 				polygons=self.information[image_name]['polygons']
 
@@ -768,14 +766,18 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							bbox=[int(x),int(y),int(w),int(h)]
 
 						coco_format['annotations'].append({
-							'id':j+1,
-							'image_id':image_count,
+							'id':annotation_id,
+							'image_id':image_id,
 							'category_id':category_id,
 							'segmentation':segmentation,
 							'area':area,
 							'bbox':bbox,
 							'iscrowd':0
 							})
+
+						annotation_id+=1
+
+				image_id+=1
 
 		with open(os.path.join(self.result_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
