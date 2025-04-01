@@ -42,7 +42,6 @@ class ColorPicker(wx.Dialog):
 
 
 
-
 class InitialWindow(wx.Frame):
 
 	def __init__(self,title):
@@ -138,7 +137,7 @@ class WindowLv1_SetAnnotation(wx.Frame):
 		module_model=wx.BoxSizer(wx.HORIZONTAL)
 		button_model=wx.Button(panel,label='Set up the SAM2 model for\nAI-assisted annotation',size=(300,40))
 		button_model.Bind(wx.EVT_BUTTON,self.select_model)
-		wx.Button.SetToolTip(button_model,'Select the path to the model checkpoint (*.pt) and that to the model config file (*.yaml).')
+		wx.Button.SetToolTip(button_model,'Select the path to the SAM2 model, which stores a checkpoint (*.pt) file and a corresponding model config (*.yaml) file.')
 		self.text_model=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_model.Add(button_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_model.Add(self.text_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
