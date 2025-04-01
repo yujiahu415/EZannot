@@ -208,18 +208,12 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 		if model_path is None:
 			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
-
-		wildcard='Checkpoint files (*.pt)|*.pt'
-		dialog=wx.FileDialog(self,'Select model checkpoint','','',wildcard,style=wx.FD_OPEN)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.model_cp=dialog.GetPath()
-		dialog.Destroy()
-
-		wildcard='Config files (*.yaml)|*.yaml'
-		dialog=wx.FileDialog(self,'Select model config','','',wildcard,style=wx.FD_OPEN)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.model_cfg=dialog.GetPath()
-		dialog.Destroy()
+		else:
+			for i in os.listdir(model_path):
+				if i.endswith('.pt'):
+					self.model_cp=os.path.join(model_path,i)
+				if i.endswith('.yaml'):
+					self.model_cfg=os.path.join(model_path,i)
 
 		if self.model_cp is None:
 			self.text_model.SetLabel('Missing checkpoint file.')
