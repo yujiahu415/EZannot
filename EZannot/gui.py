@@ -561,7 +561,22 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		key_code=event.GetKeyCode()
 
-		if key_code==wx.WXK_LEFT:
+		if event.GetKeyCode()==wx.WXK_RETURN:
+			if len(self.current_polygon)>2:
+				dialog=wx.TextEntryDialog(self,'Enter object class name:','Class Name',self.current_classname)
+				if dialog.ShowModal()==wx.ID_OK:
+					self.current_classname=dialog.GetValue()
+					if len(self.current_polygon)>0:
+						self.current_polygon.append(self.current_polygon[0])
+						image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+						self.information[image_name]['polygons'].append(self.current_polygon)
+						self.information[image_name]['class_names'].append(self.current_classname)
+				dialog.Destroy()
+				self.current_polygon=[]
+				self.foreground_points=[]
+				self.background_points=[]
+				self.canvas.Refresh()
+		elif key_code==wx.WXK_LEFT:
 			self.previous_image(None)
 		elif key_code==wx.WXK_RIGHT:
 			self.next_image(None)
