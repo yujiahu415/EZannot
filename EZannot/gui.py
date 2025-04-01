@@ -200,6 +200,15 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 	def select_model(self,event):
 
+		model_path=None
+		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+		if dialog.ShowModal()==wx.ID_OK:
+			model_path=dialog.GetPath()
+		dialog.Destroy()
+
+		if model_path is None:
+			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
+
 		wildcard='Checkpoint files (*.pt)|*.pt'
 		dialog=wx.FileDialog(self,'Select model checkpoint','','',wildcard,style=wx.FD_OPEN)
 		if dialog.ShowModal()==wx.ID_OK:
