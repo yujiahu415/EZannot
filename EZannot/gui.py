@@ -116,7 +116,7 @@ class WindowLv1_SetAnnotation(wx.Frame):
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
 		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
-		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported.')
+		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png) are supported.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
