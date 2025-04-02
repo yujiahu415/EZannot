@@ -303,6 +303,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.information={}
 		self.foreground_points=[]
 		self.background_points=[]
+		self.selected_point=None
+		self.start_modify=False
 		self.AI_help=False
 
 		annotation_file=None
@@ -375,8 +377,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
-		#self.canvas.Bind(wx.EVT_MOTION,self.on_mouse_move)
-		#self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_release)
 		self.scrolled_canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mouse_scroll)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
@@ -559,6 +559,12 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			self.previous_image(None)
 		elif key_code==wx.WXK_RIGHT:
 			self.next_image(None)
+		elif event.GetKeyCode()==wx.WXK_SHIFT:
+			if self.start_modify:
+				self.start_modify=False
+			else:
+				self.start_modify=True
+			self.canvas.Refresh()
 		else:
 			event.Skip()
 
