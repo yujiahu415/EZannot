@@ -375,7 +375,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
-		self.canvas.Bind(wx.EVT_LEFT_DCLICK,self.on_left_double_click)
 		#self.canvas.Bind(wx.EVT_MOTION,self.on_mouse_move)
 		#self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_release)
 		self.scrolled_canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mouse_scroll)
@@ -535,26 +534,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					del self.information[image_name]['class_names'][i]
 
 		self.canvas.Refresh()
-
-
-	def on_left_double_click(self,event):
-
-		if len(self.current_polygon)>2:
-
-			dialog=wx.TextEntryDialog(self,'Enter object class name:','Class Name',self.current_classname)
-			if dialog.ShowModal()==wx.ID_OK:
-				self.current_classname=dialog.GetValue()
-				if len(self.current_polygon)>0:
-					self.current_polygon.append(self.current_polygon[0])
-					image_name=os.path.basename(self.image_paths[self.current_image_id-1])
-					self.information[image_name]['polygons'].append(self.current_polygon)
-					self.information[image_name]['class_names'].append(self.current_classname)
-			dialog.Destroy()
-
-			self.current_polygon=[]
-			self.foreground_points=[]
-			self.background_points=[]
-			self.canvas.Refresh()
 
 
 	def on_key_press(self,event):
