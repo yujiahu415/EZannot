@@ -208,19 +208,19 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 		if model_path is None:
 			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
+			self.text_model.SetLabel('No SAM2 model is set up. The AI assistance function is OFF.')
 		else:
 			for i in os.listdir(model_path):
 				if i.endswith('.pt'):
 					self.model_cp=os.path.join(model_path,i)
 				if i.endswith('.yaml'):
 					self.model_cfg=os.path.join(model_path,i)
-
-		if self.model_cp is None:
-			self.text_model.SetLabel('Missing checkpoint file.')
-		elif self.model_cfg is None:
-			self.text_model.SetLabel('Missing config file.')
-		else:
-			self.text_model.SetLabel('Checkpoint: '+str(os.path.basename(self.model_cp))+'; Config: '+str(os.path.basename(self.model_cfg))+'.')
+			if self.model_cp is None:
+				self.text_model.SetLabel('Missing checkpoint file.')
+			elif self.model_cfg is None:
+				self.text_model.SetLabel('Missing config file.')
+			else:
+				self.text_model.SetLabel('Checkpoint: '+str(os.path.basename(self.model_cp))+'; Config: '+str(os.path.basename(self.model_cfg))+'.')
 
 
 	def specify_classes(self,event):
