@@ -377,8 +377,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
-        self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
-        self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
+		self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
+		self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
 		self.scrolled_canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mouse_scroll)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
@@ -487,7 +487,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		scroll_x,scroll_y=self.scrolled_canvas.GetViewStart()
 		scroll_x*=self.scrolled_canvas.GetScrollPixelsPerUnit()[0]
 		scroll_y*=self.scrolled_canvas.GetScrollPixelsPerUnit()[1]
-		pos=(event.GetX()+scroll_x,event.GetY()+scroll_y)
+		x,y=event.GetX()+scroll_x,event.GetY()+scroll_y
 
 		if self.start_modify:
 
@@ -495,18 +495,23 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			polygons=self.information[image_name]['polygons']
 			polygons_length=len(polygons)
 			polygons+=self.current_polygon
+			for i,polygon in enumerate(polygons):
+				for j,(px,py) in enumerate(polygon):
+					if abs(px-x)<5 and abs(py-y)<5:
+						self.selected_point = (polygon, i)
+						return
 
 		else:
 
 			if self.AI_help:
-				self.foreground_points.append(list(pos))
+				self.foreground_points.append([x,y])
 				points=self.foreground_points+self.background_points
 				labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
 				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
 				mask=masks[np.argsort(scores)[::-1]][0]
 				self.current_polygon=self.mask_to_polygon(mask)
 			else:
-				self.current_polygon.append(pos)
+				self.current_polygon.append((x,y))
 
 		self.canvas.Refresh()
 
