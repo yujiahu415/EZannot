@@ -377,6 +377,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
+        self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
+        self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
 		self.scrolled_canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mouse_scroll)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
@@ -461,6 +463,11 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				pen=wx.Pen(wx.Colour(*color),width=2)
 				dc.SetPen(pen)
 				dc.DrawLines(polygon)
+				if self.start_modify:
+					brush=wx.Brush(wx.Colour(*color))
+					dc.SetBrush(brush)
+					for x,y in polygon:
+						dc.DrawCircle(x,y,4)
 
 		if len(self.current_polygon)>0:
 			current_polygon=[i for i in self.current_polygon]
