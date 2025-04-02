@@ -492,13 +492,10 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.start_modify:
 
 			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
-			polygons=self.information[image_name]['polygons']
-			polygons_length=len(polygons)
-			polygons+=self.current_polygon
-			for i,polygon in enumerate(polygons):
+			for i,polygon in enumerate(self.information[image_name]['polygons']):
 				for j,(px,py) in enumerate(polygon):
 					if abs(px-x)<5 and abs(py-y)<5:
-						self.selected_point = (polygon, i)
+						self.selected_point=(polygon,j,i)
 						return
 
 		else:
@@ -521,38 +518,44 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		scroll_x,scroll_y=self.scrolled_canvas.GetViewStart()
 		scroll_x*=self.scrolled_canvas.GetScrollPixelsPerUnit()[0]
 		scroll_y*=self.scrolled_canvas.GetScrollPixelsPerUnit()[1]
-		pos=(event.GetX()+scroll_x,event.GetY()+scroll_y)
+		x,y=event.GetX()+scroll_x,event.GetY()+scroll_y
 
-		if len(self.current_polygon)>0:
+		if self.start_modify:
 
-			if self.AI_help:
-				self.background_points.append(list(pos))
-				points=self.foreground_points+self.background_points
-				labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
-				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
-				mask=masks[np.argsort(scores)[::-1]][0]
-				self.current_polygon=self.mask_to_polygon(mask)
-			else:
-				self.current_polygon.pop()
+			return
 
 		else:
 
-			to_delete=[]
-			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
-			polygons=self.information[image_name]['polygons']
-			class_names=self.information[image_name]['class_names']
-			if len(polygons)>0:
-				for i,polygon in enumerate(polygons):
-					x_max=max(x for x,y in polygon)
-					x_min=min(x for x,y in polygon)
-					y_max=max(y for x,y in polygon)
-					y_min=min(y for x,y in polygon)
-					if x_min<=pos[0]<=x_max and y_min<=pos[1]<=y_max:
-						to_delete.append(i)
-			if len(to_delete)>0:
-				for i in sorted(to_delete,reverse=True):
-					del self.information[image_name]['polygons'][i]
-					del self.information[image_name]['class_names'][i]
+			if len(self.current_polygon)>0:
+
+				if self.AI_help:
+					self.background_points.append([x,y])
+					points=self.foreground_points+self.background_points
+					labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
+					masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
+					mask=masks[np.argsort(scores)[::-1]][0]
+					self.current_polygon=self.mask_to_polygon(mask)
+				else:
+					self.current_polygon.pop()
+
+			else:
+
+				to_delete=[]
+				image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+				polygons=self.information[image_name]['polygons']
+				class_names=self.information[image_name]['class_names']
+				if len(polygons)>0:
+					for i,polygon in enumerate(polygons):
+						x_max=max(x for x,y in polygon)
+						x_min=min(x for x,y in polygon)
+						y_max=max(y for x,y in polygon)
+						y_min=min(y for x,y in polygon)
+						if x_min<=x<=x_max and y_min<=y<=y_max:
+							to_delete.append(i)
+				if len(to_delete)>0:
+					for i in sorted(to_delete,reverse=True):
+						del self.information[image_name]['polygons'][i]
+						del self.information[image_name]['class_names'][i]
 
 		self.canvas.Refresh()
 
@@ -588,6 +591,21 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			self.canvas.Refresh()
 		else:
 			event.Skip()
+
+
+	def on_left_move(self,event):
+
+		if self.selected_point is not None and event.Dragging() and event.LeftIsDown():
+			polygon,j,i=self.selected_point
+			polygon[j]=event.GetPosition()
+			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+			self.information[image_name]['polygons'][i]=polygon
+			self.canvas.Refresh()
+
+
+	def on_left_up(self,event):
+
+		self.selected_point=None
 
 
 	def on_mouse_scroll(self,event):
