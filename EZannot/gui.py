@@ -489,15 +489,24 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		scroll_y*=self.scrolled_canvas.GetScrollPixelsPerUnit()[1]
 		pos=(event.GetX()+scroll_x,event.GetY()+scroll_y)
 
-		if self.AI_help:
-			self.foreground_points.append(list(pos))
-			points=self.foreground_points+self.background_points
-			labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
-			masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
-			mask=masks[np.argsort(scores)[::-1]][0]
-			self.current_polygon=self.mask_to_polygon(mask)
+		if self.start_modify:
+
+			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+			polygons=self.information[image_name]['polygons']
+			polygons_length=len(polygons)
+			polygons+=self.current_polygon
+
 		else:
-			self.current_polygon.append(pos)
+
+			if self.AI_help:
+				self.foreground_points.append(list(pos))
+				points=self.foreground_points+self.background_points
+				labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
+				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
+				mask=masks[np.argsort(scores)[::-1]][0]
+				self.current_polygon=self.mask_to_polygon(mask)
+			else:
+				self.current_polygon.append(pos)
 
 		self.canvas.Refresh()
 
