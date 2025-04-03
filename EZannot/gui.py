@@ -295,7 +295,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.aug_methods=aug_methods
 		self.model_cp=model_cp
 		self.model_cfg=model_cfg
-		self.current_image_id=1
+		self.current_image_id=0
 		self.current_image=None
 		self.current_segmentation=None
 		self.current_polygon=[]
@@ -329,7 +329,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			for i in annotation['images']:
 				self.information[i['file_name']]={'polygons':[],'class_names':[]}
 			for i in annotation['annotations']:
-				image_name=annotation['images'][int(i['image_id'])-1]['file_name']
+				image_name=annotation['images'][int(i['image_id'])]['file_name']
 				classname=annotation['categories'][int(i['category_id'])-1]['name']
 				self.information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
 				self.information[image_name]['class_names'].append(classname)
@@ -403,7 +403,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			self.ai_button.SetLabel(f'AI Help: {"ON" if self.AI_help else "OFF"}')
 
 			if self.AI_help:
-				image=Image.open(self.image_paths[self.current_image_id-1])
+				image=Image.open(self.image_paths[self.current_image_id])
 				image=np.array(image.convert('RGB'))
 				self.sam2=self.sam2_model()
 				self.sam2.set_image(image)
@@ -412,7 +412,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 	def load_current_image(self):
 
 		if self.image_paths:
-			path=self.image_paths[self.current_image_id-1]
+			path=self.image_paths[self.current_image_id]
 			image=wx.Image(path,wx.BITMAP_TYPE_ANY).ConvertToBitmap()
 			self.current_image=wx.Bitmap(image)
 			img_width,img_height=image.GetSize()
@@ -434,14 +434,14 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def previous_image(self,event):
 
-		if self.image_paths and self.current_image_id>1:
+		if self.image_paths and self.current_image_id>0:
 			self.current_image_id-=1
 			self.load_current_image()
 
 
 	def next_image(self,event):
 
-		if self.image_paths and self.current_image_id<len(self.image_paths):
+		if self.image_paths and self.current_image_id<len(self.image_paths)-1:
 			self.current_image_id+=1
 			self.load_current_image()
 
@@ -453,7 +453,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		dc=wx.PaintDC(self.canvas)
 		dc.DrawBitmap(self.current_image,0,0,True)
-		image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+		image_name=os.path.basename(self.image_paths[self.current_image_id])
 		polygons=self.information[image_name]['polygons']
 		class_names=self.information[image_name]['class_names']
 
@@ -491,7 +491,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		if self.start_modify:
 
-			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			for i,polygon in enumerate(self.information[image_name]['polygons']):
 				for j,(px,py) in enumerate(polygon):
 					if abs(px-x)<5 and abs(py-y)<5:
@@ -541,7 +541,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			else:
 
 				to_delete=[]
-				image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+				image_name=os.path.basename(self.image_paths[self.current_image_id])
 				polygons=self.information[image_name]['polygons']
 				class_names=self.information[image_name]['class_names']
 				if len(polygons)>0:
@@ -571,7 +571,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					self.current_classname=dialog.GetValue()
 					if len(self.current_polygon)>0:
 						self.current_polygon.append(self.current_polygon[0])
-						image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+						image_name=os.path.basename(self.image_paths[self.current_image_id])
 						self.information[image_name]['polygons'].append(self.current_polygon)
 						self.information[image_name]['class_names'].append(self.current_classname)
 				dialog.Destroy()
@@ -598,7 +598,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.selected_point is not None and event.Dragging() and event.LeftIsDown():
 			polygon,j,i=self.selected_point
 			polygon[j]=event.GetPosition()
-			image_name=os.path.basename(self.image_paths[self.current_image_id-1])
+			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			self.information[image_name]['polygons'][i]=polygon
 			self.canvas.Refresh()
 
