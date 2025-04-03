@@ -408,6 +408,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				self.sam2=self.sam2_model()
 				self.sam2.set_image(image)
 
+		self.canvas.SetFocus()
+
 
 	def load_current_image(self):
 
@@ -437,6 +439,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.image_paths and self.current_image_id>0:
 			self.current_image_id-=1
 			self.load_current_image()
+		self.canvas.SetFocus()
 
 
 	def next_image(self,event):
@@ -444,6 +447,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.image_paths and self.current_image_id<len(self.image_paths)-1:
 			self.current_image_id+=1
 			self.load_current_image()
+		self.canvas.SetFocus()
 
 
 	def on_paint(self,event):
@@ -823,6 +827,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		with open(os.path.join(self.result_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
 		wx.MessageBox('Annotations exported successfully.','Success',wx.ICON_INFORMATION)
+
+		self.canvas.SetFocus()
 
 
 	def mask_to_polygon(self,mask):
