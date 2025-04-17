@@ -613,7 +613,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		remove=[]
 
-		all_methods=['orig','rot1','rot2','rot3','rot4','rot5','rot6','blur']
+		all_methods=['','rot1','rot2','rot3','rot4','rot5','rot6','blur']
 		options=['rot7','flph','flpv','brih','bril','exph','expl']
 		for r in range(1,len(options)+1):
 			all_methods.extend([''.join(c) for c in itertools.combinations(options,r)])
