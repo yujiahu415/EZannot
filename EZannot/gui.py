@@ -299,8 +299,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.current_image=None
 		self.current_segmentation=None
 		self.current_polygon=[]
-		self.scroll_x=0
-		self.scroll_y=0
 		self.current_classname=list(self.color_map.keys())[0]
 		self.information={}
 		self.foreground_points=[]
@@ -381,7 +379,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
 		self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
 		self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
-		self.scrolled_canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mouse_scroll)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
 		self.scrolled_canvas.GetSizer().Add(self.canvas,proportion=1,flag=wx.EXPAND|wx.ALL,border=5)
@@ -490,7 +487,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_left_click(self,event):
 
-		x,y=event.GetX()+self.scroll_x,event.GetY()+self.scroll_y
+		x,y=event.GetX(),event.GetY()
 
 		if self.start_modify:
 
@@ -518,7 +515,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_right_click(self,event):
 
-		x,y=event.GetX()+self.scroll_x,event.GetY()+self.scroll_y
+		x,y=event.GetX(),event.GetY()
 
 		if self.start_modify:
 
@@ -606,16 +603,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 	def on_left_up(self,event):
 
 		self.selected_point=None
-
-
-	def on_mouse_scroll(self,event):
-
-		rotation=event.GetWheelRotation()
-		lines=rotation//event.GetWheelDelta()
-		self.scroll_x,self.scroll_y=self.scrolled_canvas.GetViewStart()
-		self.scrolled_canvas.Scroll(self.scroll_x,self.scroll_y-lines)
-		self.scroll_x*=self.scrolled_canvas.GetScrollPixelsPerUnit()[0]
-		self.scroll_y*=self.scrolled_canvas.GetScrollPixelsPerUnit()[1]
 
 
 	def export_annotations(self,event):
