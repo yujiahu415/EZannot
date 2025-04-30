@@ -896,42 +896,44 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							cell_roundness[image_name][cell_name].append(roundness)
 							cell_intensities[image_name][cell_name].append(intensity)
 
-		with pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx')) as writer:
+		writer=pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl')
 
-			for cell_name in self.color_map:
+		for cell_name in self.color_map:
 
-				all_measures=[]
-				all_names=[]
+			all_measures=[]
+			all_names=[]
 
-				for image_name in cell_numbers:
+			for image_name in cell_numbers:
 
-					dfs=[]
-					if len(cell_centers[image_name][cell_name])>0:
-						dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[image_name][cell_name]))],columns=['number']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_centers[image_name][cell_name],columns=['center_x','center_y']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_areas[image_name][cell_name],columns=['areas']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_heights[image_name][cell_name],columns=['heights']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_widths[image_name][cell_name],columns=['widths']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_perimeter[image_name][cell_name],columns=['perimeter']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_roundness[image_name][cell_name],columns=['roundness']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(cell_intensities[image_name][cell_name],columns=['intensities']).reset_index(drop=True))
-					else:
-						dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
-						dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
-						dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
-					pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
+				dfs=[]
+				if len(cell_centers[image_name][cell_name])>0:
+					dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[image_name][cell_name]))],columns=['number']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_centers[image_name][cell_name],columns=['center_x','center_y']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_areas[image_name][cell_name],columns=['areas']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_heights[image_name][cell_name],columns=['heights']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_widths[image_name][cell_name],columns=['widths']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_perimeter[image_name][cell_name],columns=['perimeter']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_roundness[image_name][cell_name],columns=['roundness']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(cell_intensities[image_name][cell_name],columns=['intensities']).reset_index(drop=True))
+				else:
+					dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
+					dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
+				pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
 
-					all_measures.append(dfs)
-					all_names.append(os.path.splitext(image_name)[0])
+				all_measures.append(dfs)
+				all_names.append(os.path.splitext(image_name)[0])
 
-				all_measures=pd.concat(all_measures,keys=all_names,names=['File name','ID/parameter'])
-				all_measures.drop(all_measures.columns[0],axis=1,inplace=True)
-				all_measures.to_excel(writer,sheet_name=cell_name,float_format='%.2f')
+			all_measures=pd.concat(all_measures,keys=all_names,names=['File name','ID/parameter'])
+			all_measures.drop(all_measures.columns[0],axis=1,inplace=True)
+			all_measures.to_excel(writer,sheet_name=cell_name,float_format='%.2f')
+
+		writer.save()
 
 		self.canvas.SetFocus()
 
