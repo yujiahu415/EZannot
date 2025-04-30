@@ -367,6 +367,9 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.export_button.Bind(wx.EVT_BUTTON,self.export_annotations)
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
 
+		self.measure_button=wx.Button(panel,label='Measure Annotations',size=(150,30))
+		self.measure_button.Bind(wx.EVT_BUTTON,self.measure_annotations)
+		hbox.Add(self.measure_button,flag=wx.ALL,border=2)
 		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
@@ -812,6 +815,137 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		with open(os.path.join(self.result_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
 		wx.MessageBox('Annotations exported successfully.','Success',wx.ICON_INFORMATION)
+
+		self.canvas.SetFocus()
+
+
+	def measure_annotations(self,event,threshold=180):
+
+		if not self.information:
+			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
+			return
+
+		cell_numbers={}
+		cell_centers={}
+		cell_areas={}
+		cell_heights={}
+		cell_widths={}
+		cell_perimeter={}
+		cell_roundness={}
+		cell_intensities={}
+
+		image_id=0
+		annotation_id=0
+		parent_path=os.path.dirname(self.image_paths[0])
+
+		for image_name in self.information:
+
+			cell_numbers[image_name]={}
+			cell_centers[image_name]={}
+			cell_areas[image_name]={}
+			cell_heights[image_name]={}
+			cell_widths[image_name]={}
+			cell_perimeter[image_name]={}
+			cell_roundness[image_name]={}
+			cell_intensities[image_name]={}
+			for cell_name in self.color_map:
+				cell_numbers[image_name][cell_name]=0
+				cell_centers[image_name][cell_name]=[]
+				cell_areas[image_name][cell_name]=[]
+				cell_heights[image_name][cell_name]=[]
+				cell_widths[image_name][cell_name]=[]
+				cell_perimeter[image_name][cell_name]=[]
+				cell_roundness[image_name][cell_name]=[]
+				cell_intensities[image_name][cell_name]=[]
+
+			image=cv2.imread(os.path.join(parent_path,image_name))
+			image_width=image.shape[1]
+			image_height=image.shape[0]
+
+			polygons=self.information[image_name]['polygons']
+
+			if len(polygons)>0:
+
+				for j,polygon in enumerate(self.information[image_name]['polygons']):
+
+					mask=np.zeros((image_height,image_width),dtype=np.uint8)
+					cell_name=self.information[image_name]['class_names'][j]
+					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
+					cv2.fillPoly(mask,[pts],color=1)
+					mask=mask.astype(bool)
+					excluded_pixels=np.all(image>threshold,axis=2)
+					mask[excluded_pixels]=False
+					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+					if len(cnts)>0:
+						cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
+						area=np.sum(np.array(mask),axis=(0,1))
+						perimeter=cv2.arcLength(cnt,closed=True)
+						roundness=(4*np.pi*area)/(perimeter*perimeter)
+						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
+						intensity=np.sum(image*cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR))/max(area,1)
+						if area>0:
+							cell_numbers[image_name][cell_name]+=1
+							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])+int(w*self.fov_dim)
+							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])+int(h*self.fov_dim)
+							cell_centers[image_name][cell_name].append((cx,cy))
+							cell_areas[image_name][cell_name].append(area)
+							cell_heights[image_name][cell_name].append(ht)
+							cell_widths[image_name][cell_name].append(wd)
+							cell_perimeter[image_name][cell_name].append(perimeter)
+							cell_roundness[image_name][cell_name].append(roundness)
+							cell_intensities[image_name][cell_name].append(intensity)
+
+
+		for cell_name in self.cell_kinds:
+
+			dfs=[]
+			if len(cell_centers[cell_name])>0:
+				dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[cell_name]))],columns=['number']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_centers[cell_name],columns=['center_x','center_y']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_areas[cell_name],columns=['areas']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_heights[cell_name],columns=['heights']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_widths[cell_name],columns=['widths']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_perimeter[cell_name],columns=['perimeter']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_roundness[cell_name],columns=['roundness']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(cell_intensities[cell_name],columns=['intensities']).reset_index(drop=True))
+				if self.inners is not None:
+					dfs.append(pd.DataFrame(inners_areas[cell_name],columns=['inners_areas']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(inners_heights[cell_name],columns=['inners_heights']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(inners_widths[cell_name],columns=['inners_widths']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(inners_out_ratio[cell_name],columns=['inneroutter_ratio']).reset_index(drop=True))
+			else:
+				dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
+				dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
+				dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
+				if self.inners is not None:
+					dfs.append(pd.DataFrame(['NA'],columns=['inners_areas']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['inners_heights']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['inners_widths']).reset_index(drop=True))
+					dfs.append(pd.DataFrame(['NA'],columns=['inneroutter_ratio']).reset_index(drop=True))
+			out_sheet=os.path.join(self.results_path,os.path.splitext(os.path.basename(self.path_to_file))[0]+'_'+cell_name+'_summary.xlsx')
+			pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
+
+			dfs={}
+			dfs['total_area']=total_foreground_area
+			dfs[cell_name+'_area']=total_cell_area[cell_name]
+			dfs['area_ratio']=total_cell_area[cell_name]/total_foreground_area
+			dfs=pd.DataFrame(dfs,index=['value'])
+			out_sheet=os.path.join(self.results_path,os.path.splitext(os.path.basename(self.path_to_file))[0]+'_'+cell_name+'_arearatio.xlsx')
+			dfs.to_excel(out_sheet,float_format='%.6f')
+
+		print('Analysis completed!')
+
+
+
+
+
+
+
 
 		self.canvas.SetFocus()
 
