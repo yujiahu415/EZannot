@@ -886,8 +886,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						intensity=np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/max(area,1)
 						if area>0:
 							cell_numbers[image_name][cell_name]+=1
-							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])+int(w*self.fov_dim)
-							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])+int(h*self.fov_dim)
+							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])
+							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])
 							cell_centers[image_name][cell_name].append((cx,cy))
 							cell_areas[image_name][cell_name].append(area)
 							cell_heights[image_name][cell_name].append(ht)
