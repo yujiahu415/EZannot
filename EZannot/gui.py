@@ -929,15 +929,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					all_measures.append(dfs)
 					all_names.append(os.path.splitext(image_name)[0])
 
-			dfs={}
-			dfs['total_area']=total_foreground_area
-			dfs[cell_name+'_area']=total_cell_area[cell_name]
-			dfs['area_ratio']=total_cell_area[cell_name]/total_foreground_area
-			dfs=pd.DataFrame(dfs,index=['value'])
-			out_sheet=os.path.join(self.results_path,os.path.splitext(os.path.basename(self.path_to_file))[0]+'_'+cell_name+'_arearatio.xlsx')
-			dfs.to_excel(out_sheet,float_format='%.6f')
-
-		print('Analysis completed!')
 
 
 
