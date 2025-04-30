@@ -873,9 +873,9 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					cell_name=self.information[image_name]['class_names'][j]
 					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
 					cv2.fillPoly(mask,[pts],color=1)
-					mask=mask.astype(bool)
+					#mask=mask.astype(bool)
 					excluded_pixels=np.all(image>threshold,axis=2)
-					mask[excluded_pixels]=False
+					mask[excluded_pixels]=0
 					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 					if len(cnts)>0:
 						cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
@@ -883,7 +883,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						perimeter=cv2.arcLength(cnt,closed=True)
 						roundness=(4*np.pi*area)/(perimeter*perimeter)
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
-						intensity=np.sum(image*cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR))/max(area,1)
+						intensity=np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/max(area,1)
 						if area>0:
 							cell_numbers[image_name][cell_name]+=1
 							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])+int(w*self.fov_dim)
