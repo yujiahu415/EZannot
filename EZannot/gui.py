@@ -929,7 +929,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				all_measures.append(dfs)
 				all_names.append(os.path.splitext(image_name)[0])
 
-			all_measures=pd.concat(all_measures,keys=all_names,names=['File name','ID/parameter'])
+			all_measures=pd.concat(pd.DataFrame(all_measures),keys=all_names,names=['File name','ID/parameter'])
 			all_measures.drop(all_measures.columns[0],axis=1,inplace=True)
 			all_measures.to_excel(writer,sheet_name=cell_name,float_format='%.2f')
 
