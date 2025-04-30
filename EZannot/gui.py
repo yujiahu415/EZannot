@@ -7,6 +7,7 @@ import random
 import itertools
 import torch
 import numpy as np
+import pandas as pd
 from scipy.ndimage import rotate
 from PIL import Image
 from screeninfo import get_monitors
@@ -895,40 +896,38 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							cell_roundness[image_name][cell_name].append(roundness)
 							cell_intensities[image_name][cell_name].append(intensity)
 
+		with pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx')) as writer:
 
-		for cell_name in self.cell_kinds:
+			for cell_name in self.color_map:
 
-			dfs=[]
-			if len(cell_centers[cell_name])>0:
-				dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[cell_name]))],columns=['number']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_centers[cell_name],columns=['center_x','center_y']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_areas[cell_name],columns=['areas']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_heights[cell_name],columns=['heights']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_widths[cell_name],columns=['widths']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_perimeter[cell_name],columns=['perimeter']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_roundness[cell_name],columns=['roundness']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(cell_intensities[cell_name],columns=['intensities']).reset_index(drop=True))
-				if self.inners is not None:
-					dfs.append(pd.DataFrame(inners_areas[cell_name],columns=['inners_areas']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(inners_heights[cell_name],columns=['inners_heights']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(inners_widths[cell_name],columns=['inners_widths']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(inners_out_ratio[cell_name],columns=['inneroutter_ratio']).reset_index(drop=True))
-			else:
-				dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
-				dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
-				dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
-				if self.inners is not None:
-					dfs.append(pd.DataFrame(['NA'],columns=['inners_areas']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['inners_heights']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['inners_widths']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['inneroutter_ratio']).reset_index(drop=True))
-			out_sheet=os.path.join(self.results_path,os.path.splitext(os.path.basename(self.path_to_file))[0]+'_'+cell_name+'_summary.xlsx')
-			pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
+				all_measures=[]
+				all_names=[]
+
+				for image_name in cell_numbers:
+
+					dfs=[]
+					if len(cell_centers[image_name][cell_name])>0:
+						dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[image_name][cell_name]))],columns=['number']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_centers[image_name][cell_name],columns=['center_x','center_y']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_areas[image_name][cell_name],columns=['areas']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_heights[image_name][cell_name],columns=['heights']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_widths[image_name][cell_name],columns=['widths']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_perimeter[image_name][cell_name],columns=['perimeter']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_roundness[image_name][cell_name],columns=['roundness']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(cell_intensities[image_name][cell_name],columns=['intensities']).reset_index(drop=True))
+					else:
+						dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
+						dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
+						dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
+					pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
+
+					all_measures.append(dfs)
+					all_names.append(os.path.splitext(image_name)[0])
 
 			dfs={}
 			dfs['total_area']=total_foreground_area
