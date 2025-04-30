@@ -924,7 +924,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
 					dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
 					dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
-				pd.concat(dfs,axis=1).to_excel(out_sheet,float_format='%.2f',index_label='ID/parameter')
+				pd.concat(dfs,axis=1)
 
 				all_measures.append(dfs)
 				all_names.append(os.path.splitext(image_name)[0])
