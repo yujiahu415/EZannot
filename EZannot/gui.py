@@ -826,38 +826,20 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
 			return
 
-		cell_numbers={}
-		cell_centers={}
-		cell_areas={}
-		cell_heights={}
-		cell_widths={}
-		cell_perimeter={}
-		cell_roundness={}
-		cell_intensities={}
-
-		image_id=0
-		annotation_id=0
+		data={}
+		parameters=['number','center','area','height','width','perimeter','roundness','intensity']
 		parent_path=os.path.dirname(self.image_paths[0])
 
 		for image_name in self.information:
 
-			cell_numbers[image_name]={}
-			cell_centers[image_name]={}
-			cell_areas[image_name]={}
-			cell_heights[image_name]={}
-			cell_widths[image_name]={}
-			cell_perimeter[image_name]={}
-			cell_roundness[image_name]={}
-			cell_intensities[image_name]={}
+			data[image_name]={}
 			for cell_name in self.color_map:
-				cell_numbers[image_name][cell_name]=0
-				cell_centers[image_name][cell_name]=[]
-				cell_areas[image_name][cell_name]=[]
-				cell_heights[image_name][cell_name]=[]
-				cell_widths[image_name][cell_name]=[]
-				cell_perimeter[image_name][cell_name]=[]
-				cell_roundness[image_name][cell_name]=[]
-				cell_intensities[image_name][cell_name]=[]
+				data[image_name][cell_name]={}
+				for parameter in parameters:
+					if parameter=='number':
+						data[image_name][cell_name][parameter]=0
+					else:
+						data[image_name][cell_name][parameter]=[]
 
 			image=cv2.imread(os.path.join(parent_path,image_name))
 			image_width=image.shape[1]
@@ -873,7 +855,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					cell_name=self.information[image_name]['class_names'][j]
 					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
 					cv2.fillPoly(mask,[pts],color=1)
-					#mask=mask.astype(bool)
 					excluded_pixels=np.all(image>threshold,axis=2)
 					mask[excluded_pixels]=0
 					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
@@ -885,55 +866,30 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/max(area,1)
 						if area>0:
-							cell_numbers[image_name][cell_name]+=1
-							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])
-							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])
-							cell_centers[image_name][cell_name].append((cx,cy))
-							cell_areas[image_name][cell_name].append(area)
-							cell_heights[image_name][cell_name].append(ht)
-							cell_widths[image_name][cell_name].append(wd)
-							cell_perimeter[image_name][cell_name].append(perimeter)
-							cell_roundness[image_name][cell_name].append(roundness)
-							cell_intensities[image_name][cell_name].append(intensity)
+							data[image_name][cell_name]['number']+=1
+							data[image_name][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
+							data[image_name][cell_name]['area'].append(area)
+							data[image_name][cell_name]['height'].append(ht)
+							data[image_name][cell_name]['width'].append(wd)
+							data[image_name][cell_name]['perimeter'].append(perimeter)
+							data[image_name][cell_name]['roundness'].append(roundness)
+							data[image_name][cell_name]['intensity'].append(intensity)
 
 		writer=pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl')
 
 		for cell_name in self.color_map:
 
-			all_measures=[]
-			all_names=[]
+			rows=[]
+			columns=['filename','ID']+parameters
 
-			for image_name in cell_numbers:
+			for name,name_data in data.items():
+				if cell_name in name_data:
+					values=zip(*[name_data[cell_name][parameter] for parameter in parameters])
+					for idx,value in enumerate(values):
+						rows.append([name,idx]+list(value))
 
-				dfs=[]
-				if len(cell_centers[image_name][cell_name])>0:
-					dfs.append(pd.DataFrame([i+1 for i in range(len(cell_centers[image_name][cell_name]))],columns=['number']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_centers[image_name][cell_name],columns=['center_x','center_y']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_areas[image_name][cell_name],columns=['areas']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_heights[image_name][cell_name],columns=['heights']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_widths[image_name][cell_name],columns=['widths']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_perimeter[image_name][cell_name],columns=['perimeter']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_roundness[image_name][cell_name],columns=['roundness']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(cell_intensities[image_name][cell_name],columns=['intensities']).reset_index(drop=True))
-				else:
-					dfs.append(pd.DataFrame(['NA'],columns=['number']).reset_index(drop=True))
-					dfs.append(pd.DataFrame([('NA','NA')],columns=['center_x','center_y']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['areas']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['heights']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['widths']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['perimeter']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['roundness']).reset_index(drop=True))
-					dfs.append(pd.DataFrame(['NA'],columns=['intensities']).reset_index(drop=True))
-				pd.concat(dfs,axis=1)
-
-				all_measures.append(pd.DataFrame(dfs))
-				all_names.append(os.path.splitext(image_name)[0])
-
-			all_measures=pd.concat(all_measures,keys=all_names,names=['File name','ID/parameter'])
-			all_measures.drop(all_measures.columns[0],axis=1,inplace=True)
-			all_measures.to_excel(writer,sheet_name=cell_name,float_format='%.2f')
-
-		writer.save()
+			df=pd.DataFrame(rows,columns=columns)
+			df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
 
 		self.canvas.SetFocus()
 
