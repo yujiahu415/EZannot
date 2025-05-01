@@ -829,18 +829,23 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		data={}
 		parameters=['center','area','height','width','perimeter','roundness','intensity']
 		parent_path=os.path.dirname(self.image_paths[0])
+		out_path=os.path.join(self.result_path,'Measurements')
+		os.makedirs(out_path,exist_ok=True)
 
 		for image_name in self.information:
 
-			data[image_name]={}
+			filename=os.path.splitext(image_name)[0]
+			data[filename]={}
 			for cell_name in self.color_map:
-				data[image_name][cell_name]={}
+				data[filename][cell_name]={}
 				for parameter in parameters:
-					data[image_name][cell_name][parameter]=[]
+					data[filename][cell_name][parameter]=[]
 
 			image=cv2.imread(os.path.join(parent_path,image_name))
 			image_width=image.shape[1]
 			image_height=image.shape[0]
+			thickness=max(1,round(max(image_width,image_height)/960))
+			to_annotate=image
 
 			polygons=self.information[image_name]['polygons']
 
@@ -863,15 +868,18 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
 						if area>0:
-							data[image_name][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
-							data[image_name][cell_name]['area'].append(area)
-							data[image_name][cell_name]['height'].append(ht)
-							data[image_name][cell_name]['width'].append(wd)
-							data[image_name][cell_name]['perimeter'].append(perimeter)
-							data[image_name][cell_name]['roundness'].append(roundness)
-							data[image_name][cell_name]['intensity'].append(intensity)
+							data[filename][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
+							data[filename][cell_name]['area'].append(area)
+							data[filename][cell_name]['height'].append(ht)
+							data[filename][cell_name]['width'].append(wd)
+							data[filename][cell_name]['perimeter'].append(perimeter)
+							data[filename][cell_name]['roundness'].append(roundness)
+							data[filename][cell_name]['intensity'].append(intensity)
+							cv2.drawContours(to_annotate,[cnt],0,self.color_map[cell_name],thickness)
 
-		with pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl') as writer:
+			cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
+
+		with pd.ExcelWriter(os.path.join(out_path,'measurements.xlsx'),engine='openpyxl') as writer:
 
 			for cell_name in self.color_map:
 
