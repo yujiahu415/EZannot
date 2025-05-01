@@ -462,6 +462,14 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.current_image is None:
 			return
 
+		path=self.image_paths[self.current_image_id]
+		image=wx.Image(path,wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+		img_width,img_height=image.GetSize()
+		self.scrolled_canvas.SetVirtualSize((img_width/self.scale,img_height/self.scale))
+		self.canvas.SetSize((img_width/self.scale,img_height/self.scale))
+
+
+
 		dc=wx.PaintDC(self.canvas)
 		dc.SetUserScale(self.scale,self.scale)
 		dc.DrawBitmap(self.current_image,0,0,True)
