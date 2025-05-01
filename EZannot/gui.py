@@ -875,7 +875,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							data[filename][cell_name]['perimeter'].append(perimeter)
 							data[filename][cell_name]['roundness'].append(roundness)
 							data[filename][cell_name]['intensity'].append(intensity)
-							cv2.drawContours(to_annotate,[cnt],0,self.color_map[cell_name],thickness)
+							cv2.drawContours(to_annotate,[cnt],0,(self.color_map[cell_name][1],self.color_map[cell_name][2],self.color_map[cell_name][0]),thickness)
 
 			cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
 
