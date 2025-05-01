@@ -567,9 +567,12 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		if event.GetKeyCode()==wx.WXK_RETURN:
 			if len(self.current_polygon)>2:
-				dialog=wx.TextEntryDialog(self,'Enter object class name:','Class Name',self.current_classname)
+				classnames=sorted(list(self.color_map.keys()))
+				current_index=classnames.index(self.current_classname)
+				dialog=wx.SingleChoiceDialog(self,message='Choose object class name',caption='Class Name',choices=classnames)
+				dialog.SetSelection(current_index)
 				if dialog.ShowModal()==wx.ID_OK:
-					self.current_classname=dialog.GetValue()
+					self.current_classname=dialog.GetStringSelection()
 					if len(self.current_polygon)>0:
 						self.current_polygon.append(self.current_polygon[0])
 						image_name=os.path.basename(self.image_paths[self.current_image_id])
