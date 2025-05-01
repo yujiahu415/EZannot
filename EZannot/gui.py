@@ -871,21 +871,21 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							data[image_name][cell_name]['roundness'].append(roundness)
 							data[image_name][cell_name]['intensity'].append(intensity)
 
-		writer=pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl')
+		with pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl') as writer:
 
-		for cell_name in self.color_map:
+			for cell_name in self.color_map:
 
-			rows=[]
-			columns=['filename','ID']+parameters
+				rows=[]
+				columns=['filename','ID']+parameters
 
-			for name,name_data in data.items():
-				if cell_name in name_data:
-					values=zip(*[name_data[cell_name][parameter] for parameter in parameters])
-					for idx,value in enumerate(values):
-						rows.append([name,idx]+list(value))
+				for name,name_data in data.items():
+					if cell_name in name_data:
+						values=zip(*[name_data[cell_name][parameter] for parameter in parameters])
+						for idx,value in enumerate(values):
+							rows.append([name,idx]+list(value))
 
-			df=pd.DataFrame(rows,columns=columns)
-			df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
+				df=pd.DataFrame(rows,columns=columns)
+				df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
 
 		self.canvas.SetFocus()
 
