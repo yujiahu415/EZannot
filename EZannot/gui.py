@@ -903,6 +903,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				df=pd.DataFrame(rows,columns=columns)
 				df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
 
+		wx.MessageBox('Measurements exported successfully.','Success',wx.ICON_INFORMATION)
+
 		self.canvas.SetFocus()
 
 
