@@ -861,7 +861,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						perimeter=cv2.arcLength(cnt,closed=True)
 						roundness=(4*np.pi*area)/(perimeter*perimeter)
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
-						intensity=np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/max(area,1)
+						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
 						if area>0:
 							data[image_name][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
 							data[image_name][cell_name]['area'].append(area)
@@ -882,7 +882,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					if cell_name in name_data:
 						values=zip(*[name_data[cell_name][parameter] for parameter in parameters])
 						for idx,value in enumerate(values):
-							rows.append([name,idx]+list(value))
+							rows.append([name,idx+1]+list(value))
 
 				df=pd.DataFrame(rows,columns=columns)
 				df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
