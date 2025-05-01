@@ -871,7 +871,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							data[image_name][cell_name]['roundness'].append(roundness)
 							data[image_name][cell_name]['intensity'].append(intensity)
 
-		writer=pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='openpyxl')
+		writer=pd.ExcelWriter(os.path.join(self.result_path,'measurements.xlsx'),engine='xlsxwriter')
 
 		for cell_name in self.color_map:
 
