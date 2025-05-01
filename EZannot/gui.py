@@ -307,6 +307,9 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.selected_point=None
 		self.start_modify=False
 		self.AI_help=False
+		self.scale=1.0
+		self.min_scale=0.1
+		self.max_scale=5.0
 
 		annotation_file=None
 		for i in os.listdir(os.path.dirname(self.image_paths[0])):
@@ -383,6 +386,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
 		self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
 		self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
+		self.canvas.Bind(wx.EVT_MOUSEWHEEL, self.OnMouseWheel)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
 		self.scrolled_canvas.GetSizer().Add(self.canvas,proportion=1,flag=wx.EXPAND|wx.ALL,border=5)
@@ -459,6 +463,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			return
 
 		dc=wx.PaintDC(self.canvas)
+		dc.SetUserScale(self.scale,self.scale)
 		dc.DrawBitmap(self.current_image,0,0,True)
 		image_name=os.path.basename(self.image_paths[self.current_image_id])
 		polygons=self.information[image_name]['polygons']
@@ -491,7 +496,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_left_click(self,event):
 
-		x,y=event.GetX(),event.GetY()
+		x,y=round(event.GetX()/self.scale),round(event.GetY()/self.scale)
 
 		if self.start_modify:
 
@@ -519,7 +524,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_right_click(self,event):
 
-		x,y=event.GetX(),event.GetY()
+		x,y=round(event.GetX()/self.scale),round(event.GetY()/self.scale)
 
 		if self.start_modify:
 
@@ -610,6 +615,27 @@ class WindowLv2_AnnotateImages(wx.Frame):
 	def on_left_up(self,event):
 
 		self.selected_point=None
+
+
+	def OnMouseWheel(self,event):
+
+		rotation=event.GetWheelRotation()
+		if rotation>0:
+			self.ZoomIn()
+		else:
+			self.ZoomOut()
+
+
+	def ZoomIn(self):
+
+		self.scale=min(self.scale*1.1,self.max_scale)
+		self.canvas.Refresh()
+
+
+	def ZoomOut(self):
+
+		self.scale=max(self.scale/1.1,self.min_scale)
+		self.canvas.Refresh()
 
 
 	def export_annotations(self,event):
