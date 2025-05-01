@@ -878,6 +878,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							data[filename][cell_name]['intensity'].append(intensity)
 							color=(self.color_map[cell_name][2],self.color_map[cell_name][1],self.color_map[cell_name][0])
 							if threshold is None:
+								cv2.drawContours(to_annotate,[cnt],0,color,thickness)
 							else:
 								cv2.drawContours(to_annotate,sorted(cnts,key=cv2.contourArea,reverse=True)[:min(2,len(cnts))],-1,color,thickness)
 
