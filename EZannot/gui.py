@@ -827,7 +827,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			return
 
 		data={}
-		parameters=['number','center','area','height','width','perimeter','roundness','intensity']
+		parameters=['center','area','height','width','perimeter','roundness','intensity']
 		parent_path=os.path.dirname(self.image_paths[0])
 
 		for image_name in self.information:
@@ -836,10 +836,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			for cell_name in self.color_map:
 				data[image_name][cell_name]={}
 				for parameter in parameters:
-					if parameter=='number':
-						data[image_name][cell_name][parameter]=0
-					else:
-						data[image_name][cell_name][parameter]=[]
+					data[image_name][cell_name][parameter]=[]
 
 			image=cv2.imread(os.path.join(parent_path,image_name))
 			image_width=image.shape[1]
@@ -866,7 +863,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/max(area,1)
 						if area>0:
-							data[image_name][cell_name]['number']+=1
 							data[image_name][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
 							data[image_name][cell_name]['area'].append(area)
 							data[image_name][cell_name]['height'].append(ht)
