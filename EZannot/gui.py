@@ -857,9 +857,10 @@ class WindowLv2_AnnotateImages(wx.Frame):
 					cell_name=self.information[image_name]['class_names'][j]
 					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
 					cv2.fillPoly(mask,[pts],color=1)
-					excluded_pixels=np.all(image>threshold,axis=2)
-					mask[excluded_pixels]=0
-					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+					if threshold is not None:
+						excluded_pixels=np.all(image>threshold,axis=2)
+						mask[excluded_pixels]=0
+					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
 					if len(cnts)>0:
 						cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
 						area=np.sum(np.array(mask),axis=(0,1))
@@ -875,7 +876,10 @@ class WindowLv2_AnnotateImages(wx.Frame):
 							data[filename][cell_name]['perimeter'].append(perimeter)
 							data[filename][cell_name]['roundness'].append(roundness)
 							data[filename][cell_name]['intensity'].append(intensity)
-							cv2.drawContours(to_annotate,cnts[:min(2,len(cnts))],-1,(self.color_map[cell_name][1],self.color_map[cell_name][2],self.color_map[cell_name][0]),thickness)
+							color=(self.color_map[cell_name][2],self.color_map[cell_name][1],self.color_map[cell_name][0])
+							if threshold is None:
+							else:
+								cv2.drawContours(to_annotate,sorted(cnts,key=cv2.contourArea,reverse=True)[:min(2,len(cnts))],-1,color,thickness)
 
 			cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
 
