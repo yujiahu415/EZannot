@@ -16,7 +16,7 @@ dependencies=[
 	'packaging',
 	'requests',
 	'screeninfo',
-	'xlsxwriter',
+	'openpyxl',
 	'pandas'
 	'torch>=2.5.1',
 	'torchvision>=0.20.1',
