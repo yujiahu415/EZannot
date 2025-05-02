@@ -18,6 +18,10 @@ from EZannot import __version__
 
 
 
+the_absolute_current_path=str(Path(__file__).resolve().parent)
+
+
+
 class ColorPicker(wx.Dialog):
 
 	def __init__(self,parent,title,name_and_color):
@@ -139,7 +143,7 @@ class WindowLv1_SetAnnotation(wx.Frame):
 		module_model=wx.BoxSizer(wx.HORIZONTAL)
 		button_model=wx.Button(panel,label='Set up the SAM2 model for\nAI-assisted annotation',size=(300,40))
 		button_model.Bind(wx.EVT_BUTTON,self.select_model)
-		wx.Button.SetToolTip(button_model,'Select the path to the SAM2 model, which stores a checkpoint (*.pt) file and a corresponding model config (*.yaml) file.')
+		wx.Button.SetToolTip(button_model,'Choose the SAM2 model. If select from a folder, make sure the folder stores a checkpoint (*.pt) file and a corresponding model config (*.yaml) file.')
 		self.text_model=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_model.Add(button_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_model.Add(self.text_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -202,21 +206,42 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 	def select_model(self,event):
 
-		model_path=None
-		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+		path_to_sam2_model=None
+		sam2_model_path=os.path.join(the_absolute_current_path,'sam2 models')
+		sam2_models=[i for i in os.listdir(sam2_model_path) if os.path.isdir(os.path.join(sam2_model_path,i))]
+		if '__pycache__' in sam2_models:
+			sam2_models.remove('__pycache__')
+		if '__init__' in sam2_models:
+			sam2_models.remove('__init__')
+		if '__init__.py' in sam2_models:
+			sam2_models.remove('__init__.py')
+		sam2_models.sort()
+		if 'Choose a new directory of the SAM2 model' not in sam2_models:
+			sam2_models.append('Choose a new directory of the SAM2 model')
+
+		dialog=wx.SingleChoiceDialog(self,message='Select a SAM2 model for AI-assisted annotation.',caption='Select a SAM2 model',choices=sam2_models)
 		if dialog.ShowModal()==wx.ID_OK:
-			model_path=dialog.GetPath()
+			sam2_model=dialog.GetStringSelection()
+			if sam2_model=='Choose a new directory of the SAM2 model':
+				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+				if dialog1.ShowModal()==wx.ID_OK:
+					path_to_sam2_model=dialog1.GetPath()
+				else:
+					path_to_sam2_model=None
+				dialog1.Destroy()
+			else:
+				path_to_sam2_model=os.path.join(sam2_model_path,sam2_model)
 		dialog.Destroy()
 
-		if model_path is None:
+		if path_to_sam2_model is None:
 			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
 			self.text_model.SetLabel('No SAM2 model is set up. The AI assistance function is OFF.')
 		else:
-			for i in os.listdir(model_path):
+			for i in os.listdir(path_to_sam2_model):
 				if i.endswith('.pt'):
-					self.model_cp=os.path.join(model_path,i)
+					self.model_cp=os.path.join(path_to_sam2_model,i)
 				if i.endswith('.yaml'):
-					self.model_cfg=os.path.join(model_path,i)
+					self.model_cfg=os.path.join(path_to_sam2_model,i)
 			if self.model_cp is None:
 				self.text_model.SetLabel('Missing checkpoint file.')
 			elif self.model_cfg is None:
