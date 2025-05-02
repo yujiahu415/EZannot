@@ -288,7 +288,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		monitor=get_monitors()[0]
 		monitor_w,monitor_h=monitor.width,monitor.height
 
-		super().__init__(parent,title=title,size=(get_monitors()[0].width-100,get_monitors()[0].height-100))
+		super().__init__(parent,title=title,size=(get_monitors()[0].width,get_monitors()[0].height))
 
 		self.image_paths=path_to_images
 		self.result_path=result_path
@@ -307,9 +307,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.selected_point=None
 		self.start_modify=False
 		self.AI_help=False
-		self.scale=1.0
-		self.min_scale=0.1
-		self.max_scale=5.0
 
 		annotation_file=None
 		for i in os.listdir(os.path.dirname(self.image_paths[0])):
@@ -378,7 +375,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
 		self.scrolled_canvas.SetScrollRate(10,10)
-		self.canvas=wx.Panel(self.scrolled_canvas,size=(get_monitors()[0].width-150,get_monitors()[0].height-100))
+		self.canvas=wx.Panel(self.scrolled_canvas,size=(get_monitors()[0].width,get_monitors()[0].height))
 		self.canvas.SetBackgroundColour('white')
 
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
@@ -386,7 +383,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
 		self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
 		self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
-		self.canvas.Bind(wx.EVT_MOUSEWHEEL, self.OnMouseWheel)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
 		self.scrolled_canvas.GetSizer().Add(self.canvas,proportion=1,flag=wx.EXPAND|wx.ALL,border=5)
@@ -422,9 +418,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		if self.image_paths:
 			path=self.image_paths[self.current_image_id]
-			image=wx.Image(path,wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-			self.current_image=wx.Bitmap(image)
-			img_width,img_height=image.GetSize()
+			self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
+			img_width,img_height=self.current_image.GetSize()
 			self.scrolled_canvas.SetVirtualSize((img_width,img_height))
 			self.canvas.SetSize((img_width,img_height))
 			self.scrolled_canvas.Scroll(0,0)
@@ -462,17 +457,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		if self.current_image is None:
 			return
 
-		path=self.image_paths[self.current_image_id]
-		image=wx.Image(path,wx.BITMAP_TYPE_ANY).ConvertToBitmap()
-		img_width,img_height=image.GetSize()
-		self.scrolled_canvas.SetVirtualSize((img_width/self.scale,img_height/self.scale))
-		self.canvas.SetSize((img_width/self.scale,img_height/self.scale))
-
-
-
 		dc=wx.PaintDC(self.canvas)
-		dc.SetUserScale(self.scale,self.scale)
-		dc.DrawBitmap(self.current_image,0,0,True)
+		dc.DrawBitmap(wx.Bitmap(self.current_image),0,0,True)
 		image_name=os.path.basename(self.image_paths[self.current_image_id])
 		polygons=self.information[image_name]['polygons']
 		class_names=self.information[image_name]['class_names']
@@ -504,7 +490,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_left_click(self,event):
 
-		x,y=round(event.GetX()/self.scale),round(event.GetY()/self.scale)
+		x,y=event.GetX(),event.GetY()
 
 		if self.start_modify:
 
@@ -532,7 +518,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 	def on_right_click(self,event):
 
-		x,y=round(event.GetX()/self.scale),round(event.GetY()/self.scale)
+		x,y=event.GetX(),event.GetY()
 
 		if self.start_modify:
 
@@ -623,27 +609,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 	def on_left_up(self,event):
 
 		self.selected_point=None
-
-
-	def OnMouseWheel(self,event):
-
-		rotation=event.GetWheelRotation()
-		if rotation>0:
-			self.ZoomIn()
-		else:
-			self.ZoomOut()
-
-
-	def ZoomIn(self):
-
-		self.scale=min(self.scale*1.1,self.max_scale)
-		self.canvas.Refresh()
-
-
-	def ZoomOut(self):
-
-		self.scale=max(self.scale/1.1,self.min_scale)
-		self.canvas.Refresh()
 
 
 	def export_annotations(self,event):
