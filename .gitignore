@@ -157,3 +157,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# sam2 models
+SAM2 models/
+
