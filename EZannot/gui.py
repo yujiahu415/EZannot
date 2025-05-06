@@ -848,7 +848,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.canvas.SetFocus()
 
 
-	def measure_annotations(self,event,threshold=180):
+	def measure_annotations(self,event,threshold=None):
 
 		if not self.information:
 			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
