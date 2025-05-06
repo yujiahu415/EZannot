@@ -314,7 +314,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		monitor=get_monitors()[0]
 		monitor_w,monitor_h=monitor.width,monitor.height
 
-		super().__init__(parent,title=title,size=(get_monitors()[0].width,get_monitors()[0].height))
+		super().__init__(parent,title=title,pos=(75,0),size=(get_monitors()[0].width-150,get_monitors()[0].height-150))
 
 		self.image_paths=path_to_images
 		self.result_path=result_path
@@ -401,8 +401,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
 		self.scrolled_canvas.SetScrollRate(10,10)
-		self.canvas=wx.Panel(self.scrolled_canvas,size=(get_monitors()[0].width,get_monitors()[0].height))
-		self.canvas.SetBackgroundColour('white')
+		self.canvas=wx.Panel(self.scrolled_canvas,pos=(75,0),size=(get_monitors()[0].width-150,get_monitors()[0].height-150))
+		self.canvas.SetBackgroundColour('black')
 
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
