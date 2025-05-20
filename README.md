@@ -6,3 +6,125 @@
 
 <p>&nbsp;</p>
 
+## What can EZannot do?
+
+<p>&nbsp;</p>
+
+
+## Installation
+
+<p>&nbsp;</p>
+
+### Windows
+
+1. Install [Git][]. 
+
+   If you're unsure of which installation method to use, select the `64-bit Git for Windows Setup` option. Run the installer, and accept all default values.
+
+2. Install Python>=3.10, for example, [Python 3.12][]. Scroll down to the bottom and click the `Windows installer (64-bit)` option. Run the installer and select "Add python to path" and "Disable long path limit".
+
+   To test your Python installation, run the following command. If the version
+   number prints out successfully, your Python installation is working.
+
+   ```pwsh-session
+   > py -3.12 --version
+   ```
+
+3. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN.
+
+   First, install and/or update your GPU drivers at
+   [this link](https://www.nvidia.com/Download/index.aspx). Select your GPU
+   model and click "Search", then click "Download". After installing the
+   drivers, reboot your system to ensure they take effect.
+
+   Then, install [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Windows&target_arch=x86_64).
+   Select your version of Windows, select "exe (local)," then click "Download."
+
+   To verify your installation of CUDA, use the following command.
+
+   ```pwsh-session
+   > set CUDA_HOME=%CUDA_HOME_V11_8%
+   > nvcc --version
+   ```
+
+   Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). 
+   You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typcially, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to path via environmental variables.
+
+4. Upgrade `pip`, `wheel`, `setuptools`.
+   
+   ```pwsh-session
+   > py -3.12 -m pip install --upgrade pip wheel 
+   ```
+
+5. Add Python path to your environment variables. You may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking "Advanced system settings". And then access environment variables: Click on "environment variables...". 
+And then locate the PATH variable: In the "System variables" section, find the variable named "Path" and click "Edit...". Add Python's path: click "New", and then paste the path to your Python installation directory (typcially, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the "Variable value" field. Also, add the path to the Scripts folder (e.g., C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is isntalled.
+
+6. Install EZannot via `pip`.
+   
+   ```pwsh-session
+   > py -3.12 -m pip install EZannot
+   ```
+
+7. If you want to use the AI-assisted annotating (which is highly recommended as it makes the annotation super easy):
+   
+   7.1. Install [SAM2][].
+   
+      navigate to where you want to put the sam2 repo by command `cd`:
+      ```pwsh-session
+      > cd desktop
+      ```
+      
+      Then clone sam2 repo, and navigate to its subfolder 'sam2', and install SAM2:
+      ```pwsh-session
+      > git clone https://github.com/facebookresearch/sam2.git
+      > cd sam2
+      > py -3.12 -m pip install -e .
+      ```
+      
+      Verify whether SAM2 is successfully installed:
+      ```pwsh-session
+      > py -3.12
+      >>> import sam2
+      ```
+      
+      If it shows import failure, meaning sam2 is not installed, you can just copy the 'sam2' subfolder under the sam2 repo into the 'site-packages' folder of Python3.12. First, quit Python 3.12 interactive shell:
+      ```pwsh-session
+      >>> quit()
+      ```
+      
+      Then find where the 'site-packages' folder is:
+      ```pwsh-session
+      > pip show EZannot
+      ```
+      
+      Copy the entire 'sam2' subfolder into that 'site-packages' folder.
+      After that, download the SAM2 models. You can put them inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
+   
+   7.2. Install PyTorch v2.5.1 with CUDA v11.8.
+   
+      ```pwsh-session
+      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
+      ```
+   
+      If you are using LabGym without a GPU, use the following command instead.
+   
+      ```pwsh-session
+      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      ```
+
+Launch EZannot:
+
+   ```pwsh-session
+   > EZannot
+   ```
+   
+   The user interface will take a few minutes to start up during the first launch. If the user interface doesn't show up, you can still make it show up by three lines of code:
+   ```pwsh-session
+   > py -3.12
+   >>> from EZannot import __main__
+   >>> __main__.main()
+   ```
+
+[Git]: https://git-scm.com/download/win
+[Python 3.12]: https://www.python.org/downloads/release/python-31210/
+[SAM2]: https://github.com/facebookresearch/sam2
