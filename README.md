@@ -98,7 +98,7 @@ And then locate the PATH variable: In the 'System variables' section, find the v
       ```
       
       Copy the entire 'sam2' subfolder into that 'site-packages' folder.
-      After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) (there are three models, 'large', 'small', and 'tiny'). You can put them inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
+      After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) (there are three models, 'large', 'small', and 'tiny'). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
    
    7.2. Install PyTorch v2.5.1 with CUDA v11.8.
    
