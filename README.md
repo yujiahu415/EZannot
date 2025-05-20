@@ -8,8 +8,12 @@
 
 ## What can EZannot do?
 
-<p>&nbsp;</p>
+1. Annotates the outline of an object or a region in an image with one mouse click (with AI-assistance enabled).
+2. Augments the annotated image dataset to 135 folds of its original size.
+3. Provides automatic quantitative measures, such as area, roundness, pixel intensity, and so on, for each annotated object/region.
+4. It is free, and keeps your data 100% private since the annotation is performed locally on your own computer.
 
+<p>&nbsp;</p>
 
 ## Installation
 
