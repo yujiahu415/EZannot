@@ -13,8 +13,6 @@
 
 ## Installation
 
-<p>&nbsp;</p>
-
 ### Windows
 
 1. Install [Git][]. 
@@ -111,6 +109,10 @@ And then locate the PATH variable: In the 'System variables' section, find the v
       ```pwsh-session
       > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
       ```
+
+<p>&nbsp;</p>
+
+## Usage
 
 Launch EZannot:
 
