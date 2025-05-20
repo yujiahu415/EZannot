@@ -48,7 +48,7 @@
    ```
 
    Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). 
-   You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typcially, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to path via environmental variables.
+   You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to path via environmental variables.
 
 4. Upgrade `pip`, `wheel`, `setuptools`.
    
@@ -57,7 +57,7 @@
    ```
 
 5. Add Python path to your environment variables. You may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking "Advanced system settings". And then access environment variables: Click on "environment variables...". 
-And then locate the PATH variable: In the "System variables" section, find the variable named "Path" and click "Edit...". Add Python's path: click "New", and then paste the path to your Python installation directory (typcially, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the "Variable value" field. Also, add the path to the Scripts folder (e.g., C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is isntalled.
+And then locate the PATH variable: In the "System variables" section, find the variable named "Path" and click "Edit...". Add Python's path: click "New", and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the "Variable value" field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
 
 6. Install EZannot via `pip`.
    
@@ -106,7 +106,7 @@ And then locate the PATH variable: In the "System variables" section, find the v
       > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
       ```
    
-      If you are using LabGym without a GPU, use the following command instead.
+      If you are using EZannot without a GPU, use the following command instead.
    
       ```pwsh-session
       > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
