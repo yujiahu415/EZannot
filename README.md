@@ -26,23 +26,25 @@
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_remove.gif?raw=true)
 
-   Press "shift" once, and go to the editing mode to edit the polygons of an annotated object/region:
+   Press "shift" to enter the editing mode and modify the annotated polygons; press "shift" again to exit the editing mode:
+
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Shift_modify.gif?raw=true)
 
 <p>&nbsp;</p>
 
-**2. Augments the annotated image dataset to 135 folds of its original size.**
+**2. Augments each annotated image to 134 additional manipulated images to improve the model training.**
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Augmentation.png?raw=true)
 
 <p>&nbsp;</p>
 
-**3. Provides automatic quantitative measures, such as area, roundness, pixel intensity, and so on, for each annotated object/region.**
+**3. Provides quantitative measures, such as area, pixel intensity, and so on, for each annotated object/region.**
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Measurements.png?raw=true)
 
 <p>&nbsp;</p>
 
-**4. It is free, and keeps your data 100% private since the annotation is performed locally on your own computer.**
+**4. Completely free, and keeps your data 100% private since the annotation is done locally on your own computer.**
 
 <p>&nbsp;</p>
 
