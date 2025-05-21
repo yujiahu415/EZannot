@@ -8,10 +8,41 @@
 
 ## What can EZannot do?
 
-1. Annotates the outline of an object or a region in an image with one mouse click (with AI-assistance enabled).
-2. Augments the annotated image dataset to 135 folds of its original size.
-3. Provides automatic quantitative measures, such as area, roundness, pixel intensity, and so on, for each annotated object/region.
-4. It is free, and keeps your data 100% private since the annotation is performed locally on your own computer.
+**1. Annotates the outline of an object or a region in an image with one mouse click (with AI-assistance enabled).**
+
+   One mouse left click to detect the outline of an object/region, and specify its classname:
+   
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
+
+   One mouse left click to include an additional area, and specify its classname:
+   
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_include.gif?raw=true)
+
+   You can also change the classname of an object/region at anytime:
+   
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_change.gif?raw=true)
+
+   One mouse left click to select a region and one right click to exclude an area, and specify its classname:
+   
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_remove.gif?raw=true)
+
+   Press "shift" once, and go to the editing mode to edit the polygons of an annotated object/region:
+
+<p>&nbsp;</p>
+
+**2. Augments the annotated image dataset to 135 folds of its original size.**
+
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Augmentation.png?raw=true)
+
+<p>&nbsp;</p>
+
+**3. Provides automatic quantitative measures, such as area, roundness, pixel intensity, and so on, for each annotated object/region.**
+
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Measurements.png?raw=true)
+
+<p>&nbsp;</p>
+
+**4. It is free, and keeps your data 100% private since the annotation is performed locally on your own computer.**
 
 <p>&nbsp;</p>
 
