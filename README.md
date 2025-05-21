@@ -171,7 +171,7 @@ Below is the guide for Windows.
 
 2. Follow the hint for each button in the user interface to annotate images with ease:
 
-   
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.png?raw=true)
 
 3. Recommend specifying a new folder for exporting the annotation. You may do this without selecting any augmentation method, which will generate an annotation file for all your original images. And later you can load your original images together with the annotation file to the user interface and perform the augmentation at any time.
 
