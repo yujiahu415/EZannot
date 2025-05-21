@@ -14,19 +14,19 @@
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
 
-   One mouse left click to include an additional area, and specify its classname:
+   One mouse left click to include an additional area in an annotation:
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_include.gif?raw=true)
 
-   You can also change the classname of an object/region at anytime:
+   Change the classname of an object/region:
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_change.gif?raw=true)
 
-   One mouse left click to select a region and one right click to exclude an area, and specify its classname:
+   One mouse left click to select a region and one right click to exclude an area:
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_remove.gif?raw=true)
 
-   Press "shift" to enter the editing mode and modify the annotated polygons; press "shift" again to exit the editing mode:
+   Press "shift" to enter/exit the editing mode and modify the annotated polygons:
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Shift_modify.gif?raw=true)
 
@@ -38,13 +38,13 @@
 
 <p>&nbsp;</p>
 
-**3. Provides quantitative measures, such as area, pixel intensity, and so on, for each annotated object/region.**
+**3. Provides quantitative measures, such as area and pixel intensity, for each annotated object/region.**
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Measurements.png?raw=true)
 
 <p>&nbsp;</p>
 
-**4. Completely free, and keeps your data 100% private since the annotation is done locally on your own computer.**
+**4. Completely free, and keeps your data private since the annotation is done locally on your computer.**
 
 <p>&nbsp;</p>
 
