@@ -50,16 +50,25 @@
 
 ## Installation
 
-### Windows
+EZannot works for Windows, Mac and Linux systems. Installation steps can vary for different systems. But in general, you need to:
+1) Install Python3 (>=3.10)
+2) Set up CUDA (v11.8) for GPU usage
+3) Install EZannot with pip
+4) Install [SAM2][] for AI-help in annotation
+5) Install PyTorch (>=2.5.1) with CUDA support v11.8 (cu118)
 
-1. Install [Git][]. 
+Below is the guide for Windows.
 
-   If you're unsure of which installation method to use, select the `64-bit Git for Windows Setup` option. Run the installer, and accept all default values.
 
-2. Install Python>=3.10, for example, [Python 3.12][]. Scroll down to the bottom and click the `Windows installer (64-bit)` option. Run the installer and select "Add python to path" and "Disable long path limit".
+1. Install [Git][].
 
-   To test your Python installation, run the following command. If the version
-   number prints out successfully, your Python installation is working.
+   Select the `64-bit Git for Windows Setup` option. Run the installer, and accept all default values.
+
+2. Install Python>=3.10, for example, [Python 3.12][].
+
+   Scroll down to the bottom and click the `Windows installer (64-bit)` option. Run the installer and select "Add python to path" and "Disable long path limit".
+
+   To test your Python installation, run the following command. If the version number prints out successfully, your Python installation is working.
 
    ```pwsh-session
    > py -3.12 --version
@@ -67,13 +76,9 @@
 
 3. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN.
 
-   First, install and/or update your GPU drivers at
-   [this link](https://www.nvidia.com/Download/index.aspx). Select your GPU
-   model and click "Search", then click "Download". After installing the
-   drivers, reboot your system to ensure they take effect.
+   First, install and/or update your GPU drivers at [this link](https://www.nvidia.com/Download/index.aspx). Select your GPU model and click "Search", then click "Download". After installing the drivers, reboot your system to ensure they take effect.
 
-   Then, install [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Windows&target_arch=x86_64).
-   Select your version of Windows, select "exe (local)," then click "Download."
+   Then, install [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Windows&target_arch=x86_64). Select your version of Windows, select "exe (local)," then click "Download."
 
    To verify your installation of CUDA, use the following command.
 
@@ -82,8 +87,7 @@
    > nvcc --version
    ```
 
-   Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). 
-   You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to path via environmental variables.
+   Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to Path in environmental variables.
 
 4. Upgrade `pip`, `wheel`, `setuptools`.
    
@@ -91,8 +95,9 @@
    > py -3.12 -m pip install --upgrade pip wheel 
    ```
 
-5. Add Python path to your environment variables. You may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking 'Advanced system settings'. And then access environment variables: Click on 'environment variables...'. 
-And then locate the PATH variable: In the 'System variables' section, find the variable named 'Path' and click 'Edit...'. Add Python's path: click 'New', and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the 'Variable value' field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
+5. Add Python path to your environment variables.
+
+   You may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking 'Advanced system settings'. And then access environment variables: Click on 'environment variables...'. And then locate the PATH variable: In the 'System variables' section, find the variable named 'Path' and click 'Edit...'. Add Python's path: click 'New', and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the 'Variable value' field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
 
 6. Install EZannot via `pip`.
    
@@ -100,7 +105,7 @@ And then locate the PATH variable: In the 'System variables' section, find the v
    > py -3.12 -m pip install EZannot
    ```
 
-7. If you want to use the AI-assisted annotating (which is highly recommended as it makes the annotation super easy):
+7. If you want to use AI help in annotation (which is highly recommended as it makes the annotation super easy):
    
    7.1. Install [SAM2][].
    
@@ -151,18 +156,26 @@ And then locate the PATH variable: In the 'System variables' section, find the v
 
 ## Usage
 
-Launch EZannot:
+1. Launch EZannot:
 
    ```pwsh-session
    > EZannot
    ```
    
-   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with above method, you can still make it show up by three lines of code:
+   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, you can still make it show up by three lines of code:
    ```pwsh-session
    > py -3.12
    >>> from EZannot import __main__
    >>> __main__.main()
    ```
+
+2. Follow the hint for each button in the user interface to annotate images with ease:
+
+   
+
+3. Recommend specifying a new folder for exporting the annotation. You may do this without selecting any augmentation method, which will generate an annotation file for all your original images. And later you can load your original images together with the annotation file to the user interface and perform the augmentation at any time.
+
+4. When loading the annotated images to the user interface, EZannot automatically looks for the annotation file in json format in the same folder where the images are stored, and reads the annotations and displays them in images within the user interface.
 
 [Git]: https://git-scm.com/download/win
 [Python 3.12]: https://www.python.org/downloads/release/python-31210/
