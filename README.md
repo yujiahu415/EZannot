@@ -8,7 +8,7 @@
 
 ## What can EZannot do?
 
-**1. Annotates the outline of an object or a region in an image with one mouse click (with AI-assistance enabled).**
+**1. Annotates the outline of objects or regions in images with ease (when AI-help enabled).**
 
    One mouse left click to detect the outline of an object/region, and specify its classname:
    
