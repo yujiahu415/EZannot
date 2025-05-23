@@ -50,15 +50,16 @@
 
 ## Installation
 
+**Important: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) or [Cellan](https://github.com/yujiahu415/Cellan) user, you need to install EZannot under a different version of Python3. For example, if your [LabGym](https://github.com/umyelab/LabGym)/[FluoSA](https://github.com/umyelab/FluoSA)/[Cellan](https://github.com/yujiahu415/Cellan) installed under Python3.10, you need to install a Python3.11 or 3.12 and install EZannot under that different version of Python3. This is because LabGym/Cellan and EZannot use different versions of PyTorch. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.**
+
 EZannot works for Windows, Mac and Linux systems. Installation steps can vary for different systems. But in general, you need to:
 1) Install Python3 (>=3.10)
 2) Set up CUDA (v11.8) for GPU usage
 3) Install EZannot with pip
-4) Install [SAM2][] for AI-help in annotation
-5) Install PyTorch (>=2.5.1) with CUDA support v11.8 (cu118)
+4) Install PyTorch (>=2.5.1)
+5) Install [SAM2][] for AI-help in annotation
 
 Below is the guide for Windows.
-
 
 1. Install [Git][].
 
