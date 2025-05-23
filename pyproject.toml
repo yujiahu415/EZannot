@@ -4,7 +4,7 @@ build-backend='pdm.backend'
 
 [project]
 name='EZannot'
-description='Annotate images with ease.'
+description='Annotate images and measure the annotated with ease.'
 authors=[{name='Yujia Hu',email='yujiahu415@gmail.com'}]
 dependencies=[
 	'numpy',
