@@ -50,7 +50,11 @@
 
 ## Installation
 
+<p>&nbsp;</p>
+
 **Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) or [Cellan](https://github.com/yujiahu415/Cellan) user, you need to install EZannot under a different version of Python3. For example, if your LabGym/FluoSA/Cellan installed under Python3.10, you need to install a Python3.11 or 3.12 and install EZannot under that different version of Python3. This is because LabGym/FluoSA/Cellan and EZannot use different versions of PyTorch. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
+
+<p>&nbsp;</p>
 
 EZannot works for Windows, Mac and Linux systems. Installation steps can vary for different systems. But in general, you need to:
 1) Install Python3 (>=3.10)
@@ -93,7 +97,7 @@ Below is the guide for Windows.
 4. Upgrade `pip`, `wheel`, `setuptools`.
    
    ```pwsh-session
-   > py -3.12 -m pip install --upgrade pip wheel 
+   > py -3.12 -m pip install --upgrade pip wheel setuptools
    ```
 
 5. Add Python path to your environment variables.
@@ -107,8 +111,20 @@ Below is the guide for Windows.
    ```
 
 7. If you want to use AI help in annotation (which is highly recommended as it makes the annotation super easy):
+
+   7.1. Install PyTorch v2.5.1 with CUDA v11.8.
    
-   7.1. Install [SAM2][].
+      ```pwsh-session
+      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
+      ```
+   
+      If you are using EZannot without a GPU, use the following command instead.
+   
+      ```pwsh-session
+      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      ```
+   
+   7.2. Install [SAM2][].
    
       navigate to where you want to put the sam2 repo by command `cd`:
       ```pwsh-session
@@ -140,18 +156,6 @@ Below is the guide for Windows.
       
       Copy the entire 'sam2' subfolder into that 'site-packages' folder.
       After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) (there are three models, 'large', 'small', and 'tiny'). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
-   
-   7.2. Install PyTorch v2.5.1 with CUDA v11.8.
-   
-      ```pwsh-session
-      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
-      ```
-   
-      If you are using EZannot without a GPU, use the following command instead.
-   
-      ```pwsh-session
-      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-      ```
 
 <p>&nbsp;</p>
 
