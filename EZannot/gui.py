@@ -645,8 +645,8 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		remove=[]
 
-		all_methods=['','rot1','rot2','rot3','rot4','rot5','rot6','blur']
-		options=['rot7','flph','flpv','brih','bril','exph','expl']
+		all_methods=['','_rot1','_rot2','_rot3','_rot4','_rot5','_rot6','_blur']
+		options=['_rot7','_flph','_flpv','_brih','_bril','_exph','_expl']
 		for r in range(1,len(options)+1):
 			all_methods.extend([''.join(c) for c in itertools.combinations(options,r)])
 
@@ -766,7 +766,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				if blur is not None:
 					image=cv2.GaussianBlur(image,(blur,blur),0)
 
-				new_name=image_name.split('.'+image_name.split('.')[-1])[0]+'_'+str(m)+'.'+image_name.split('.')[-1]
+				new_name=image_name.split('.'+image_name.split('.')[-1])[0]+str(m)+'.'+image_name.split('.')[-1]
 				cv2.imwrite(os.path.join(self.result_path,new_name),image)
 
 				coco_format['images'].append({
