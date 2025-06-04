@@ -253,19 +253,20 @@ class WindowLv1_SetAnnotation(wx.Frame):
 	def specify_classes(self,event):
 
 		dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
+		color_map={}
 		if dialog.ShowModal()==wx.ID_OK:
 			entry=dialog.GetValue()
 			try:
 				for i in entry.split(','):
-					self.color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+					color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
 			except:
-				self.color_map={}
+				color_map={}
 				wx.MessageBox('Please enter the object class names in\ncorrect format! For example: apple,orange,pear','Error',wx.OK|wx.ICON_ERROR)
 		dialog.Destroy()
 
-		if len(self.color_map)>0:
-			for classname in self.color_map:
-				dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,self.color_map[classname]])
+		if len(color_map)>0:
+			for classname in color_map:
+				dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
 				if dialog.ShowModal()==wx.ID_OK:
 					(r,b,g,_)=dialog.color_picker.GetColour()
 					self.color_map[classname]=(r,b,g)
