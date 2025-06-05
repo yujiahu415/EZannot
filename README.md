@@ -76,7 +76,7 @@ Below is the guide for Windows.
    To test your Python installation, run the following command. If the version number prints out successfully, your Python installation is working.
 
    ```pwsh-session
-   > py -3.12 --version
+   py -3.12 --version
    ```
 
 3. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN.
@@ -88,8 +88,8 @@ Below is the guide for Windows.
    To verify your installation of CUDA, use the following command.
 
    ```pwsh-session
-   > set CUDA_HOME=%CUDA_HOME_V11_8%
-   > nvcc --version
+   set CUDA_HOME=%CUDA_HOME_V11_8%
+   nvcc --version
    ```
 
    Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to Path in environmental variables.
@@ -97,7 +97,7 @@ Below is the guide for Windows.
 4. Upgrade `pip`, `wheel`, `setuptools`.
    
    ```pwsh-session
-   > py -3.12 -m pip install --upgrade pip wheel setuptools
+   py -3.12 -m pip install --upgrade pip wheel setuptools
    ```
 
 5. Add Python path to your environment variables.
@@ -107,7 +107,7 @@ Below is the guide for Windows.
 6. Install EZannot via `pip`.
    
    ```pwsh-session
-   > py -3.12 -m pip install EZannot
+   py -3.12 -m pip install EZannot
    ```
 
 7. If you want to use AI help in annotation (which is highly recommended as it makes the annotation super easy):
@@ -115,43 +115,43 @@ Below is the guide for Windows.
    7.1. Install PyTorch v2.5.1 with CUDA v11.8.
    
       ```pwsh-session
-      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
+      py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
       ```
    
       If you are using EZannot without a GPU, use the following command instead.
    
       ```pwsh-session
-      > py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+      py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
       ```
    
    7.2. Install [SAM2][].
    
       navigate to where you want to put the sam2 repo by command `cd`:
       ```pwsh-session
-      > cd desktop
+      cd desktop
       ```
       
       Then clone sam2 repo, and navigate to its subfolder 'sam2', and install SAM2:
       ```pwsh-session
-      > git clone https://github.com/facebookresearch/sam2.git
-      > cd sam2
-      > py -3.12 -m pip install -e .
+      git clone https://github.com/facebookresearch/sam2.git
+      cd sam2
+      py -3.12 -m pip install -e .
       ```
       
       Verify whether SAM2 is successfully installed:
       ```pwsh-session
-      > py -3.12
-      >>> import sam2
+      py -3.12
+      import sam2
       ```
       
       If it shows import failure, meaning sam2 is not installed, you can just copy the 'sam2' subfolder under the sam2 repo into the 'site-packages' folder of Python3.12. First, quit Python 3.12 interactive shell:
       ```pwsh-session
-      >>> quit()
+      quit()
       ```
       
       Then find where the 'site-packages' folder is:
       ```pwsh-session
-      > pip show EZannot
+      pip show EZannot
       ```
       
       Copy the entire 'sam2' subfolder into that 'site-packages' folder.
@@ -164,14 +164,14 @@ Below is the guide for Windows.
 1. Launch EZannot:
 
    ```pwsh-session
-   > EZannot
+   EZannot
    ```
    
    The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, you can still make it show up by three lines of code:
    ```pwsh-session
-   > py -3.12
-   >>> from EZannot import __main__
-   >>> __main__.main()
+   py -3.12
+   from EZannot import __main__
+   __main__.main()
    ```
 
 2. Follow the hint for each button in the user interface to annotate images with ease:
