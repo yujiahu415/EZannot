@@ -10,7 +10,7 @@
 
 **1. Annotates the outline of objects or regions in images with ease (when AI-help enabled).**
 
-   One mouse left click to detect the outline of an object/region, and specify its classname:
+   One mouse left click to detect the outline of an object/region, and hit 'enter' to specify its classname:
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
 
