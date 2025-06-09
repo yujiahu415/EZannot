@@ -138,24 +138,15 @@ Below is the guide for Windows.
       py -3.12 -m pip install -e .
       ```
       
-      Verify whether SAM2 is successfully installed:
-      ```pwsh-session
-      py -3.12
-      import sam2
-      ```
+      Then copy the entire 'sam2' subfolder under the sam2 repo (there's a sam2 folder under the sam2 repo, which stores the actual code for sam2 module) into the 'site-packages' folder of Python3.12.
       
-      If it shows import failure, meaning sam2 is not installed, you can just copy the 'sam2' subfolder under the sam2 repo into the 'site-packages' folder of Python3.12. First, quit Python 3.12 interactive shell:
-      ```pwsh-session
-      quit()
-      ```
-      
-      Then find where the 'site-packages' folder is:
+      You can find where the 'site-packages' folder is by typing:
       ```pwsh-session
       pip show EZannot
       ```
       
       Copy the entire 'sam2' subfolder into that 'site-packages' folder.
-      After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) (there are three models, 'large', 'small', and 'tiny'). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
+      After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'; if you have a good GPU, go for large). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
 
 <p>&nbsp;</p>
 
