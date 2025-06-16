@@ -12,8 +12,8 @@ from pathlib import Path
 from scipy.ndimage import rotate
 from PIL import Image
 from screeninfo import get_monitors
-from sam2.build_sam import build_sam2
-from sam2.sam2_image_predictor import SAM2ImagePredictor
+from EZannot.sam2.build_sam import build_sam2
+from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from EZannot import __version__
 
 
