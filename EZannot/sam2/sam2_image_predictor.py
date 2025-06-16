@@ -12,9 +12,9 @@ import numpy as np
 import torch
 from PIL.Image import Image
 
-from sam2.modeling.sam2_base import SAM2Base
+from EZannot.sam2.modeling.sam2_base import SAM2Base
 
-from sam2.utils.transforms import SAM2Transforms
+from EZannot.sam2.utils.transforms import SAM2Transforms
 
 
 class SAM2ImagePredictor:
