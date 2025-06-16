@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from iopath.common.file_io import g_pathmgr
 
-from sam2.modeling.backbones.utils import (
+from EZannot.sam2.modeling.backbones.utils import (
     PatchEmbed,
     window_partition,
     window_unpartition,
