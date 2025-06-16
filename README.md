@@ -61,7 +61,7 @@ EZannot works for Windows, Mac and Linux systems. Installation steps can vary fo
 2) Set up CUDA (v11.8) for GPU usage
 3) Install EZannot with pip
 4) Install PyTorch (>=2.5.1)
-5) Install [SAM2][] for AI-help in annotation
+5) Download [SAM2][] models for AI-help in annotation
 
 Below is the guide for Windows.
 
@@ -102,7 +102,7 @@ Below is the guide for Windows.
 
 5. Add Python path to your environment variables.
 
-   You may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking 'Advanced system settings'. And then access environment variables: Click on 'environment variables...'. And then locate the PATH variable: In the 'System variables' section, find the variable named 'Path' and click 'Edit...'. Add Python's path: click 'New', and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the 'Variable value' field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
+   This can be done by select "Add python to path" during step#2. But incase you haven't done this, you may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking 'Advanced system settings'. And then access environment variables: Click on 'environment variables...'. And then locate the PATH variable: In the 'System variables' section, find the variable named 'Path' and click 'Edit...'. Add Python's path: click 'New', and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the 'Variable value' field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
 
 6. Install EZannot via `pip`.
    
@@ -110,43 +110,25 @@ Below is the guide for Windows.
    py -3.12 -m pip install EZannot
    ```
 
-7. If you want to use AI help in annotation (which is highly recommended as it makes the annotation super easy):
+7. Install PyTorch>=v2.5.1 with CUDA v11.8:
 
-   7.1. Install PyTorch v2.5.1 with CUDA v11.8.
+   ```pwsh-session
+   py -3.12 -m pip install torch>=2.5.1 torchvision>=0.20.1 torchaudio>=2.5.1 --index-url https://download.pytorch.org/whl/cu118
+   ```
    
-      ```pwsh-session
-      py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
-      ```
+   If you are using EZannot without a GPU, use the following command instead.
    
-      If you are using EZannot without a GPU, use the following command instead.
+   ```pwsh-session
+   py -3.12 -m pip install torch>=2.5.1 torchvision>=0.20.1 torchaudio>=2.5.1 --index-url https://download.pytorch.org/whl/cpu
+   ```
    
-      ```pwsh-session
-      py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-      ```
-   
-   7.2. Install [SAM2][].
-   
-      navigate to where you want to put the sam2 repo by command `cd`:
-      ```pwsh-session
-      cd desktop
-      ```
-      
-      Then clone sam2 repo, and navigate to its subfolder 'sam2', and install SAM2:
-      ```pwsh-session
-      git clone https://github.com/facebookresearch/sam2.git
-      cd sam2
-      py -3.12 -m pip install -e .
-      ```
-      
-      Then copy the entire 'sam2' subfolder under the sam2 repo (there's a sam2 folder under the sam2 repo, which stores the actual code for sam2 module) into the 'site-packages' folder of Python3.12.
-      
-      You can find where the 'site-packages' folder is by typing:
-      ```pwsh-session
-      pip show EZannot
-      ```
-      
-      Copy the entire 'sam2' subfolder into that 'site-packages' folder.
-      After that, download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'; if you have a good GPU, go for large). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
+8. Setup [SAM2][] models.
+ 
+   Find the 'site-packages' folder where the EZannot is by typing:
+   ```pwsh-session
+   pip show EZannot
+   ```
+   And download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'; if you have a good GPU, go for large). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
 
 <p>&nbsp;</p>
 
