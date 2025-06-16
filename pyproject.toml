@@ -7,17 +7,20 @@ name='EZannot'
 description='Annotate images and measure the annotated with ease.'
 authors=[{name='Yujia Hu',email='yujiahu415@gmail.com'}]
 dependencies=[
-	'numpy',
+	'numpy>=1.24.4',
 	'scipy',
 	'opencv-python',
 	'opencv-contrib-python',
-	'pillow',
+	'pillow>=9.4.0',
 	'wxPython',
 	'packaging',
 	'requests',
 	'screeninfo',
 	'openpyxl',
 	'pandas',
+	'tqdm>=4.66.1',
+	'hydra-core>=1.3.2',
+	'iopath>=0.1.10',
 	'torch>=2.5.1',
 	'torchvision>=0.20.1',
 	'torchaudio'
