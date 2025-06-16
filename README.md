@@ -113,13 +113,13 @@ Below is the guide for Windows.
 7. Install PyTorch>=v2.5.1 with CUDA v11.8:
 
    ```pwsh-session
-   py -3.12 -m pip install torch>=2.5.1 torchvision>=0.20.1 torchaudio>=2.5.1 --index-url https://download.pytorch.org/whl/cu118
+   py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
    ```
    
    If you are using EZannot without a GPU, use the following command instead.
    
    ```pwsh-session
-   py -3.12 -m pip install torch>=2.5.1 torchvision>=0.20.1 torchaudio>=2.5.1 --index-url https://download.pytorch.org/whl/cpu
+   py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
    ```
    
 8. Setup [SAM2][] models.
