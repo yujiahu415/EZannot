@@ -59,8 +59,8 @@ def build_sam2(
     **kwargs,
 ):
     
-    if isinstance(config_file, DictConfig):
-        cfg = config_file
+    if isinstance(config_file, str):
+        cfg = OmegaConf.load(config_file)
     else:
         if apply_postprocessing:
             hydra_overrides_extra = hydra_overrides_extra.copy()
@@ -72,8 +72,8 @@ def build_sam2(
             ]
         # Read config and init model
         cfg = compose(config_name=config_file, overrides=hydra_overrides_extra)
+        OmegaConf.resolve(cfg)
 
-    OmegaConf.resolve(cfg)
     model = instantiate(cfg.model, _recursive_=True)
 
     if ckpt_path:
