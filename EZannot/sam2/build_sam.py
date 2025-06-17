@@ -58,22 +58,35 @@ def build_sam2(
     apply_postprocessing=True,
     **kwargs,
 ):
+    
+    if isinstance(config_file, DictConfig):
+        cfg = config_file
+    else:
+        if apply_postprocessing:
+            hydra_overrides_extra = hydra_overrides_extra.copy()
+            hydra_overrides_extra += [
+                # dynamically fall back to multi-mask if the single mask is not stable
+                "++model.sam_mask_decoder_extra_args.dynamic_multimask_via_stability=true",
+                "++model.sam_mask_decoder_extra_args.dynamic_multimask_stability_delta=0.05",
+                "++model.sam_mask_decoder_extra_args.dynamic_multimask_stability_thresh=0.98",
+            ]
+        # Read config and init model
+        cfg = compose(config_name=config_file, overrides=hydra_overrides_extra)
 
-    if apply_postprocessing:
-        hydra_overrides_extra = hydra_overrides_extra.copy()
-        hydra_overrides_extra += [
-            # dynamically fall back to multi-mask if the single mask is not stable
-            "++model.sam_mask_decoder_extra_args.dynamic_multimask_via_stability=true",
-            "++model.sam_mask_decoder_extra_args.dynamic_multimask_stability_delta=0.05",
-            "++model.sam_mask_decoder_extra_args.dynamic_multimask_stability_thresh=0.98",
-        ]
-    # Read config and init model
-    cfg = compose(config_name=config_file, overrides=hydra_overrides_extra)
     OmegaConf.resolve(cfg)
     model = instantiate(cfg.model, _recursive_=True)
-    _load_checkpoint(model, ckpt_path)
+
+    if ckpt_path:
+        checkpoint = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        if "model" in checkpoint:
+            model.load_state_dict(checkpoint["model"], strict=False)
+        else:
+            model.load_state_dict(checkpoint, strict=False)
+
     model = model.to(device)
-    if mode == "eval":
+    if mode == "train":
+        model.train()
+    else:
         model.eval()
     return model
 
