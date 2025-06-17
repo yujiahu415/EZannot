@@ -147,15 +147,17 @@ Below is the guide for Windows.
    __main__.main()
    ```
 
-2. Follow the hint for each button in the user interface to annotate images with ease:
+2. There's a hint for each button in the user interface:
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.png?raw=true)
 
-3. Recommend specifying a new folder for exporting the annotation. You may do this without selecting any augmentation method, which will generate an annotation file for all your original images. Later you can load your original images together with the annotation file to the user interface of EZannot and perform the augmentation at any time.
+3. You can specify a new folder for exporting the annotation without performing any augmentation. In this way, you will have an 'origin' dataset that stores the annotations on all original images. You may perform augmentation on the 'origin' dataset at any time later.
 
-4. When loading the annotated images to the user interface, EZannot automatically looks for the annotation file in json format in the same folder where the images are stored, and reads the annotations and displays them in images within the user interface.
+4. You can load the annotated images to the user interface, EZannot automatically looks for the annotation file in json format in the same folder where the images are stored, and reads the annotations and displays them in images within the user interface.
+
+5. You can include more images to an existing annotated dataset. Simply put new images and old ones, as well as the annotation file for the old ones in the same folder, select all the images, specify a new folder to export the annotation, and start to annotate. The previous annotations will be shown in old images.
    
-5. If there is no object of interest in an image (a 'null' image), simply don't do any annotation and proceed to the next image and the 'null' image will be marked as 'null' in the annotation file.
+6. If there is no object of interest in an image (a 'null' image), simply don't do any annotation and proceed to the next image and the 'null' image will be marked as 'null' in the annotation file.
 
 [Git]: https://git-scm.com/download/win
 [Python 3.12]: https://www.python.org/downloads/release/python-31210/
