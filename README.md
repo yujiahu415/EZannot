@@ -52,7 +52,7 @@
 
 <p>&nbsp;</p>
 
-**Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) or [Cellan](https://github.com/yujiahu415/Cellan) user, you need to install EZannot under a different version of Python3. For example, if your LabGym/FluoSA/Cellan installed under Python3.10, you need to install a Python3.11 or 3.12 and install EZannot under that different version of Python3. This is because LabGym/FluoSA/Cellan and EZannot use different versions of PyTorch. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
+**Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) or [Cellan](https://github.com/yujiahu415/Cellan) user, you need to install EZannot under a different version of Python3 or environment. For example, if your LabGym/FluoSA/Cellan installed under Python3.10, you need to install EZannot under another version of Python (e.g., Python3.11). This is because LabGym/FluoSA/Cellan and EZannot use different versions of PyTorch and different versions of PyTorch cannot be installed within the same Python3 or environment. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
 
 <p>&nbsp;</p>
 
