@@ -88,6 +88,7 @@ def build_sam2(
         model.train()
     else:
         model.eval()
+
     return model
 
 
