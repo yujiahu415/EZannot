@@ -19,7 +19,7 @@ from EZannot.sam2.modeling.backbones.utils import (
     window_unpartition,
 )
 
-from sam2.modeling.sam2_utils import DropPath, MLP
+from EZannot.sam2.modeling.sam2_utils import DropPath, MLP
 
 
 def do_pool(x: torch.Tensor, pool: nn.Module, norm: nn.Module = None) -> torch.Tensor:
