@@ -61,15 +61,15 @@ EZannot works for Windows, Mac and Linux systems. Installation steps can vary fo
 2) Set up CUDA (v11.8) for GPU usage
 3) Install EZannot with pip
 4) Install PyTorch (>=2.5.1)
-5) Download [SAM2][] models for AI-help in annotation
+5) Download [SAM2](https://github.com/facebookresearch/sam2) models for AI-help in annotation
 
 Below is the guide for Windows.
 
-1. Install [Git][].
+1. Install [Git](https://git-scm.com/download/win).
 
    Select the `64-bit Git for Windows Setup` option. Run the installer, and accept all default values.
 
-2. Install Python>=3.10, for example, [Python 3.12][].
+2. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
 
    Scroll down to the bottom and click the `Windows installer (64-bit)` option. Run the installer and select "Add python to path" and "Disable long path limit".
 
@@ -159,6 +159,3 @@ Below is the guide for Windows.
    
 6. If there is no object of interest in an image (a 'null' image), simply don't do any annotation and proceed to the next image and the 'null' image will be marked as 'null' in the annotation file.
 
-[Git]: https://git-scm.com/download/win
-[Python 3.12]: https://www.python.org/downloads/release/python-31210/
-[SAM2]: https://github.com/facebookresearch/sam2
