@@ -89,6 +89,8 @@ Below is the guide for Windows.
 
    ```pwsh-session
    set CUDA_HOME=%CUDA_HOME_V11_8%
+   ```
+   ```pwsh-session
    nvcc --version
    ```
 
@@ -143,7 +145,11 @@ Below is the guide for Windows.
    The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, you can still make it show up by three lines of code:
    ```pwsh-session
    py -3.12
+   ```
+   ```pwsh-session
    from EZannot import __main__
+   ```
+   ```pwsh-session
    __main__.main()
    ```
 
