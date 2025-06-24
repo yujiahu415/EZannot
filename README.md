@@ -128,7 +128,7 @@ You need to access the terminal. To do this, open the start menu by clicking the
    py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
    ```
    
-8. Setup [SAM2][] models.
+8. Setup SAM2 models.
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```pwsh-session
@@ -165,7 +165,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
    python3.12 -m pip install EZannot
    ```
 
-5. Setup [SAM2][] models.
+5. Setup SAM2 models.
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```console
