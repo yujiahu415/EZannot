@@ -63,7 +63,11 @@ EZannot works for Windows, Mac and Linux systems. Installation steps can vary fo
 4) Install PyTorch (>=2.5.1)
 5) Download [SAM2](https://github.com/facebookresearch/sam2) models for AI-help in annotation
 
-Below is the guide for Windows.
+<p>&nbsp;</p>
+
+### Windows
+
+You need to access the terminal. To do this, open the start menu by clicking the `Win` key, type "PowerShell", and hit enter. All terminal commands going forward should be entered in this terminal.
 
 1. Install [Git](https://git-scm.com/download/win).
 
@@ -133,6 +137,43 @@ Below is the guide for Windows.
    And download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'; if you have a good GPU, go for large). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
 
 <p>&nbsp;</p>
+
+### macOS
+
+You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then search for "Terminal" and hit enter to open it. Next, follow these steps.
+
+1. Install the Xcode command line tools, a software package provided by Apple that includes `git` and a C/C++ compiler named `clang`.
+
+   ```console
+   xcode-select --install
+   ```
+   A GUI installation window should pop up. Follow along and accept all the default values. 
+
+2. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
+
+   Scroll down to the bottom and click the `macOS 64-bit universal2 installer` option. Run the installer and select "Add python to path".
+
+3. Upgrade `pip`, `wheel`, `setuptools`.
+
+   ```console
+   python3.12 -m pip install --upgrade pip wheel setuptools
+   ```
+
+4. Install EZannot via `pip`.
+ 
+   ```console
+   python3.12 -m pip install EZannot
+   ```
+
+5. Setup [SAM2][] models.
+ 
+   Find the 'site-packages' folder where the EZannot is by typing:
+   ```console
+   pip show EZannot
+   ```
+   And download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
+
+&nbsp;
 
 ## Usage
 
