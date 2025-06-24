@@ -132,13 +132,13 @@ You need to access the terminal. To do this, open the start menu by clicking the
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```pwsh-session
-   pip show EZannot
+   py -3.12 -m pip show EZannot
    ```
    And download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'; if you have a good GPU, go for large). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
 
 <p>&nbsp;</p>
 
-### macOS
+### Mac
 
 You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then search for "Terminal" and hit enter to open it. Next, follow these steps.
 
@@ -169,7 +169,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```console
-   pip show EZannot
+   python3.12 -m pip show EZannot
    ```
    And download the [SAM2 models](https://github.com/yujiahu415/EZannot/tree/main/SAM2%20models) ('large' is more accurate but slower than 'tiny'). You can download the individual files and organize them in the same way as they appear in the folder, and put them (e.g., the entire 'large' folder) inside the '.../site-packages/EZannot/sam2 models/' folder for easy access within EZannot's user interface, or store them somewhere else and choose the option of 'Choose a new directory of the SAM2 model' and navigate to where you store them to access these models.
 
