@@ -370,20 +370,6 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			if i.endswith('.json'):
 				annotation_file=os.path.join(os.path.dirname(self.image_paths[0]),i)
 		if annotation_file and os.path.exists(annotation_file):
-			colors=[self.color_map[i] for i in self.color_map]
-			classnames=[]
-			annotation=json.load(open(annotation_file))
-			for i in annotation['categories']:
-				if i['id']>0:
-					classnames.append(i['name'])
-			len_diff=len(classnames)-len(self.color_map)
-			self.current_classname=classnames[0]
-			if len_diff>0:
-				for i in range(len_diff):
-					colors.append((random.randint(0,255),random.randint(0,255),random.randint(0,255)))
-			self.color_map={}
-			for i,classname in enumerate(classnames):
-				self.color_map[classname]=colors[i]
 			for i in annotation['images']:
 				self.information[i['file_name']]={'polygons':[],'class_names':[]}
 			for i in annotation['annotations']:
