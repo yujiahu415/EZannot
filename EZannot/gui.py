@@ -262,9 +262,9 @@ class WindowLv1_SetAnnotation(wx.Frame):
 			color_map={}
 			classnames=[]
 			entry=None
-			for i in self.path_to_images:
+			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
 				if i.endswith('.json'):
-					annotation_file=os.path.join(self.path_to_images,i)
+					annotation_file=os.path.join(os.path.dirname(self.path_to_images[0]),i)
 
 			if annotation_file and os.path.exists(annotation_file):
 				annotation=json.load(open(annotation_file))
@@ -388,7 +388,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				self.information[i['file_name']]={'polygons':[],'class_names':[]}
 			for i in annotation['annotations']:
 				image_name=annotation['images'][int(i['image_id'])]['file_name']
-				classname=annotation['categories'][int(i['category_id'])-1]['name']
+				classname=list(self.color_map.keys())[int(i['category_id'])-1]
 				self.information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
 				self.information[image_name]['class_names'].append(classname)
 
