@@ -373,6 +373,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 			if i.endswith('.json'):
 				annotation_file=os.path.join(os.path.dirname(self.image_paths[0]),i)
 		if annotation_file and os.path.exists(annotation_file):
+			annotation=json.load(open(annotation_file))
 			for i in annotation['images']:
 				self.information[i['file_name']]={'polygons':[],'class_names':[]}
 			for i in annotation['annotations']:
