@@ -421,6 +421,10 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		self.next_button.Bind(wx.EVT_BUTTON,self.next_image)
 		hbox.Add(self.next_button,flag=wx.ALL,border=2)
 
+		self.delete_button=wx.Button(panel,label='Delete',size=(150,30))
+		self.delete_button.Bind(wx.EVT_BUTTON,self.delete_image)
+		hbox.Add(self.delete_button,flag=wx.ALL,border=2)
+
 		self.export_button=wx.Button(panel,label='Export Annotations',size=(150,30))
 		self.export_button.Bind(wx.EVT_BUTTON,self.export_annotations)
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
@@ -505,6 +509,17 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		if self.image_paths and self.current_image_id<len(self.image_paths)-1:
 			self.current_image_id+=1
+			self.load_current_image()
+		self.canvas.SetFocus()
+
+
+	def delete_image(self,event):
+
+		if self.image_paths:
+			path=self.image_paths[self.current_image_id]
+			self.image_paths.remove(path)
+			image_name=os.path.basename(path)
+			del self.information[image_name]
 			self.load_current_image()
 		self.canvas.SetFocus()
 
