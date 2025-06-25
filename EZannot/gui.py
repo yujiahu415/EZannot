@@ -252,28 +252,58 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 	def specify_classes(self,event):
 
-		dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
-		color_map={}
-		if dialog.ShowModal()==wx.ID_OK:
-			entry=dialog.GetValue()
-			try:
-				for i in entry.split(','):
-					color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
-			except:
-				color_map={}
-				wx.MessageBox('Please enter the object class names in\ncorrect format! For example: apple,orange,pear','Error',wx.OK|wx.ICON_ERROR)
-		dialog.Destroy()
+		if self.path_to_images is None:
 
-		if len(color_map)>0:
-			for classname in color_map:
-				dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
-				if dialog.ShowModal()==wx.ID_OK:
-					(r,b,g,_)=dialog.color_picker.GetColour()
-					self.color_map[classname]=(r,b,g)
-				dialog.Destroy()
-			self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
+			wx.MessageBox('No input images(s).','Error',wx.OK|wx.ICON_ERROR)
+
 		else:
-			self.text_classes.SetLabel('None.')
+
+			annotation_file=None
+			color_map={}
+			classnames=[]
+			entry=None
+			for i in self.path_to_images:
+				if i.endswith('.json'):
+					annotation_file=os.path.join(self.path_to_images,i)
+
+			if annotation_file and os.path.exists(annotation_file):
+				annotation=json.load(open(annotation_file))
+				for i in annotation['categories']:
+					if i['id']>0:
+						classnames.append(i['name'])
+				dialog=wx.MessageDialog(self,'Current classnames are: '+str(classnames)+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
+				if dialog.ShowModal()==wx.ID_YES:
+					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=str(classnames)[1:-1])
+					if dialog1.ShowModal()==wx.ID_OK:
+						entry=dialog1.GetValue()
+					dialog1.Destroy()
+				else:
+					entry=str(classnames)[1:-1]
+				dialog.Destroy()
+			else:
+				dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
+				if dialog.ShowModal()==wx.ID_OK:
+					entry=dialog.GetValue()
+				dialog.Destroy()
+
+			if entry:
+				try:
+					for i in entry.split(','):
+						color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+				except:
+					color_map={}
+					wx.MessageBox('Please enter the object class names in\ncorrect format! For example: apple,orange,pear','Error',wx.OK|wx.ICON_ERROR)
+
+			if len(color_map)>0:
+				for classname in color_map:
+					dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
+					if dialog.ShowModal()==wx.ID_OK:
+						(r,b,g,_)=dialog.color_picker.GetColour()
+						self.color_map[classname]=(r,b,g)
+					dialog.Destroy()
+				self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
+			else:
+				self.text_classes.SetLabel('None.')
 
 
 	def specify_augmentation(self,event):
