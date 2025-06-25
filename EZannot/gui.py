@@ -260,7 +260,7 @@ class WindowLv1_SetAnnotation(wx.Frame):
 
 			annotation_file=None
 			color_map={}
-			classnames=[]
+			classnames=''
 			entry=None
 			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
 				if i.endswith('.json'):
@@ -270,15 +270,18 @@ class WindowLv1_SetAnnotation(wx.Frame):
 				annotation=json.load(open(annotation_file))
 				for i in annotation['categories']:
 					if i['id']>0:
-						classnames.append(i['name'])
-				dialog=wx.MessageDialog(self,'Current classnames are: '+str(classnames)+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
+						classnames=classnames+i['name']+','
+				classnames=classnames[:-1]
+
+				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
 				if dialog.ShowModal()==wx.ID_YES:
-					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=str(classnames)[1:-1])
+
+					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=classnames)
 					if dialog1.ShowModal()==wx.ID_OK:
 						entry=dialog1.GetValue()
 					dialog1.Destroy()
 				else:
-					entry=str(classnames)[1:-1]
+					entry=classnames
 				dialog.Destroy()
 			else:
 				dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
