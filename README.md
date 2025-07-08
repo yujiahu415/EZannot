@@ -69,11 +69,7 @@ EZannot works for Windows, Mac and Linux systems. Installation steps can vary fo
 
 You need to access the terminal. To do this, open the start menu by clicking the `Win` key, type "PowerShell", and hit enter. All terminal commands going forward should be entered in this terminal.
 
-1. Install [Git](https://git-scm.com/download/win).
-
-   Select the `64-bit Git for Windows Setup` option. Run the installer, and accept all default values.
-
-2. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
+1. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
 
    Scroll down to the bottom and click the `Windows installer (64-bit)` option. Run the installer and select "Add python to path" and "Disable long path limit".
 
@@ -83,7 +79,7 @@ You need to access the terminal. To do this, open the start menu by clicking the
    py -3.12 --version
    ```
 
-3. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN.
+2. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN.
 
    First, install and/or update your GPU drivers at [this link](https://www.nvidia.com/Download/index.aspx). Select your GPU model and click "Search", then click "Download". After installing the drivers, reboot your system to ensure they take effect.
 
@@ -98,37 +94,27 @@ You need to access the terminal. To do this, open the start menu by clicking the
    nvcc --version
    ```
 
-   Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an Nvidia Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to Path in environmental variables.
+   Finally, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an NVIDIA Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to Path in environmental variables.
 
-4. Upgrade `pip`, `wheel`, `setuptools`.
+3. Upgrade `pip`, `wheel`, `setuptools`.
    
    ```pwsh-session
    py -3.12 -m pip install --upgrade pip wheel setuptools
    ```
 
-5. Add Python path to your environment variables.
-
-   This can be done by select "Add python to path" during step#2. But incase you haven't done this, you may Google how to do this--it's simple. Generally, open System Properties: you can do this by pressing the Windows key + Pause/Break, then clicking 'Advanced system settings'. And then access environment variables: Click on 'environment variables...'. And then locate the PATH variable: In the 'System variables' section, find the variable named 'Path' and click 'Edit...'. Add Python's path: click 'New', and then paste the path to your Python installation directory (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312) into the 'Variable value' field. Also, add the path to the Scripts folder (typically, C:\Users\YourName\AppData\Local\Programs\Python\Python312\Scripts). You may type `where python` in the command prompt to see the path where Python3.12 is installed.
-
-6. Install EZannot via `pip`.
+4. Install EZannot via `pip`.
    
    ```pwsh-session
    py -3.12 -m pip install EZannot
    ```
 
-7. Install PyTorch>=v2.5.1 with CUDA v11.8:
+5. If you're using an NVIDIA GPU, install PyTorch>=v2.5.1 with CUDA v11.8:
 
    ```pwsh-session
    py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
    ```
    
-   If you are using EZannot without a GPU, use the following command instead.
-   
-   ```pwsh-session
-   py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-   ```
-   
-8. Setup SAM2 models.
+6. Setup SAM2 models.
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```pwsh-session
@@ -142,30 +128,23 @@ You need to access the terminal. To do this, open the start menu by clicking the
 
 You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then search for "Terminal" and hit enter to open it. Next, follow these steps.
 
-1. Install the Xcode command line tools, a software package provided by Apple that includes `git` and a C/C++ compiler named `clang`.
-
-   ```console
-   xcode-select --install
-   ```
-   A GUI installation window should pop up. Follow along and accept all the default values. 
-
-2. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
+1. Install Python>=3.10, for example, [Python 3.12](https://www.python.org/downloads/release/python-31210/).
 
    Scroll down to the bottom and click the `macOS 64-bit universal2 installer` option. Run the installer and select "Add python to path".
 
-3. Upgrade `pip`, `wheel`, `setuptools`.
+2. Upgrade `pip`, `wheel`, `setuptools`.
 
    ```console
    python3.12 -m pip install --upgrade pip wheel setuptools
    ```
 
-4. Install EZannot via `pip`.
+3. Install EZannot via `pip`.
  
    ```console
    python3.12 -m pip install EZannot
    ```
 
-5. Setup SAM2 models.
+4. Setup SAM2 models.
  
    Find the 'site-packages' folder where the EZannot is by typing:
    ```console
