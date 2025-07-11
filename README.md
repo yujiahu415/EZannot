@@ -58,8 +58,8 @@
 
 EZannot works for Windows, Mac and Linux systems. Installation steps can vary for different systems. But in general, you need to:
 1) Install Python3 (>=3.10)
-2) Install EZannot with pip
-3) If using an NVIDIA GPU, set up CUDA (v11.8) and install PyTorch with cu118 support
+2) If using an NVIDIA GPU, set up CUDA (v11.8) and install PyTorch with cu118 support
+3) Install EZannot with pip
 4) Download [SAM2](https://github.com/facebookresearch/sam2) models for AI-help in annotation
 
 <p>&nbsp;</p>
@@ -78,19 +78,7 @@ You need to access the terminal. To do this, open the start menu by clicking the
    py -3.12 --version
    ```
 
-2. Upgrade `pip`, `wheel`, `setuptools`.
-   
-   ```pwsh-session
-   py -3.12 -m pip install --upgrade pip wheel setuptools
-   ```
-
-3. Install EZannot via `pip`.
-   
-   ```pwsh-session
-   py -3.12 -m pip install EZannot
-   ```
-
-4. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN, and install PyTorch>=v2.5.1 with cu118 support.
+2. If you're using an NVIDIA GPU, install CUDA Toolkit 11.8 and cuDNN, and install PyTorch>=v2.5.1 with cu118 support.
 
    First, install and/or update your GPU drivers at [this link](https://www.nvidia.com/Download/index.aspx). Select your GPU model and click "Search", then click "Download". After installing the drivers, reboot your system to ensure they take effect.
 
@@ -105,14 +93,26 @@ You need to access the terminal. To do this, open the start menu by clicking the
    nvcc --version
    ```
 
-   Next, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an NVIDIA Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to Path in environmental variables.
+   Next, install [cuDNN](https://developer.nvidia.com/rdp/cudnn-archive). You will need to register an NVIDIA Developer account, which you can do for free. You can choose cuDNN v8.9.7 that supports CUDA toolkit v11.8. Choose 'Local Installer for Windows (Zip)', download and extract it. And then copy the three folders 'bin', 'lib', and 'include' into where the CUDA toolkit is installed (typically, 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\'), and replace all the three folders with the same names. After that, you may need to add the 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8' to the 'PATH' environmental variable.
 
    Finally, install install PyTorch>=v2.5.1 with cu118 support:
 
    ```pwsh-session
    py -3.12 -m pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
    ```
+
+3. Upgrade `pip`, `wheel`, `setuptools`.
    
+   ```pwsh-session
+   py -3.12 -m pip install --upgrade pip wheel setuptools
+   ```
+
+4. Install EZannot via `pip`.
+   
+   ```pwsh-session
+   py -3.12 -m pip install EZannot
+   ```
+ 
 5. Setup SAM2 models.
  
    Find the 'site-packages' folder where the EZannot is by typing:
@@ -161,7 +161,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
    EZannot
    ```
    
-   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, which is typcially because the python3 is not added into the "PATH" environmental variables, you can still make it show up by three lines of code:
+   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, which is typcially because the python3 is not added into the 'PATH' environmental variable, you can still make it show up by three lines of code:
    ```pwsh-session
    py -3.12
    ```
