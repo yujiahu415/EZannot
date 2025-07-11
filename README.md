@@ -52,7 +52,7 @@
 
 <p>&nbsp;</p>
 
-**Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) or [Cellan](https://github.com/yujiahu415/Cellan) user, you need to install EZannot under a different version of Python3 or environment. For example, if your LabGym/FluoSA/Cellan installed under Python3.10, you need to install EZannot under another version of Python (e.g., Python3.11). This is because LabGym/FluoSA/Cellan and EZannot use different versions of PyTorch and different versions of PyTorch cannot be installed within the same Python3 or environment. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
+**Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) user, you need to install EZannot under a different version of Python3 or environment. For example, if your LabGym/FluoSA/Cellan installed under Python3.10, you need to install EZannot under another version of Python (e.g., Python3.12). This is because LabGym/FluoSA and EZannot use different versions of PyTorch and different versions of PyTorch cannot be installed within the same Python3 or environment. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
 
 <p>&nbsp;</p>
 
@@ -60,7 +60,7 @@ EZannot works for Windows, Mac and Linux systems. Installation steps can vary fo
 1) Install Python3 (>=3.10)
 2) Set up CUDA (v11.8) for GPU usage
 3) Install EZannot with pip
-4) Install PyTorch (>=2.5.1)
+4) If using an NVIDIA GPU, install PyTorch with cu118 support
 5) Download [SAM2](https://github.com/facebookresearch/sam2) models for AI-help in annotation
 
 <p>&nbsp;</p>
@@ -162,7 +162,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
    EZannot
    ```
    
-   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, you can still make it show up by three lines of code:
+   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, which is typcially because the python3 is not added into the "PATH" environmental variables, you can still make it show up by three lines of code:
    ```pwsh-session
    py -3.12
    ```
