@@ -712,7 +712,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		methods=list(set(all_methods)-set(remove))
 
-		coco_format={'categories':[],'images':[],'annotations':[]}
+		coco_format={'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},'licenses':[],'categories':[],'images':[],'annotations':[]}
 
 		for i,class_name in enumerate(sorted(list(self.color_map.keys()))):
 			coco_format['categories'].append({
