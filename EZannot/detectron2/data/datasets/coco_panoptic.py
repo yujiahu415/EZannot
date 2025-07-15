@@ -3,8 +3,8 @@ import copy
 import json
 import os
 
-from Cellan.detectron2.data import DatasetCatalog, MetadataCatalog
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import DatasetCatalog, MetadataCatalog
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .coco import load_coco_json, load_sem_seg
 
@@ -201,9 +201,9 @@ if __name__ == "__main__":
         "dataset_name" can be "coco_2017_train_panoptic", or other
         pre-registered ones
     """
-    from Cellan.detectron2.utils.logger import setup_logger
-    from Cellan.detectron2.utils.visualizer import Visualizer
-    import Cellan.detectron2.data.datasets  # noqa # add pre-defined metadata
+    from EZannot.detectron2.utils.logger import setup_logger
+    from EZannot.detectron2.utils.visualizer import Visualizer
+    import EZannot.detectron2.data.datasets  # noqa # add pre-defined metadata
     import sys
     from PIL import Image
     import numpy as np
