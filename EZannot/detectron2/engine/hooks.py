@@ -18,12 +18,12 @@ from fvcore.common.param_scheduler import ParamScheduler
 from fvcore.common.timer import Timer
 from fvcore.nn.precise_bn import get_bn_modules, update_bn_stats
 
-import Cellan.detectron2.utils.comm as comm
-from Cellan.detectron2.evaluation.testing import flatten_results_dict
-from Cellan.detectron2.solver import LRMultiplier
-from Cellan.detectron2.solver import LRScheduler as _LRScheduler
-from Cellan.detectron2.utils.events import EventStorage, EventWriter
-from Cellan.detectron2.utils.file_io import PathManager
+import EZannot.detectron2.utils.comm as comm
+from EZannot.detectron2.evaluation.testing import flatten_results_dict
+from EZannot.detectron2.solver import LRMultiplier
+from EZannot.detectron2.solver import LRScheduler as _LRScheduler
+from EZannot.detectron2.utils.events import EventStorage, EventWriter
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .train_loop import HookBase
 
