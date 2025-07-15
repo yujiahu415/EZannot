@@ -16,8 +16,8 @@ import cloudpickle
 import yaml
 from omegaconf import DictConfig, ListConfig, OmegaConf, SCMode
 
-from Cellan.detectron2.utils.file_io import PathManager
-from Cellan.detectron2.utils.registry import _convert_target_to_string
+from EZannot.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.registry import _convert_target_to_string
 
 __all__ = ["LazyCall", "LazyConfig"]
 
@@ -88,7 +88,7 @@ def _cast_to_config(obj):
     return obj
 
 
-_CFG_PACKAGE_NAME = "Cellan.detectron2._cfg_loader"
+_CFG_PACKAGE_NAME = "EZannot.detectron2._cfg_loader"
 """
 A namespace to put all imported config into.
 """
