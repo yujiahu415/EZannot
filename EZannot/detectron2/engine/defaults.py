@@ -21,28 +21,28 @@ from fvcore.nn.precise_bn import get_bn_modules
 from omegaconf import OmegaConf
 from torch.nn.parallel import DistributedDataParallel
 
-import Cellan.detectron2.data.transforms as T
-from Cellan.detectron2.checkpoint import DetectionCheckpointer
-from Cellan.detectron2.config import CfgNode, LazyConfig
-from Cellan.detectron2.data import (
+import EZannot.detectron2.data.transforms as T
+from EZannot.detectron2.checkpoint import DetectionCheckpointer
+from EZannot.detectron2.config import CfgNode, LazyConfig
+from EZannot.detectron2.data import (
     MetadataCatalog,
     build_detection_test_loader,
     build_detection_train_loader,
 )
-from Cellan.detectron2.evaluation import (
+from EZannot.detectron2.evaluation import (
     DatasetEvaluator,
     inference_on_dataset,
     print_csv_format,
     verify_results,
 )
-from Cellan.detectron2.modeling import build_model
-from Cellan.detectron2.solver import build_lr_scheduler, build_optimizer
-from Cellan.detectron2.utils import comm
-from Cellan.detectron2.utils.collect_env import collect_env_info
-from Cellan.detectron2.utils.env import seed_all_rng
-from Cellan.detectron2.utils.events import CommonMetricPrinter, JSONWriter, TensorboardXWriter
-from Cellan.detectron2.utils.file_io import PathManager
-from Cellan.detectron2.utils.logger import setup_logger
+from EZannot.detectron2.modeling import build_model
+from EZannot.detectron2.solver import build_lr_scheduler, build_optimizer
+from EZannot.detectron2.utils import comm
+from EZannot.detectron2.utils.collect_env import collect_env_info
+from EZannot.detectron2.utils.env import seed_all_rng
+from EZannot.detectron2.utils.events import CommonMetricPrinter, JSONWriter, TensorboardXWriter
+from EZannot.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.logger import setup_logger
 
 from . import hooks
 from .train_loop import AMPTrainer, SimpleTrainer, TrainerBase
