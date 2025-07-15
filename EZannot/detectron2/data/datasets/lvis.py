@@ -3,9 +3,9 @@ import logging
 import os
 from fvcore.common.timer import Timer
 
-from Cellan.detectron2.data import DatasetCatalog, MetadataCatalog
-from Cellan.detectron2.structures import BoxMode
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import DatasetCatalog, MetadataCatalog
+from EZannot.detectron2.structures import BoxMode
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .builtin_meta import _get_coco_instances_meta
 from .lvis_v0_5_categories import LVIS_CATEGORIES as LVIS_V0_5_CATEGORIES
@@ -224,10 +224,10 @@ def main() -> None:
     """
     import sys
 
-    import Cellan.detectron2.data.datasets  # noqa  # add pre-defined metadata
+    import EZannot.detectron2.data.datasets  # noqa  # add pre-defined metadata
     import numpy as np
-    from Cellan.detectron2.utils.logger import setup_logger
-    from Cellan.detectron2.utils.visualizer import Visualizer
+    from EZannot.detectron2.utils.logger import setup_logger
+    from EZannot.detectron2.utils.visualizer import Visualizer
     from PIL import Image
 
     logger = setup_logger(name=__name__)
