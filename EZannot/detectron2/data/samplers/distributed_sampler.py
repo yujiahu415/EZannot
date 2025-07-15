@@ -7,7 +7,7 @@ from typing import Optional
 import torch
 from torch.utils.data.sampler import Sampler
 
-from Cellan.detectron2.utils import comm
+from EZannot.detectron2.utils import comm
 
 logger = logging.getLogger(__name__)
 
