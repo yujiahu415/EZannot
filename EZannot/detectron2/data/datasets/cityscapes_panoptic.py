@@ -3,9 +3,9 @@ import json
 import logging
 import os
 
-from Cellan.detectron2.data import DatasetCatalog, MetadataCatalog
-from Cellan.detectron2.data.datasets.builtin_meta import CITYSCAPES_CATEGORIES
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import DatasetCatalog, MetadataCatalog
+from EZannot.detectron2.data.datasets.builtin_meta import CITYSCAPES_CATEGORIES
+from EZannot.detectron2.utils.file_io import PathManager
 
 """
 This file contains functions to register the Cityscapes panoptic dataset to the DatasetCatalog.
