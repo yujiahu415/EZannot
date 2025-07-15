@@ -5,7 +5,7 @@ import types
 from collections import UserDict
 from typing import List
 
-from Cellan.detectron2.utils.logger import log_first_n
+from EZannot.detectron2.utils.logger import log_first_n
 
 __all__ = ["DatasetCatalog", "MetadataCatalog", "Metadata"]
 
@@ -82,8 +82,8 @@ DatasetCatalog = _DatasetCatalog()
 DatasetCatalog.__doc__ = (
     _DatasetCatalog.__doc__
     + """
-    .. automethod:: Cellan.detectron2.data.catalog.DatasetCatalog.register
-    .. automethod:: Cellan.detectron2.data.catalog.DatasetCatalog.get
+    .. automethod:: EZannot.detectron2.data.catalog.DatasetCatalog.register
+    .. automethod:: EZannot.detectron2.data.catalog.DatasetCatalog.get
 """
 )
 
@@ -231,6 +231,6 @@ MetadataCatalog = _MetadataCatalog()
 MetadataCatalog.__doc__ = (
     _MetadataCatalog.__doc__
     + """
-    .. automethod:: Cellan.detectron2.data.catalog.MetadataCatalog.get
+    .. automethod:: EZannot.detectron2.data.catalog.MetadataCatalog.get
 """
 )
