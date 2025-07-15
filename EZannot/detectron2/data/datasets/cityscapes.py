@@ -9,10 +9,10 @@ from itertools import chain
 import pycocotools.mask as mask_util
 from PIL import Image
 
-from Cellan.detectron2.structures import BoxMode
-from Cellan.detectron2.utils.comm import get_world_size
-from Cellan.detectron2.utils.file_io import PathManager
-from Cellan.detectron2.utils.logger import setup_logger
+from EZannot.detectron2.structures import BoxMode
+from EZannot.detectron2.utils.comm import get_world_size
+from EZannot.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.logger import setup_logger
 
 try:
     import cv2  # noqa
@@ -295,8 +295,8 @@ def main() -> None:
     parser.add_argument("--type", choices=["instance", "semantic"], default="instance")
     args = parser.parse_args()
     from cityscapesscripts.helpers.labels import labels
-    from Cellan.detectron2.data.catalog import Metadata
-    from Cellan.detectron2.utils.visualizer import Visualizer
+    from EZannot.detectron2.data.catalog import Metadata
+    from EZannot.detectron2.utils.visualizer import Visualizer
 
     logger = setup_logger(name=__name__)
 
