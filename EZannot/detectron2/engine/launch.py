@@ -5,7 +5,7 @@ import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
 
-from Cellan.detectron2.utils import comm
+from EZannot.detectron2.utils import comm
 
 __all__ = ["DEFAULT_TIMEOUT", "launch"]
 
