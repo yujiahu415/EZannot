@@ -1,7 +1,7 @@
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.modeling.poolers import ROIPooler
-from Cellan.detectron2.modeling.roi_heads import KRCNNConvDeconvUpsampleHead
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.modeling.poolers import ROIPooler
+from EZannot.detectron2.modeling.roi_heads import KRCNNConvDeconvUpsampleHead
 
 from .mask_rcnn_fpn import model
 
