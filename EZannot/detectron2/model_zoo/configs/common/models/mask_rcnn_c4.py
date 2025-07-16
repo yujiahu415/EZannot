@@ -1,13 +1,13 @@
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.modeling.meta_arch import GeneralizedRCNN
-from Cellan.detectron2.modeling.anchor_generator import DefaultAnchorGenerator
-from Cellan.detectron2.modeling.backbone import BasicStem, BottleneckBlock, ResNet
-from Cellan.detectron2.modeling.box_regression import Box2BoxTransform
-from Cellan.detectron2.modeling.matcher import Matcher
-from Cellan.detectron2.modeling.poolers import ROIPooler
-from Cellan.detectron2.modeling.proposal_generator import RPN, StandardRPNHead
-from Cellan.detectron2.modeling.roi_heads import (
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.modeling.meta_arch import GeneralizedRCNN
+from EZannot.detectron2.modeling.anchor_generator import DefaultAnchorGenerator
+from EZannot.detectron2.modeling.backbone import BasicStem, BottleneckBlock, ResNet
+from EZannot.detectron2.modeling.box_regression import Box2BoxTransform
+from EZannot.detectron2.modeling.matcher import Matcher
+from EZannot.detectron2.modeling.poolers import ROIPooler
+from EZannot.detectron2.modeling.proposal_generator import RPN, StandardRPNHead
+from EZannot.detectron2.modeling.roi_heads import (
     FastRCNNOutputLayers,
     MaskRCNNConvUpsampleHead,
     Res5ROIHeads,
