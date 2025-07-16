@@ -1,8 +1,8 @@
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.modeling.box_regression import Box2BoxTransform
-from Cellan.detectron2.modeling.matcher import Matcher
-from Cellan.detectron2.modeling.roi_heads import FastRCNNOutputLayers, FastRCNNConvFCHead, CascadeROIHeads
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.modeling.box_regression import Box2BoxTransform
+from EZannot.detectron2.modeling.matcher import Matcher
+from EZannot.detectron2.modeling.roi_heads import FastRCNNOutputLayers, FastRCNNConvFCHead, CascadeROIHeads
 
 from .mask_rcnn_fpn import model
 
