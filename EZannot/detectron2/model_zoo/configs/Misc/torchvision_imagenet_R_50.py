@@ -19,13 +19,13 @@ from torchvision.transforms import transforms as T
 from torchvision.models.resnet import ResNet, Bottleneck
 from fvcore.common.param_scheduler import MultiStepParamScheduler
 
-from Cellan.detectron2.solver import WarmupParamScheduler
-from Cellan.detectron2.solver.build import get_default_optimizer_params
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.model_zoo import get_config
-from Cellan.detectron2.data.samplers import TrainingSampler, InferenceSampler
-from Cellan.detectron2.evaluation import DatasetEvaluator
-from Cellan.detectron2.utils import comm
+from EZannot.detectron2.solver import WarmupParamScheduler
+from EZannot.detectron2.solver.build import get_default_optimizer_params
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.model_zoo import get_config
+from EZannot.detectron2.data.samplers import TrainingSampler, InferenceSampler
+from EZannot.detectron2.evaluation import DatasetEvaluator
+from EZannot.detectron2.utils import comm
 
 
 """
