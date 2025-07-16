@@ -1,7 +1,7 @@
 from fvcore.common.param_scheduler import MultiStepParamScheduler
 
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.solver import WarmupParamScheduler
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.solver import WarmupParamScheduler
 
 
 def default_X_scheduler(num_X):
