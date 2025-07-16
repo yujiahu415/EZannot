@@ -1,14 +1,14 @@
 from omegaconf import OmegaConf
 
-import Cellan.detectron2.data.transforms as T
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.data import (
+import EZannot.detectron2.data.transforms as T
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.data import (
     DatasetMapper,
     build_detection_test_loader,
     build_detection_train_loader,
     get_detection_dataset_dicts,
 )
-from Cellan.detectron2.evaluation import COCOEvaluator
+from EZannot.detectron2.evaluation import COCOEvaluator
 
 dataloader = OmegaConf.create()
 
