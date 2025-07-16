@@ -1,5 +1,5 @@
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.evaluation import (
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.evaluation import (
     COCOEvaluator,
     COCOPanopticEvaluator,
     DatasetEvaluators,
