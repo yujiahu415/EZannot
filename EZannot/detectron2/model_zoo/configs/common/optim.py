@@ -1,7 +1,7 @@
 import torch
 
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.solver.build import get_default_optimizer_params
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.solver.build import get_default_optimizer_params
 
 SGD = L(torch.optim.SGD)(
     params=L(get_default_optimizer_params)(
