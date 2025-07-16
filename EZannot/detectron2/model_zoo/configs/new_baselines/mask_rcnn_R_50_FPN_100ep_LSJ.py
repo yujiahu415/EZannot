@@ -1,7 +1,7 @@
-import Cellan.detectron2.data.transforms as T
-from Cellan.detectron2.config.lazy import LazyCall as L
-from Cellan.detectron2.layers.batch_norm import NaiveSyncBatchNorm
-from Cellan.detectron2.solver import WarmupParamScheduler
+import EZannot.detectron2.data.transforms as T
+from EZannot.detectron2.config.lazy import LazyCall as L
+from EZannot.detectron2.layers.batch_norm import NaiveSyncBatchNorm
+from EZannot.detectron2.solver import WarmupParamScheduler
 from fvcore.common.param_scheduler import MultiStepParamScheduler
 
 from ..common.data.coco import dataloader
