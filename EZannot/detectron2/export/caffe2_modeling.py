@@ -6,10 +6,10 @@ import struct
 import types
 import torch
 
-from Cellan.detectron2.modeling import meta_arch
-from Cellan.detectron2.modeling.box_regression import Box2BoxTransform
-from Cellan.detectron2.modeling.roi_heads import keypoint_head
-from Cellan.detectron2.structures import Boxes, ImageList, Instances, RotatedBoxes
+from EZannot.detectron2.modeling import meta_arch
+from EZannot.detectron2.modeling.box_regression import Box2BoxTransform
+from EZannot.detectron2.modeling.roi_heads import keypoint_head
+from EZannot.detectron2.structures import Boxes, ImageList, Instances, RotatedBoxes
 
 from .c10 import Caffe2Compatible
 from .caffe2_patch import ROIHeadsPatcher, patch_generalized_rcnn
