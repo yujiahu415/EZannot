@@ -8,12 +8,12 @@ import pickle
 from collections import OrderedDict
 import torch
 
-import Cellan.detectron2.utils.comm as comm
-from Cellan.detectron2.config import CfgNode
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.structures import Boxes, BoxMode, pairwise_iou
-from Cellan.detectron2.utils.file_io import PathManager
-from Cellan.detectron2.utils.logger import create_small_table
+import EZannot.detectron2.utils.comm as comm
+from EZannot.detectron2.config import CfgNode
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.structures import Boxes, BoxMode, pairwise_iou
+from EZannot.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.logger import create_small_table
 
 from .coco_evaluation import instances_to_coco_json
 from .evaluator import DatasetEvaluator
