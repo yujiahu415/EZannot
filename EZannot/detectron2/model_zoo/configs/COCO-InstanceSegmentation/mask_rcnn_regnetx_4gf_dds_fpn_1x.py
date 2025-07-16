@@ -4,9 +4,9 @@ from ..common.data.coco import dataloader
 from ..common.models.mask_rcnn_fpn import model
 from ..common.train import train
 
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.modeling.backbone import RegNet
-from Cellan.detectron2.modeling.backbone.regnet import SimpleStem, ResBottleneckBlock
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.modeling.backbone import RegNet
+from EZannot.detectron2.modeling.backbone.regnet import SimpleStem, ResBottleneckBlock
 
 
 # Replace default ResNet with RegNetX-4GF from the DDS paper. Config source:
