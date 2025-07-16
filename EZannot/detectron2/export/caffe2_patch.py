@@ -4,10 +4,10 @@ import contextlib
 from unittest import mock
 import torch
 
-from Cellan.detectron2.modeling import poolers
-from Cellan.detectron2.modeling.proposal_generator import rpn
-from Cellan.detectron2.modeling.roi_heads import keypoint_head, mask_head
-from Cellan.detectron2.modeling.roi_heads.fast_rcnn import FastRCNNOutputLayers
+from EZannot.detectron2.modeling import poolers
+from EZannot.detectron2.modeling.proposal_generator import rpn
+from EZannot.detectron2.modeling.roi_heads import keypoint_head, mask_head
+from EZannot.detectron2.modeling.roi_heads.fast_rcnn import FastRCNNOutputLayers
 
 from .c10 import (
     Caffe2Compatible,
