@@ -6,8 +6,8 @@ from ..common.optim import SGD as optimizer
 from ..common.train import train
 from ..common.data.constants import constants
 
-from Cellan.detectron2.modeling.mmdet_wrapper import MMDetDetector
-from Cellan.detectron2.config import LazyCall as L
+from EZannot.detectron2.modeling.mmdet_wrapper import MMDetDetector
+from EZannot.detectron2.config import LazyCall as L
 
 model = L(MMDetDetector)(
     detector=dict(
