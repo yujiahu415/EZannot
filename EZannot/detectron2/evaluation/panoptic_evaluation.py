@@ -12,9 +12,9 @@ from typing import Optional
 from PIL import Image
 from tabulate import tabulate
 
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.utils import comm
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.utils import comm
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .evaluator import DatasetEvaluator
 
@@ -178,7 +178,7 @@ def _print_panoptic_results(pq_res):
 
 
 if __name__ == "__main__":
-    from Cellan.detectron2.utils.logger import setup_logger
+    from EZannot.detectron2.utils.logger import setup_logger
 
     logger = setup_logger()
     import argparse
