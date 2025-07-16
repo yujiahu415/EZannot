@@ -8,9 +8,9 @@ from collections import OrderedDict
 import torch
 from PIL import Image
 
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.utils import comm
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.utils import comm
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .evaluator import DatasetEvaluator
 
