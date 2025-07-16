@@ -1,7 +1,7 @@
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.modeling import PanopticFPN
-from Cellan.detectron2.modeling.meta_arch.semantic_seg import SemSegFPNHead
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.modeling import PanopticFPN
+from EZannot.detectron2.modeling.meta_arch.semantic_seg import SemSegFPNHead
 
 from .mask_rcnn_fpn import model
 
