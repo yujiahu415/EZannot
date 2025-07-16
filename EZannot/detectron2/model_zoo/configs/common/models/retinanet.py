@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from Cellan.detectron2.config import LazyCall as L
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.modeling.meta_arch import RetinaNet
-from Cellan.detectron2.modeling.anchor_generator import DefaultAnchorGenerator
-from Cellan.detectron2.modeling.backbone.fpn import LastLevelP6P7
-from Cellan.detectron2.modeling.backbone import BasicStem, FPN, ResNet
-from Cellan.detectron2.modeling.box_regression import Box2BoxTransform
-from Cellan.detectron2.modeling.matcher import Matcher
-from Cellan.detectron2.modeling.meta_arch.retinanet import RetinaNetHead
+from EZannot.detectron2.config import LazyCall as L
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.modeling.meta_arch import RetinaNet
+from EZannot.detectron2.modeling.anchor_generator import DefaultAnchorGenerator
+from EZannot.detectron2.modeling.backbone.fpn import LastLevelP6P7
+from EZannot.detectron2.modeling.backbone import BasicStem, FPN, ResNet
+from EZannot.detectron2.modeling.box_regression import Box2BoxTransform
+from EZannot.detectron2.modeling.matcher import Matcher
+from EZannot.detectron2.modeling.meta_arch.retinanet import RetinaNetHead
 
 from ..data.constants import constants
 
