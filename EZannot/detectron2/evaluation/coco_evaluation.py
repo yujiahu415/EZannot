@@ -15,18 +15,18 @@ from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 from tabulate import tabulate
 
-import Cellan.detectron2.utils.comm as comm
-from Cellan.detectron2.config import CfgNode
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.data.datasets.coco import convert_to_coco_json
-from Cellan.detectron2.structures import Boxes, BoxMode, pairwise_iou
-from Cellan.detectron2.utils.file_io import PathManager
-from Cellan.detectron2.utils.logger import create_small_table
+import EZannot.detectron2.utils.comm as comm
+from EZannot.detectron2.config import CfgNode
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.data.datasets.coco import convert_to_coco_json
+from EZannot.detectron2.structures import Boxes, BoxMode, pairwise_iou
+from EZannot.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.logger import create_small_table
 
 from .evaluator import DatasetEvaluator
 
 try:
-    from Cellan.detectron2.evaluation.fast_eval_api import COCOeval_opt
+    from EZannot.detectron2.evaluation.fast_eval_api import COCOeval_opt
 except ImportError:
     COCOeval_opt = COCOeval
 
