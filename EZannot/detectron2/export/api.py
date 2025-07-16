@@ -6,8 +6,8 @@ import torch
 from caffe2.proto import caffe2_pb2
 from torch import nn
 
-from Cellan.detectron2.config import CfgNode
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.config import CfgNode
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .caffe2_inference import ProtobufDetectionModel
 from .caffe2_modeling import META_ARCH_CAFFE2_EXPORT_TYPE_MAP, convert_batched_inputs_to_c2_format
