@@ -3,7 +3,7 @@
 import os
 import torch
 
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .torchscript_patch import freeze_training_mode, patch_instances
 
