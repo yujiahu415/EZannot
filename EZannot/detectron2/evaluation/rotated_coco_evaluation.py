@@ -6,8 +6,8 @@ import os
 import torch
 from pycocotools.cocoeval import COCOeval, maskUtils
 
-from Cellan.detectron2.structures import BoxMode, RotatedBoxes, pairwise_iou_rotated
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.structures import BoxMode, RotatedBoxes, pairwise_iou_rotated
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .coco_evaluation import COCOEvaluator
 
