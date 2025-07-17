@@ -3,11 +3,11 @@ from typing import Dict, List, Optional, Tuple
 import torch
 from torch import Tensor, nn
 
-from Cellan.detectron2.data.detection_utils import convert_image_to_rgb
-from Cellan.detectron2.layers import move_device_like
-from Cellan.detectron2.modeling import Backbone
-from Cellan.detectron2.structures import Boxes, ImageList, Instances
-from Cellan.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.data.detection_utils import convert_image_to_rgb
+from EZannot.detectron2.layers import move_device_like
+from EZannot.detectron2.modeling import Backbone
+from EZannot.detectron2.structures import Boxes, ImageList, Instances
+from EZannot.detectron2.utils.events import get_event_storage
 
 from ..postprocessing import detector_postprocess
 
@@ -268,7 +268,7 @@ class DenseDetector(nn.Module):
             batched_inputs (list): a list that contains input to the model.
             results (List[Instances]): a list of #images elements returned by forward_inference().
         """
-        from Cellan.detectron2.utils.visualizer import Visualizer
+        from EZannot.detectron2.utils.visualizer import Visualizer
 
         assert len(batched_inputs) == len(
             results
