@@ -4,11 +4,11 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import Conv2d, ConvTranspose2d, cat, interpolate
-from Cellan.detectron2.structures import Instances, heatmaps_to_keypoints
-from Cellan.detectron2.utils.events import get_event_storage
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import Conv2d, ConvTranspose2d, cat, interpolate
+from EZannot.detectron2.structures import Instances, heatmaps_to_keypoints
+from EZannot.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.utils.registry import Registry
 
 _TOTAL_SKIPPED = 0
 
