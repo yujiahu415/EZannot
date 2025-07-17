@@ -5,9 +5,9 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.layers import ShapeSpec, cat
-from Cellan.detectron2.utils.events import get_event_storage
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.layers import ShapeSpec, cat
+from EZannot.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.utils.registry import Registry
 
 POINT_HEAD_REGISTRY = Registry("POINT_HEAD")
 POINT_HEAD_REGISTRY.__doc__ = """
