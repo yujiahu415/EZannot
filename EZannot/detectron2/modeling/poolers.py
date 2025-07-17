@@ -5,9 +5,9 @@ import torch
 from torch import nn
 from torchvision.ops import RoIPool
 
-from Cellan.detectron2.layers import ROIAlign, ROIAlignRotated, cat, nonzero_tuple, shapes_to_tensor
-from Cellan.detectron2.structures import Boxes
-from Cellan.detectron2.utils.tracing import assert_fx_safe, is_fx_tracing
+from EZannot.detectron2.layers import ROIAlign, ROIAlignRotated, cat, nonzero_tuple, shapes_to_tensor
+from EZannot.detectron2.structures import Boxes
+from EZannot.detectron2.utils.tracing import assert_fx_safe, is_fx_tracing
 
 """
 To export ROIPooler to torchscript, in this file, variables that should be annotated with
