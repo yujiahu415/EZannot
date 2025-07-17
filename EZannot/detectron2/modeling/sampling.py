@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import torch
 
-from Cellan.detectron2.layers import nonzero_tuple
+from EZannot.detectron2.layers import nonzero_tuple
 
 __all__ = ["subsample_labels"]
 
