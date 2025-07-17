@@ -5,9 +5,9 @@ import fvcore.nn.weight_init as weight_init
 import torch
 from torch import nn
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import Conv2d, ShapeSpec, get_norm
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import Conv2d, ShapeSpec, get_norm
+from EZannot.detectron2.utils.registry import Registry
 
 __all__ = ["FastRCNNConvFCHead", "build_box_head", "ROI_BOX_HEAD_REGISTRY"]
 
