@@ -9,9 +9,9 @@ import torch
 from omegaconf import DictConfig, OmegaConf
 from torch import Tensor, nn
 
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.structures import BitMasks, Boxes, ImageList, Instances
-from Cellan.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.structures import BitMasks, Boxes, ImageList, Instances
+from EZannot.detectron2.utils.events import get_event_storage
 
 from .backbone import Backbone
 
