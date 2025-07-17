@@ -4,8 +4,8 @@ import math
 from typing import List, Tuple, Union
 import torch
 
-from Cellan.detectron2.layers import batched_nms, cat, move_device_like
-from Cellan.detectron2.structures import Boxes, Instances
+from EZannot.detectron2.layers import batched_nms, cat, move_device_like
+from EZannot.detectron2.structures import Boxes, Instances
 
 logger = logging.getLogger(__name__)
 
