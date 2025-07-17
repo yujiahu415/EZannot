@@ -6,8 +6,8 @@ from typing import Dict
 import torch
 from scipy.optimize import linear_sum_assignment
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.structures import Boxes, Instances
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.structures import Boxes, Instances
 
 from ..config.config import CfgNode as CfgNode_
 from .base_tracker import BaseTracker
