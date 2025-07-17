@@ -5,10 +5,10 @@ from typing import List
 import torch
 from torch import nn
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import ShapeSpec, move_device_like
-from Cellan.detectron2.structures import Boxes, RotatedBoxes
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import ShapeSpec, move_device_like
+from EZannot.detectron2.structures import Boxes, RotatedBoxes
+from EZannot.detectron2.utils.registry import Registry
 
 ANCHOR_GENERATOR_REGISTRY = Registry("ANCHOR_GENERATOR")
 ANCHOR_GENERATOR_REGISTRY.__doc__ = """
