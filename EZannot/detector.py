@@ -2,64 +2,64 @@ import os
 import cv2
 import json
 import torch
-from Cellan.detectron2 import model_zoo
-from Cellan.detectron2.checkpoint import DetectionCheckpointer
-from Cellan.detectron2.config import get_cfg
-from Cellan.detectron2.data import MetadataCatalog,DatasetCatalog,build_detection_test_loader
-from Cellan.detectron2.data.datasets import register_coco_instances
-from Cellan.detectron2.engine import DefaultTrainer,DefaultPredictor
-from Cellan.detectron2.utils.visualizer import Visualizer
-from Cellan.detectron2.evaluation import COCOEvaluator,inference_on_dataset
-from Cellan.detectron2.modeling import build_model
+from EZannot.detectron2 import model_zoo
+from EZannot.detectron2.checkpoint import DetectionCheckpointer
+from EZannot.detectron2.config import get_cfg
+from EZannot.detectron2.data import MetadataCatalog,DatasetCatalog,build_detection_test_loader
+from EZannot.detectron2.data.datasets import register_coco_instances
+from EZannot.detectron2.engine import DefaultTrainer,DefaultPredictor
+from EZannot.detectron2.utils.visualizer import Visualizer
+from EZannot.detectron2.evaluation import COCOEvaluator,inference_on_dataset
+from EZannot.detectron2.modeling import build_model
 
 
 
-class Detector():
+class annotator():
 
 	def __init__(self):
 
 		self.device='cuda' if torch.cuda.is_available() else 'cpu' # whether the GPU is available, if so, use GPU
-		self.cell_mapping=None # the celln categories and names in a Detector
+		self.object_mapping=None # the objectn categories and names in a annotator
 		self.inferencing_framesize=None
 		self.black_background=None
-		self.current_detector=None # the current Detector used for inference
+		self.current_annotator=None # the current annotator used for inference
 
 
-	def train(self,path_to_annotation,path_to_trainingimages,path_to_detector,iteration_num,inference_size,num_rois,black_background=0):
+	def train(self,path_to_annotation,path_to_trainingimages,path_to_annotator,iteration_num,inference_size,num_rois,black_background=0):
 
 		# path_to_annotation: the path to the .json file that stores the annotations in coco format
 		# path_to_trainingimages: the folder that stores all the training images
 		# iteration_num: the number of training iterations
-		# inference_size: the Detector inferencing frame size
+		# inference_size: the annotator inferencing frame size
 		# num_rois: the batch size of ROI heads per image
 		# black_background: whether the background of images to analyze is black/darker
 
-		if str('Cellan_detector_train') in DatasetCatalog.list():
-			DatasetCatalog.remove('Cellan_detector_train')
-			MetadataCatalog.remove('Cellan_detector_train')
+		if str('EZannot_annotator_train') in DatasetCatalog.list():
+			DatasetCatalog.remove('EZannot_annotator_train')
+			MetadataCatalog.remove('EZannot_annotator_train')
 
-		register_coco_instances('Cellan_detector_train',{},path_to_annotation,path_to_trainingimages)
+		register_coco_instances('EZannot_annotator_train',{},path_to_annotation,path_to_trainingimages)
 
-		datasetcat=DatasetCatalog.get('Cellan_detector_train')
-		metadatacat=MetadataCatalog.get('Cellan_detector_train')
+		datasetcat=DatasetCatalog.get('EZannot_annotator_train')
+		metadatacat=MetadataCatalog.get('EZannot_annotator_train')
 
 		classnames=metadatacat.thing_classes
 
 		model_parameters_dict={}
-		model_parameters_dict['cell_names']=[]
+		model_parameters_dict['object_names']=[]
 
 		annotation_data=json.load(open(path_to_annotation))
 
 		for i in annotation_data['categories']:
 			if i['id']>0:
-				model_parameters_dict['cell_names'].append(i['name'])
+				model_parameters_dict['object_names'].append(i['name'])
 
-		print('Cell names in annotation file: '+str(model_parameters_dict['cell_names']))
+		print('Object names in annotation file: '+str(model_parameters_dict['object_names']))
 
 		cfg=get_cfg()
 		cfg.merge_from_file(model_zoo.get_config_file('COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml'))
-		cfg.OUTPUT_DIR=path_to_detector
-		cfg.DATASETS.TRAIN=('Cellan_detector_train',)
+		cfg.OUTPUT_DIR=path_to_annotator
+		cfg.DATASETS.TRAIN=('EZannot_annotator_train',)
 		cfg.DATASETS.TEST=()
 		cfg.DATALOADER.NUM_WORKERS=4
 		cfg.MODEL.WEIGHTS=model_zoo.get_checkpoint_url('COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml')
@@ -86,12 +86,12 @@ class Detector():
 
 		model_parameters=os.path.join(cfg.OUTPUT_DIR,'model_parameters.txt')
 		
-		model_parameters_dict['cell_mapping']={}
+		model_parameters_dict['object_mapping']={}
 		model_parameters_dict['inferencing_framesize']=int(inference_size)
 		model_parameters_dict['black_background']=int(black_background)
 
 		for i in range(len(classnames)):
-			model_parameters_dict['cell_mapping'][i]=classnames[i]
+			model_parameters_dict['object_mapping'][i]=classnames[i]
 
 		with open(model_parameters,'w') as f:
 			f.write(json.dumps(model_parameters_dict))
@@ -107,44 +107,44 @@ class Detector():
 		with open(config,'w') as f:
 			f.write(cfg.dump())
 
-		print('Detector training completed!')
+		print('Annotator training completed!')
 
 
-	def test(self,path_to_annotation,path_to_testingimages,path_to_detector,output_path):
+	def test(self,path_to_annotation,path_to_testingimages,path_to_annotator,output_path):
 
 		# path_to_annotation: the path to the .json file that stores the annotations in coco format
 		# path_to_testingimages: the folder that stores all the ground-truth testing images
 		# output_path: the folder that stores the testing images with annotations
 
-		if str('Cellan_detector_test') in DatasetCatalog.list():
-			DatasetCatalog.remove('Cellan_detector_test')
-			MetadataCatalog.remove('Cellan_detector_test')
+		if str('EZannot_annotator_test') in DatasetCatalog.list():
+			DatasetCatalog.remove('EZannot_annotator_test')
+			MetadataCatalog.remove('EZannot_annotator_test')
 
-		register_coco_instances('Cellan_detector_test',{},path_to_annotation,path_to_testingimages)
+		register_coco_instances('EZannot_annotator_test',{},path_to_annotation,path_to_testingimages)
 
-		datasetcat=DatasetCatalog.get('Cellan_detector_test')
-		metadatacat=MetadataCatalog.get('Cellan_detector_test')
+		datasetcat=DatasetCatalog.get('EZannot_annotator_test')
+		metadatacat=MetadataCatalog.get('EZannot_annotator_test')
 
-		cellmapping=os.path.join(path_to_detector,'model_parameters.txt')
+		objectmapping=os.path.join(path_to_annotator,'model_parameters.txt')
 
-		with open(cellmapping) as f:
+		with open(objectmapping) as f:
 			model_parameters=f.read()
 
-		cell_names=json.loads(model_parameters)['cell_names']
+		object_names=json.loads(model_parameters)['object_names']
 		dt_infersize=int(json.loads(model_parameters)['inferencing_framesize'])
 		bg=int(json.loads(model_parameters)['black_background'])
 
-		print('The total categories of cells in this Detector: '+str(cell_names))
-		print('The inferencing framesize of this Detector: '+str(dt_infersize))
+		print('The total categories of objects in this Annotator: '+str(object_names))
+		print('The inferencing framesize of this Annotator: '+str(dt_infersize))
 		if bg==0:
-			print('The images that can be analyzed by this Detector have black/darker background')
+			print('The images that can be analyzed by this Annotator have black/darker background')
 		else:
-			print('The images that can be analyzed by this Detector have white/lighter background')
+			print('The images that can be analyzed by this Annotator have white/lighter background')
 
 		cfg=get_cfg()
 		cfg.set_new_allowed(True)
-		cfg.merge_from_file(os.path.join(path_to_detector,'config.yaml'))
-		cfg.MODEL.WEIGHTS=os.path.join(path_to_detector,'model_final.pth')
+		cfg.merge_from_file(os.path.join(path_to_annotator,'config.yaml'))
+		cfg.MODEL.WEIGHTS=os.path.join(path_to_annotator,'model_final.pth')
 		cfg.MODEL.DEVICE=self.device
 
 		predictor=DefaultPredictor(cfg)
@@ -152,60 +152,60 @@ class Detector():
 		for d in datasetcat:
 			im=cv2.imread(d['file_name'])
 			outputs=predictor(im)
-			v=Visualizer(im[:,:,::-1],MetadataCatalog.get('Cellan_detector_test'),scale=1.2)
+			v=Visualizer(im[:,:,::-1],MetadataCatalog.get('EZannot_annotator_test'),scale=1.2)
 			out=v.draw_instance_predictions(outputs['instances'].to('cpu'))
 			cv2.imwrite(os.path.join(output_path,os.path.basename(d['file_name'])),out.get_image()[:,:,::-1])
 
-		evaluator=COCOEvaluator('Cellan_detector_test',cfg,False,output_dir=output_path)
-		val_loader=build_detection_test_loader(cfg,'Cellan_detector_test')
+		evaluator=COCOEvaluator('EZannot_annotator_test',cfg,False,output_dir=output_path)
+		val_loader=build_detection_test_loader(cfg,'EZannot_annotator_test')
 
 		inference_on_dataset(predictor.model,val_loader,evaluator)
 
 		mAP=evaluator._results['bbox']['AP']
 
-		print(f'The mean average precision (mAP) of the Detector is: {mAP:.4f}%.')
-		print('Detector testing completed!')
+		print(f'The mean average precision (mAP) of the Annotator is: {mAP:.4f}%.')
+		print('Annotator testing completed!')
 
 
-	def load(self,path_to_detector,cell_kinds):
+	def load(self,path_to_annotator,object_kinds):
 
-		# cell_kinds: the catgories of cells / objects to be analyzed
+		# object_kinds: the catgories of objects / objects to be analyzed
 
-		config=os.path.join(path_to_detector,'config.yaml')
-		detector_model=os.path.join(path_to_detector,'model_final.pth')
-		cellmapping=os.path.join(path_to_detector,'model_parameters.txt')
-		with open(cellmapping) as f:
+		config=os.path.join(path_to_annotator,'config.yaml')
+		annotator_model=os.path.join(path_to_annotator,'model_final.pth')
+		objectmapping=os.path.join(path_to_annotator,'model_parameters.txt')
+		with open(objectmapping) as f:
 			model_parameters=f.read()
-		self.cell_mapping=json.loads(model_parameters)['cell_mapping']
-		cell_names=json.loads(model_parameters)['cell_names']
+		self.object_mapping=json.loads(model_parameters)['object_mapping']
+		object_names=json.loads(model_parameters)['object_names']
 		self.inferencing_framesize=int(json.loads(model_parameters)['inferencing_framesize'])
 		bg=int(json.loads(model_parameters)['black_background'])
 
-		print('The total categories of cells in this Detector: '+str(cell_names))
-		print('The cells of interest in this Detector: '+str(cell_kinds))
-		print('The inferencing framesize of this Detector: '+str(self.inferencing_framesize))
+		print('The total categories of objects in this annotator: '+str(object_names))
+		print('The objects of interest in this annotator: '+str(object_kinds))
+		print('The inferencing framesize of this annotator: '+str(self.inferencing_framesize))
 		if bg==0:
 			self.black_background=True
-			print('The images that can be analyzed by this Detector have black/darker background')
+			print('The images that can be analyzed by this annotator have black/darker background')
 		else:
 			self.black_background=False
-			print('The images that can be analyzed by this Detector have white/lighter background')
+			print('The images that can be analyzed by this annotator have white/lighter background')
 
 		cfg=get_cfg()
 		cfg.set_new_allowed(True)
 		cfg.merge_from_file(config)
 		cfg.MODEL.DEVICE=self.device
-		self.current_detector=build_model(cfg)
-		DetectionCheckpointer(self.current_detector).load(detector_model)
-		self.current_detector.eval()
+		self.current_annotator=build_model(cfg)
+		DetectionCheckpointer(self.current_annotator).load(annotator_model)
+		self.current_annotator.eval()
 
 
 	def inference(self,inputs):
 
-		# inputs: images that the current Detector runs on
+		# inputs: images that the current annotator runs on
 
 		with torch.no_grad():
-			outputs=self.current_detector(inputs)
+			outputs=self.current_annotator(inputs)
 
 		return outputs
 
