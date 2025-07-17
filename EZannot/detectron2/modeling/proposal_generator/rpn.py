@@ -4,12 +4,12 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import Conv2d, ShapeSpec, cat
-from Cellan.detectron2.structures import Boxes, ImageList, Instances, pairwise_iou
-from Cellan.detectron2.utils.events import get_event_storage
-from Cellan.detectron2.utils.memory import retry_if_cuda_oom
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import Conv2d, ShapeSpec, cat
+from EZannot.detectron2.structures import Boxes, ImageList, Instances, pairwise_iou
+from EZannot.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.utils.memory import retry_if_cuda_oom
+from EZannot.detectron2.utils.registry import Registry
 
 from ..anchor_generator import build_anchor_generator
 from ..box_regression import Box2BoxTransform, _dense_box_regression_loss
