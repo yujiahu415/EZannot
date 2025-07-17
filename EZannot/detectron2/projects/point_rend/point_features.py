@@ -2,8 +2,8 @@
 import torch
 from torch.nn import functional as F
 
-from Cellan.detectron2.layers import cat, shapes_to_tensor
-from Cellan.detectron2.structures import BitMasks, Boxes
+from EZannot.detectron2.layers import cat, shapes_to_tensor
+from EZannot.detectron2.structures import BitMasks, Boxes
 
 
 """
