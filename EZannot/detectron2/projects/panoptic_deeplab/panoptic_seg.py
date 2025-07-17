@@ -6,20 +6,20 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.layers import Conv2d, DepthwiseSeparableConv2d, ShapeSpec, get_norm
-from Cellan.detectron2.modeling import (
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.layers import Conv2d, DepthwiseSeparableConv2d, ShapeSpec, get_norm
+from EZannot.detectron2.modeling import (
     META_ARCH_REGISTRY,
     SEM_SEG_HEADS_REGISTRY,
     build_backbone,
     build_sem_seg_head,
 )
-from Cellan.detectron2.modeling.postprocessing import sem_seg_postprocess
-from Cellan.detectron2.projects.deeplab import DeepLabV3PlusHead
-from Cellan.detectron2.projects.deeplab.loss import DeepLabCE
-from Cellan.detectron2.structures import BitMasks, ImageList, Instances
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.modeling.postprocessing import sem_seg_postprocess
+from EZannot.detectron2.projects.deeplab import DeepLabV3PlusHead
+from EZannot.detectron2.projects.deeplab.loss import DeepLabCE
+from EZannot.detectron2.structures import BitMasks, ImageList, Instances
+from EZannot.detectron2.utils.registry import Registry
 
 from .post_processing import get_panoptic_segmentation
 
