@@ -7,7 +7,7 @@ import fvcore
 from fvcore.nn import activation_count, flop_count, parameter_count, parameter_count_table
 from torch import nn
 
-from Cellan.detectron2.export import TracingAdapter
+from EZannot.detectron2.export import TracingAdapter
 
 __all__ = [
     "activation_count_operators",
