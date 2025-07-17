@@ -4,11 +4,11 @@
 import numpy as np
 from typing import List
 
-from Cellan.detectron2.config import CfgNode as CfgNode_
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.structures import Instances
-from Cellan.detectron2.structures.boxes import pairwise_iou
-from Cellan.detectron2.tracking.utils import LARGE_COST_VALUE, create_prediction_pairs
+from EZannot.detectron2.config import CfgNode as CfgNode_
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.structures import Instances
+from EZannot.detectron2.structures.boxes import pairwise_iou
+from EZannot.detectron2.tracking.utils import LARGE_COST_VALUE, create_prediction_pairs
 
 from .base_tracker import TRACKER_HEADS_REGISTRY
 from .hungarian_tracker import BaseHungarianTracker
@@ -78,7 +78,7 @@ class VanillaHungarianBBoxIOUTracker(BaseHungarianTracker):
         min_instance_period = cfg.TRACKER_HEADS.get("MIN_INSTANCE_PERIOD", 1)
         track_iou_threshold = cfg.TRACKER_HEADS.get("TRACK_IOU_THRESHOLD", 0.5)
         return {
-            "_target_": "Cellan.detectron2.tracking.vanilla_hungarian_bbox_iou_tracker.VanillaHungarianBBoxIOUTracker",  # noqa
+            "_target_": "EZannot.detectron2.tracking.vanilla_hungarian_bbox_iou_tracker.VanillaHungarianBBoxIOUTracker",  # noqa
             "video_height": video_height,
             "video_width": video_width,
             "max_num_instances": max_num_instances,
