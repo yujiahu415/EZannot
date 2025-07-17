@@ -70,12 +70,12 @@ def collect_env_info():
     data.append(("numpy", np.__version__))
 
     try:
-        import Cellan.detectron2  # noqa
+        import EZannot.detectron2  # noqa
 
         data.append(
             (
                 "detectron2",
-                Cellan.detectron2.__version__ + " @" + os.path.dirname(Cellan.detectron2.__file__),
+                EZannot.detectron2.__version__ + " @" + os.path.dirname(EZannot.detectron2.__file__),
             )
         )
     except ImportError:
@@ -84,9 +84,9 @@ def collect_env_info():
         data.append(("detectron2", "imported a wrong installation"))
 
     try:
-        import Cellan.detectron2._C as _C
+        import EZannot.detectron2._C as _C
     except ImportError as e:
-        data.append(("Cellan.detectron2._C", f"not built correctly: {e}"))
+        data.append(("EZannot.detectron2._C", f"not built correctly: {e}"))
 
         # print system compilers when extension fails to build
         if sys.platform != "win32":  # don't know what to do for windows
@@ -109,7 +109,7 @@ def collect_env_info():
                 data.append(("CUDA compiler", nvcc))
         if has_cuda and sys.platform != "win32":
             try:
-                so_file = importlib.util.find_spec("Cellan.detectron2._C").origin
+                so_file = importlib.util.find_spec("EZannot.detectron2._C").origin
             except (ImportError, AttributeError):
                 pass
             else:
@@ -237,7 +237,7 @@ def _test_nccl_worker(rank, num_gpu, dist_url):
 def main() -> None:
     global x
     try:
-        from Cellan.detectron2.utils.collect_env import collect_env_info as f
+        from EZannot.detectron2.utils.collect_env import collect_env_info as f
 
         print(f())
     except ImportError:
