@@ -14,7 +14,7 @@ from EZannot.detectron2.modeling import build_model
 
 
 
-class annotator():
+class Annotator():
 
 	def __init__(self):
 
