@@ -1,9 +1,9 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import torch
 
-from Cellan.detectron2.config import CfgNode
-from Cellan.detectron2.solver import LRScheduler
-from Cellan.detectron2.solver import build_lr_scheduler as build_d2_lr_scheduler
+from EZannot.detectron2.config import CfgNode
+from EZannot.detectron2.solver import LRScheduler
+from EZannot.detectron2.solver import build_lr_scheduler as build_d2_lr_scheduler
 
 from .lr_scheduler import WarmupPolyLR
 
