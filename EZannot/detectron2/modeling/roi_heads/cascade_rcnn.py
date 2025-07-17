@@ -4,10 +4,10 @@ import torch
 from torch import nn
 from torch.autograd.function import Function
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.structures import Boxes, Instances, pairwise_iou
-from Cellan.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.structures import Boxes, Instances, pairwise_iou
+from EZannot.detectron2.utils.events import get_event_storage
 
 from ..box_regression import Box2BoxTransform
 from ..matcher import Matcher
