@@ -12,8 +12,8 @@ from fvcore.common.param_scheduler import (
     StepWithFixedGammaParamScheduler,
 )
 
-from Cellan.detectron2.config import CfgNode
-from Cellan.detectron2.utils.env import TORCH_VERSION
+from EZannot.detectron2.config import CfgNode
+from EZannot.detectron2.utils.env import TORCH_VERSION
 
 from .lr_scheduler import LRMultiplier, LRScheduler, WarmupParamScheduler
 
