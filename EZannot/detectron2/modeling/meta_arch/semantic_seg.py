@@ -6,10 +6,10 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import Conv2d, ShapeSpec, get_norm
-from Cellan.detectron2.structures import ImageList
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import Conv2d, ShapeSpec, get_norm
+from EZannot.detectron2.structures import ImageList
+from EZannot.detectron2.utils.registry import Registry
 
 from ..backbone import Backbone, build_backbone
 from ..postprocessing import sem_seg_postprocess
