@@ -10,7 +10,7 @@ import torch
 from tabulate import tabulate
 from termcolor import colored
 
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.utils.file_io import PathManager
 
 __all__ = ["setup_logger", "log_first_n", "log_every_n", "log_every_n_seconds"]
 
@@ -45,7 +45,7 @@ def setup_logger(
     distributed_rank=0,
     *,
     color=True,
-    name="Cellan.detectron2",
+    name="EZannot.detectron2",
     abbrev_name=None,
     enable_propagation: bool = False,
     configure_stdout: bool = True
@@ -152,7 +152,7 @@ def _find_caller():
         if os.path.join("utils", "logger.") not in code.co_filename:
             mod_name = frame.f_globals["__name__"]
             if mod_name == "__main__":
-                mod_name = "Cellan.detectron2"
+                mod_name = "EZannot.detectron2"
             return mod_name, (code.co_filename, frame.f_lineno, code.co_name)
         frame = frame.f_back
 
@@ -258,4 +258,4 @@ def _log_api_usage(identifier: str):
     Internal function used to log the usage of different detectron2 components
     inside facebook's infra.
     """
-    torch._C._log_api_usage_once("Cellan.detectron2." + identifier)
+    torch._C._log_api_usage_once("EZannot.detectron2." + identifier)
