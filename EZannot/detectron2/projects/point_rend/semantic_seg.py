@@ -5,8 +5,8 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.layers import ShapeSpec, cat
-from Cellan.detectron2.modeling import SEM_SEG_HEADS_REGISTRY
+from EZannot.detectron2.layers import ShapeSpec, cat
+from EZannot.detectron2.modeling import SEM_SEG_HEADS_REGISTRY
 
 from .point_features import (
     get_uncertain_point_coords_on_grid,
