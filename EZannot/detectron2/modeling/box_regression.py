@@ -5,8 +5,8 @@ import torch
 from fvcore.nn import giou_loss, smooth_l1_loss
 from torch.nn import functional as F
 
-from Cellan.detectron2.layers import cat, ciou_loss, diou_loss
-from Cellan.detectron2.structures import Boxes
+from EZannot.detectron2.layers import cat, ciou_loss, diou_loss
+from EZannot.detectron2.structures import Boxes
 
 # Value for clamping large dw and dh predictions. The heuristic is that we clamp
 # such that dw and dh are no larger than what would transform a 16px box into a
