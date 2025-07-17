@@ -2,7 +2,7 @@
 from typing import List
 import torch
 
-from Cellan.detectron2.layers import nonzero_tuple
+from EZannot.detectron2.layers import nonzero_tuple
 
 
 # TODO: the name is too general
