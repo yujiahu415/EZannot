@@ -18,7 +18,7 @@ if _PROJECT_ROOT.is_dir():
 
     class _D2ProjectsFinder(importlib.abc.MetaPathFinder):
         def find_spec(self, name, path, target=None):
-            if not name.startswith("Cellan.detectron2.projects."):
+            if not name.startswith("EZannot.detectron2.projects."):
                 return
             project_name = name.split(".")[-1]
             project_dir = _PROJECTS.get(project_name)
