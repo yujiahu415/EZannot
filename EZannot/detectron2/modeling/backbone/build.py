@@ -1,6 +1,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
-from Cellan.detectron2.layers import ShapeSpec
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.layers import ShapeSpec
+from EZannot.detectron2.utils.registry import Registry
 
 from .backbone import Backbone
 
