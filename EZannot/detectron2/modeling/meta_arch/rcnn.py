@@ -5,12 +5,12 @@ from typing import Dict, List, Optional, Tuple
 import torch
 from torch import nn
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.data.detection_utils import convert_image_to_rgb
-from Cellan.detectron2.layers import move_device_like
-from Cellan.detectron2.structures import ImageList, Instances
-from Cellan.detectron2.utils.events import get_event_storage
-from Cellan.detectron2.utils.logger import log_first_n
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.data.detection_utils import convert_image_to_rgb
+from EZannot.detectron2.layers import move_device_like
+from EZannot.detectron2.structures import ImageList, Instances
+from EZannot.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.utils.logger import log_first_n
 
 from ..backbone import Backbone, build_backbone
 from ..postprocessing import detector_postprocess
@@ -100,7 +100,7 @@ class GeneralizedRCNN(nn.Module):
             proposals (list): a list that contains predicted proposals. Both
                 batched_inputs and proposals should have the same length.
         """
-        from Cellan.detectron2.utils.visualizer import Visualizer
+        from EZannot.detectron2.utils.visualizer import Visualizer
 
         storage = get_event_storage()
         max_vis_prop = 20
