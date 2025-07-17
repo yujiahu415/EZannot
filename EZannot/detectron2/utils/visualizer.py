@@ -13,9 +13,9 @@ import torch
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from PIL import Image
 
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.structures import BitMasks, Boxes, BoxMode, Keypoints, PolygonMasks, RotatedBoxes
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.structures import BitMasks, Boxes, BoxMode, Keypoints, PolygonMasks, RotatedBoxes
+from EZannot.detectron2.utils.file_io import PathManager
 
 from .colormap import random_color
 
