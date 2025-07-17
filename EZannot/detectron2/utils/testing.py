@@ -12,13 +12,13 @@ from packaging import version
 from torch._C import ListType
 from torch.onnx import register_custom_op_symbolic
 
-from Cellan.detectron2 import model_zoo
-from Cellan.detectron2.config import CfgNode, LazyConfig, instantiate
-from Cellan.detectron2.data import DatasetCatalog
-from Cellan.detectron2.data.detection_utils import read_image
-from Cellan.detectron2.modeling import build_model
-from Cellan.detectron2.structures import Boxes, Instances, ROIMasks
-from Cellan.detectron2.utils.file_io import PathManager
+from EZannot.detectron2 import model_zoo
+from EZannot.detectron2.config import CfgNode, LazyConfig, instantiate
+from EZannot.detectron2.data import DatasetCatalog
+from EZannot.detectron2.data.detection_utils import read_image
+from EZannot.detectron2.modeling import build_model
+from EZannot.detectron2.structures import Boxes, Instances, ROIMasks
+from EZannot.detectron2.utils.file_io import PathManager
 
 
 """
