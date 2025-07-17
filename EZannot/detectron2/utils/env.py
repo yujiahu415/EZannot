@@ -123,7 +123,7 @@ def setup_custom_environment(custom_module):
     module, and run the setup function.
     """
     if custom_module.endswith(".py"):
-        module = _import_file("Cellan.detectron2.utils.env.custom_module", custom_module)
+        module = _import_file("EZannot.detectron2.utils.env.custom_module", custom_module)
     else:
         module = importlib.import_module(custom_module)
     assert hasattr(module, "setup_environment") and callable(module.setup_environment), (
