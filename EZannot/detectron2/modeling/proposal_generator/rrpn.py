@@ -4,10 +4,10 @@ import logging
 from typing import Dict, List
 import torch
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import ShapeSpec, batched_nms_rotated, cat
-from Cellan.detectron2.structures import Instances, RotatedBoxes, pairwise_iou_rotated
-from Cellan.detectron2.utils.memory import retry_if_cuda_oom
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import ShapeSpec, batched_nms_rotated, cat
+from EZannot.detectron2.structures import Instances, RotatedBoxes, pairwise_iou_rotated
+from EZannot.detectron2.utils.memory import retry_if_cuda_oom
 
 from ..box_regression import Box2BoxTransformRotated
 from .build import PROPOSAL_GENERATOR_REGISTRY
