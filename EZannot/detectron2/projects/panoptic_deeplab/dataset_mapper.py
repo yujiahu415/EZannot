@@ -6,10 +6,10 @@ from typing import Callable, List, Union
 import torch
 from panopticapi.utils import rgb2id
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.data import MetadataCatalog
-from Cellan.detectron2.data import detection_utils as utils
-from Cellan.detectron2.data import transforms as T
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.data import MetadataCatalog
+from EZannot.detectron2.data import detection_utils as utils
+from EZannot.detectron2.data import transforms as T
 
 from .target_generator import PanopticDeepLabTargetGenerator
 
