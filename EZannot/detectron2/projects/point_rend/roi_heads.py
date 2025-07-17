@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import logging
 
-from Cellan.detectron2.modeling import ROI_HEADS_REGISTRY, StandardROIHeads
+from EZannot.detectron2.modeling import ROI_HEADS_REGISTRY, StandardROIHeads
 
 
 @ROI_HEADS_REGISTRY.register()
