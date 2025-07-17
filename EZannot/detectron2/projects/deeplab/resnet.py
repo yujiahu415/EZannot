@@ -2,9 +2,9 @@
 import fvcore.nn.weight_init as weight_init
 import torch.nn.functional as F
 
-from Cellan.detectron2.layers import CNNBlockBase, Conv2d, get_norm
-from Cellan.detectron2.modeling import BACKBONE_REGISTRY
-from Cellan.detectron2.modeling.backbone.resnet import (
+from EZannot.detectron2.layers import CNNBlockBase, Conv2d, get_norm
+from EZannot.detectron2.modeling import BACKBONE_REGISTRY
+from EZannot.detectron2.modeling.backbone.resnet import (
     BasicStem,
     BottleneckBlock,
     DeformBottleneckBlock,
