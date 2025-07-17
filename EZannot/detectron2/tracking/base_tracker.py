@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2004-present Facebook. All Rights Reserved.
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.utils.registry import Registry
 
 from ..config.config import CfgNode as CfgNode_
 from ..structures import Instances
