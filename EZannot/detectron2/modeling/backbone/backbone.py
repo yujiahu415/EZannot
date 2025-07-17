@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Dict
 import torch.nn as nn
 
-from Cellan.detectron2.layers import ShapeSpec
+from EZannot.detectron2.layers import ShapeSpec
 
 __all__ = ["Backbone"]
 
