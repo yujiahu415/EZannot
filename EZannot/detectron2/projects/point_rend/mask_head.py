@@ -8,11 +8,11 @@ import torch
 from torch import Tensor, nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import Conv2d, ShapeSpec, cat, interpolate
-from Cellan.detectron2.modeling import ROI_MASK_HEAD_REGISTRY
-from Cellan.detectron2.modeling.roi_heads.mask_head import mask_rcnn_inference, mask_rcnn_loss
-from Cellan.detectron2.structures import Boxes
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import Conv2d, ShapeSpec, cat, interpolate
+from EZannot.detectron2.modeling import ROI_MASK_HEAD_REGISTRY
+from EZannot.detectron2.modeling.roi_heads.mask_head import mask_rcnn_inference, mask_rcnn_loss
+from EZannot.detectron2.structures import Boxes
 
 from .point_features import (
     generate_regular_grid_point_coords,
