@@ -6,11 +6,11 @@ from typing import Dict, List, Optional, Tuple
 import torch
 from torch import nn
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import ShapeSpec, nonzero_tuple
-from Cellan.detectron2.structures import Boxes, ImageList, Instances, pairwise_iou
-from Cellan.detectron2.utils.events import get_event_storage
-from Cellan.detectron2.utils.registry import Registry
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import ShapeSpec, nonzero_tuple
+from EZannot.detectron2.structures import Boxes, ImageList, Instances, pairwise_iou
+from EZannot.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.utils.registry import Registry
 
 from ..backbone.resnet import BottleneckBlock, ResNet
 from ..matcher import Matcher
