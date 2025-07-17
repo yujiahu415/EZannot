@@ -15,6 +15,7 @@ from screeninfo import get_monitors
 from EZannot.sam2.build_sam import build_sam2
 from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from EZannot import __version__
+from .annotator import Annotator
 
 
 
