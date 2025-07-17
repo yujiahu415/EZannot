@@ -7,9 +7,9 @@ from fvcore.nn import sigmoid_focal_loss_jit
 from torch import nn
 from torch.nn import functional as F
 
-from Cellan.detectron2.layers import ShapeSpec, batched_nms
-from Cellan.detectron2.structures import Boxes, ImageList, Instances, pairwise_point_box_distance
-from Cellan.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.layers import ShapeSpec, batched_nms
+from EZannot.detectron2.structures import Boxes, ImageList, Instances, pairwise_point_box_distance
+from EZannot.detectron2.utils.events import get_event_storage
 
 from ..anchor_generator import DefaultAnchorGenerator
 from ..backbone import Backbone
