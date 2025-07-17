@@ -9,15 +9,15 @@ from fvcore.transforms import HFlipTransform, NoOpTransform
 from torch import nn
 from torch.nn.parallel import DistributedDataParallel
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.data.detection_utils import read_image
-from Cellan.detectron2.data.transforms import (
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.data.detection_utils import read_image
+from EZannot.detectron2.data.transforms import (
     RandomFlip,
     ResizeShortestEdge,
     ResizeTransform,
     apply_augmentations,
 )
-from Cellan.detectron2.structures import Boxes, Instances
+from EZannot.detectron2.structures import Boxes, Instances
 
 from .meta_arch import GeneralizedRCNN
 from .postprocessing import detector_postprocess
