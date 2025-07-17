@@ -3,10 +3,10 @@ import logging
 import numpy as np
 import torch
 
-from Cellan.detectron2.config import configurable
-from Cellan.detectron2.layers import ShapeSpec, batched_nms_rotated
-from Cellan.detectron2.structures import Instances, RotatedBoxes, pairwise_iou_rotated
-from Cellan.detectron2.utils.events import get_event_storage
+from EZannot.detectron2.config import configurable
+from EZannot.detectron2.layers import ShapeSpec, batched_nms_rotated
+from EZannot.detectron2.structures import Instances, RotatedBoxes, pairwise_iou_rotated
+from EZannot.detectron2.utils.events import get_event_storage
 
 from ..box_regression import Box2BoxTransformRotated
 from ..poolers import ROIPooler
