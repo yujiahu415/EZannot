@@ -172,8 +172,8 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 		self.inference_size=None
 		self.black_background=None
 		self.iteration_num=5000
-		self.detector_path=os.path.join(the_absolute_current_path,'detectors')
-		self.path_to_detector=None
+		self.annotator_path=os.path.join(the_absolute_current_path,'annotators')
+		self.path_to_annotator=None
 
 		self.dispaly_window()
 
@@ -205,9 +205,9 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 		boxsizer.Add(0,5,0)
 
 		module_background=wx.BoxSizer(wx.HORIZONTAL)
-		button_background=wx.Button(panel,label='Specify whether the background is\nblack/darker in training images',size=(300,40))
+		button_background=wx.Button(panel,label='Specify whether the background is darker\nthan foreground in training images',size=(300,40))
 		button_background.Bind(wx.EVT_BUTTON,self.specify_background)
-		wx.Button.SetToolTip(button_background,'This helps the trained Detector to make up the missing regions when analyzing images with the fixed field of view.')
+		wx.Button.SetToolTip(button_background,'This helps the trained Annotator to make up the missing regions when annotating images with the fixed field of view.')
 		self.text_background=wx.StaticText(panel,label='Not specified.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_background.Add(button_background,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_background.Add(self.text_background,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -215,7 +215,7 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 		boxsizer.Add(0,5,0)
 
 		module_iterations=wx.BoxSizer(wx.HORIZONTAL)
-		button_iterations=wx.Button(panel,label='Specify the iteration number\nfor the Detector training',size=(300,40))
+		button_iterations=wx.Button(panel,label='Specify the iteration number\nfor the Annotator training',size=(300,40))
 		button_iterations.Bind(wx.EVT_BUTTON,self.input_iterations)
 		wx.Button.SetToolTip(button_iterations,'More training iterations typically yield higher accuracy but take longer.')
 		self.text_iterations=wx.StaticText(panel,label='Default: 5000.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
@@ -224,8 +224,8 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 		boxsizer.Add(module_iterations,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		button_train=wx.Button(panel,label='Train the Detector',size=(300,40))
-		button_train.Bind(wx.EVT_BUTTON,self.train_detector)
+		button_train=wx.Button(panel,label='Train the Annotator',size=(300,40))
+		button_train.Bind(wx.EVT_BUTTON,self.train_annotator)
 		wx.Button.SetToolTip(button_train,'English letters, numbers, “_”, or “-” are acceptable for the names but no “@” or “^”.')
 		boxsizer.Add(0,5,0)
 		boxsizer.Add(button_train,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
@@ -258,13 +258,13 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 			for i in info['categories']:
 				if i['id']>0:
 					classnames.append(i['name'])
-			self.text_selectannotation.SetLabel('Cell categories in annotation file: '+str(classnames)+'.')
+			self.text_selectannotation.SetLabel('Object categories in annotation file: '+str(classnames)+'.')
 		dialog.Destroy()
 
 
 	def specify_background(self,event):
 
-		dialog=wx.MessageDialog(self,'Is the background in the images black/darker?','Darker background?',wx.YES_NO|wx.ICON_QUESTION)
+		dialog=wx.MessageDialog(self,'Is the background in the images black or darker than foreground?','Darker background?',wx.YES_NO|wx.ICON_QUESTION)
 		if dialog.ShowModal()==wx.ID_YES:
 			self.black_background=0
 			self.text_background.SetLabel('The background in images is black/darker.')
@@ -276,14 +276,14 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 
 	def input_iterations(self,event):
 
-		dialog=wx.NumberEntryDialog(self,'Input the iteration number\nfor the Detector training','Enter a number:','Iterations',5000,1,1000000)
+		dialog=wx.NumberEntryDialog(self,'Input the iteration number\nfor the Annotator training','Enter a number:','Iterations',5000,1,1000000)
 		if dialog.ShowModal()==wx.ID_OK:
 			self.iteration_num=int(dialog.GetValue())
 			self.text_iterations.SetLabel('Training iteration number: '+str(self.iteration_num)+'.')
 		dialog.Destroy()
 
 
-	def train_detector(self,event):
+	def train_annotator(self,event):
 
 		if self.path_to_trainingimages is None or self.path_to_annotation is None or self.black_background is None:
 
@@ -291,15 +291,15 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 
 		else:
 
-			cell_sizes=['Sparse and large (e.g., large tissue areas)','Median (e.g., structures formed by group of cells)','Small (e.g. typical cell bodies)','Extremely small (e.g., dense subcellular structures)']
-			dialog=wx.SingleChoiceDialog(self,message='How large are the objects to detect\ncompared to the images?',caption='Object size',choices=cell_sizes)
+			object_sizes=['Sparse and large (e.g., a few animals in an enclosure)','Median (e.g., tissue areas formed by group of cells)','Small (e.g. sparsely distributed cells)','Dense and small (e.g., dense nuclei)']
+			dialog=wx.SingleChoiceDialog(self,message='How large are the objects to detect\ncompared to the images?',caption='Object size',choices=object_sizes)
 			if dialog.ShowModal()==wx.ID_OK:
-				cell_size=dialog.GetStringSelection()
-				if cell_size=='Sparse and large (e.g., large tissue areas)':
+				object_size=dialog.GetStringSelection()
+				if object_size=='Sparse and large (e.g., a few animals in an enclosure)':
 					self.num_rois=128
-				elif cell_size=='Median (e.g., structures formed by group of cells)':
+				elif object_size=='Median (e.g., tissue areas formed by group of cells)':
 					self.num_rois=256
-				elif cell_size=='Small (e.g. typical cell bodies)':
+				elif object_size=='Small (e.g. sparsely distributed cells)':
 					self.num_rois=512
 				else:
 					self.num_rois=1024
@@ -311,11 +311,11 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 			do_nothing=False
 			stop=False
 			while stop is False:
-				dialog=wx.TextEntryDialog(self,'Enter a name for the Detector to train','Detector name')
+				dialog=wx.TextEntryDialog(self,'Enter a name for the Annotator to train','Annotator name')
 				if dialog.ShowModal()==wx.ID_OK:
 					if dialog.GetValue()!='':
-						self.path_to_detector=os.path.join(self.detector_path,dialog.GetValue())
-						if not os.path.isdir(self.path_to_detector):
+						self.path_to_annotator=os.path.join(self.annotator_path,dialog.GetValue())
+						if not os.path.isdir(self.path_to_annotator):
 							stop=True
 						else:
 							wx.MessageBox('The name already exists.','Error',wx.OK|wx.ICON_ERROR)
@@ -325,8 +325,8 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 				dialog.Destroy()
 
 			if do_nothing is False:
-				DT=Detector()
-				DT.train(self.path_to_annotation,self.path_to_trainingimages,self.path_to_detector,self.iteration_num,self.inference_size,self.num_rois,black_background=self.black_background)
+				AT=Detector()
+				AT.train(self.path_to_annotation,self.path_to_trainingimages,self.path_to_annotator,self.iteration_num,self.inference_size,self.num_rois,black_background=self.black_background)
 
 
 
