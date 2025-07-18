@@ -85,9 +85,12 @@ class InitialWindow(wx.Frame):
 		button_train.Bind(wx.EVT_BUTTON,self.window_train)
 		wx.Button.SetToolTip(button_train,'You can train and test an Annotator here. Annotators can automatically annotate all the images for you, which saves huge labor. Depending on the annotation precision, you may or may not need to do manual corrections.')
 		button_startannotate=wx.Button(panel,label='Annotation Module',size=(200,40))
-		button_startannotate.Bind(wx.EVT_BUTTON,self.start_annotate)
+		button_startannotate.Bind(wx.EVT_BUTTON,self.window_annotate)
 		wx.Button.SetToolTip(button_startannotate,'You can use a trained Annotator for automatic annotation. You can also perform AI-assisted semi-manual annotations to get a small set of initial training data for training an Annotator, or correct the annotations done by an Annotator.')
 		module_modules.Add(button_startannotate,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		button_analyze=wx.Button(panel,label='Analysis Module',size=(200,40))
+		button_analyze.Bind(wx.EVT_BUTTON,self.window_analyze)
+		wx.Button.SetToolTip(button_analyze,'You can import an annotated dataset (images and the annotation file) here and let EZannot automatically measure the annotated objects in a quantitative way and export the quantifications.')
 		boxsizer.Add(module_modules,0,wx.ALIGN_CENTER,50)
 		boxsizer.Add(0,50,0)
 
