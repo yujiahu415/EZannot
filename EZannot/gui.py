@@ -102,17 +102,27 @@ class InitialWindow(wx.Frame):
 		self.Show(True)
 
 
-	def start_annotate(self,event):
+	def window_train(self,event):
 
-		WindowLv1_SetAnnotation('Start Annotation')
+		WindowLv1_TrainingModule('Training Module')
+
+
+	def window_annotate(self,event):
+
+		WindowLv1_AnnotationModule('Annotation Module')
+
+
+	def window_analyze(self,event):
+
+		WindowLv1_AnalysisModule('Analysis Module')
 
 
 
-class WindowLv1_SetAnnotation(wx.Frame):
+class WindowLv1_AnnotationModule(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv1_SetAnnotation,self).__init__(parent=None,title=title,size=(1000,370))
+		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(1000,370))
 		self.path_to_images=None
 		self.result_path=None
 		self.model_cp=None
