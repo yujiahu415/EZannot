@@ -134,7 +134,7 @@ class WindowLv1_TrainingModule(wx.Frame):
 
 		button_trainannotators=wx.Button(panel,label='Train Annotators',size=(300,40))
 		button_trainannotators.Bind(wx.EVT_BUTTON,self.train_annotators)
-		wx.Button.SetToolTip(button_trainannotators,'The trained Annotators can automatically annotate all the images for you, which saves huge labor.')
+		wx.Button.SetToolTip(button_trainannotators,'The trained Annotators can be used to automatically annotate all the images for you, which saves huge labor.')
 		boxsizer.Add(button_trainannotators,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,5,0)
 
