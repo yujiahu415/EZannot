@@ -77,7 +77,7 @@ def build_sam2(
     model = instantiate(cfg.model, _recursive_=True)
 
     if ckpt_path:
-        checkpoint = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        checkpoint = torch.load(ckpt_path, map_location="cpu", weights_only=False)
         if "model" in checkpoint:
             model.load_state_dict(checkpoint["model"], strict=False)
         else:
