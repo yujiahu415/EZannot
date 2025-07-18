@@ -81,6 +81,9 @@ class InitialWindow(wx.Frame):
 		boxsizer.Add(0,50,0)
 
 		module_modules=wx.BoxSizer(wx.HORIZONTAL)
+		button_train=wx.Button(panel,label='Train Annotators',size=(200,40))
+		button_train.Bind(wx.EVT_BUTTON,self.window_train)
+		wx.Button.SetToolTip(button_train,'Annotators can automatically annotate all the images for you, which saves huge labor. Depending on the annotation precision, you may or may not need to do manual corrections.')
 		button_startannotate=wx.Button(panel,label='Start Annotation',size=(200,40))
 		button_startannotate.Bind(wx.EVT_BUTTON,self.start_annotate)
 		wx.Button.SetToolTip(button_startannotate,'Start to annotate images with ease.')
