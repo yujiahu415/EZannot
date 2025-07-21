@@ -325,7 +325,7 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 				dialog.Destroy()
 
 			if do_nothing is False:
-				AT=Detector()
+				AT=Annotator()
 				AT.train(self.path_to_annotation,self.path_to_trainingimages,self.path_to_annotator,self.iteration_num,self.inference_size,self.num_rois,black_background=self.black_background)
 
 
