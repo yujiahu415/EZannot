@@ -141,7 +141,7 @@ class WindowLv1_TrainingModule(wx.Frame):
 		button_testannotators=wx.Button(panel,label='Test Annotators',size=(300,40))
 		button_testannotators.Bind(wx.EVT_BUTTON,self.test_annotators)
 		wx.Button.SetToolTip(button_testannotators,'Test trained Annotators on the annotated ground-truth image dataset (similar to the image dataset used for training a Annotator).')
-		boxsizer.Add(button_testdetectors,0,wx.ALIGN_CENTER,10)
+		boxsizer.Add(button_testannotators,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,50,0)
 
 		panel.SetSizer(boxsizer)
@@ -330,15 +330,15 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 
 
 
-class WindowLv2_TestDetectors(wx.Frame):
+class WindowLv2_TestAnnotators(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv2_TestDetectors,self).__init__(parent=None,title=title,size=(1000,280))
+		super(WindowLv2_TestAnnotators,self).__init__(parent=None,title=title,size=(1000,280))
 		self.path_to_testingimages=None
 		self.path_to_annotation=None
-		self.detector_path=os.path.join(the_absolute_current_path,'detectors')
-		self.path_to_detector=None
+		self.annotator_path=os.path.join(the_absolute_current_path,'annotators')
+		self.path_to_annotator=None
 		self.output_path=None
 
 		self.dispaly_window()
@@ -349,15 +349,15 @@ class WindowLv2_TestDetectors(wx.Frame):
 		panel=wx.Panel(self)
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
-		module_selectdetector=wx.BoxSizer(wx.HORIZONTAL)
-		button_selectdetector=wx.Button(panel,label='Select a Detector\nto test',size=(300,40))
-		button_selectdetector.Bind(wx.EVT_BUTTON,self.select_detector)
-		wx.Button.SetToolTip(button_selectdetector,'The names of cells in the testing dataset should match those in the selected Detector.')
-		self.text_selectdetector=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_selectdetector.Add(button_selectdetector,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_selectdetector.Add(self.text_selectdetector,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_selectannotator=wx.BoxSizer(wx.HORIZONTAL)
+		button_selectannotator=wx.Button(panel,label='Select an Annotator\nto test',size=(300,40))
+		button_selectannotator.Bind(wx.EVT_BUTTON,self.select_annotator)
+		wx.Button.SetToolTip(button_selectannotator,'The names of objects in the testing dataset should match those in the selected Annotator.')
+		self.text_selectannotator=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_selectannotator.Add(button_selectannotator,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_selectannotator.Add(self.text_selectannotator,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,10,0)
-		boxsizer.Add(module_selectdetector,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_selectannotator,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
 		module_selectimages=wx.BoxSizer(wx.HORIZONTAL)
@@ -391,12 +391,12 @@ class WindowLv2_TestDetectors(wx.Frame):
 		boxsizer.Add(0,5,0)
 
 		testanddelete=wx.BoxSizer(wx.HORIZONTAL)
-		button_test=wx.Button(panel,label='Test the Detector',size=(300,40))
-		button_test.Bind(wx.EVT_BUTTON,self.test_detector)
-		wx.Button.SetToolTip(button_test,'Test the selected Detector on the annotated, ground-truth testing images.')
-		button_delete=wx.Button(panel,label='Delete a Detector',size=(300,40))
-		button_delete.Bind(wx.EVT_BUTTON,self.remove_detector)
-		wx.Button.SetToolTip(button_delete,'Permanently delete a Detector. The deletion CANNOT be restored.')
+		button_test=wx.Button(panel,label='Test the Annotator',size=(300,40))
+		button_test.Bind(wx.EVT_BUTTON,self.test_annotator)
+		wx.Button.SetToolTip(button_test,'Test the selected Annotator on the annotated, ground-truth testing images.')
+		button_delete=wx.Button(panel,label='Delete a Annotator',size=(300,40))
+		button_delete.Bind(wx.EVT_BUTTON,self.remove_annotator)
+		wx.Button.SetToolTip(button_delete,'Permanently delete a Annotator. The deletion CANNOT be restored.')
 		testanddelete.Add(button_test,0,wx.RIGHT,50)
 		testanddelete.Add(button_delete,0,wx.LEFT,50)
 		boxsizer.Add(0,5,0)
@@ -409,26 +409,26 @@ class WindowLv2_TestDetectors(wx.Frame):
 		self.Show(True)
 
 
-	def select_detector(self,event):
+	def select_annotator(self,event):
 
-		detectors=[i for i in os.listdir(self.detector_path) if os.path.isdir(os.path.join(self.detector_path,i))]
-		if '__pycache__' in detectors:
-			detectors.remove('__pycache__')
-		if '__init__' in detectors:
-			detectors.remove('__init__')
-		if '__init__.py' in detectors:
-			detectors.remove('__init__.py')
-		detectors.sort()
+		annotators=[i for i in os.listdir(self.annotator_path) if os.path.isdir(os.path.join(self.annotator_path,i))]
+		if '__pycache__' in annotators:
+			annotators.remove('__pycache__')
+		if '__init__' in annotators:
+			annotators.remove('__init__')
+		if '__init__.py' in annotators:
+			annotators.remove('__init__.py')
+		annotators.sort()
 
-		dialog=wx.SingleChoiceDialog(self,message='Select a Detector to test',caption='Test a Detector',choices=detectors)
+		dialog=wx.SingleChoiceDialog(self,message='Select a Annotator to test',caption='Test a Annotator',choices=annotators)
 		if dialog.ShowModal()==wx.ID_OK:
-			detector=dialog.GetStringSelection()
-			self.path_to_detector=os.path.join(self.detector_path,detector)
-			cellmapping=os.path.join(self.path_to_detector,'model_parameters.txt')
-			with open(cellmapping) as f:
+			annotator=dialog.GetStringSelection()
+			self.path_to_annotator=os.path.join(self.annotator_path,annotator)
+			objectmapping=os.path.join(self.path_to_annotator,'model_parameters.txt')
+			with open(objectmapping) as f:
 				model_parameters=f.read()
-			cell_names=json.loads(model_parameters)['cell_names']
-			self.text_selectdetector.SetLabel('Selected: '+str(detector)+' (cells: '+str(cell_names)+').')
+			object_names=json.loads(model_parameters)['object_names']
+			self.text_selectannotator.SetLabel('Selected: '+str(annotator)+' (objects: '+str(object_names)+').')
 		dialog.Destroy()
 
 
@@ -453,7 +453,7 @@ class WindowLv2_TestDetectors(wx.Frame):
 			for i in info['categories']:
 				if i['id']>0:
 					classnames.append(i['name'])
-			self.text_selectannotation.SetLabel('Cell categories in annotation file: '+str(classnames)+'.')
+			self.text_selectannotation.SetLabel('Object categories in annotation file: '+str(classnames)+'.')
 		dialog.Destroy()
 
 
@@ -466,32 +466,32 @@ class WindowLv2_TestDetectors(wx.Frame):
 		dialog.Destroy()
 
 
-	def test_detector(self,event):
+	def test_annotator(self,event):
 
-		if self.path_to_detector is None or self.path_to_testingimages is None or self.path_to_annotation is None or self.output_path is None:
-			wx.MessageBox('No Detector / training images / annotation file / output path selected.','Error',wx.OK|wx.ICON_ERROR)
+		if self.path_to_annotator is None or self.path_to_testingimages is None or self.path_to_annotation is None or self.output_path is None:
+			wx.MessageBox('No Annotator / training images / annotation file / output path selected.','Error',wx.OK|wx.ICON_ERROR)
 		else:
-			DT=Detector()
-			DT.test(self.path_to_annotation,self.path_to_testingimages,self.path_to_detector,self.output_path)
+			AT=Annotator()
+			AT.test(self.path_to_annotation,self.path_to_testingimages,self.path_to_annotator,self.output_path)
 
 
-	def remove_detector(self,event):
+	def remove_annotator(self,event):
 
-		detectors=[i for i in os.listdir(self.detector_path) if os.path.isdir(os.path.join(self.detector_path,i))]
-		if '__pycache__' in detectors:
-			detectors.remove('__pycache__')
-		if '__init__' in detectors:
-			detectors.remove('__init__')
-		if '__init__.py' in detectors:
-			detectors.remove('__init__.py')
-		detectors.sort()
+		annotators=[i for i in os.listdir(self.annotator_path) if os.path.isdir(os.path.join(self.annotator_path,i))]
+		if '__pycache__' in annotators:
+			annotators.remove('__pycache__')
+		if '__init__' in annotators:
+			annotators.remove('__init__')
+		if '__init__.py' in annotators:
+			annotators.remove('__init__.py')
+		annotators.sort()
 
-		dialog=wx.SingleChoiceDialog(self,message='Select a Detector to delete',caption='Delete a Detector',choices=detectors)
+		dialog=wx.SingleChoiceDialog(self,message='Select a Annotator to delete',caption='Delete a Annotator',choices=annotators)
 		if dialog.ShowModal()==wx.ID_OK:
-			detector=dialog.GetStringSelection()
-			dialog1=wx.MessageDialog(self,'Delete '+str(detector)+'?','CANNOT be restored!',wx.YES_NO|wx.ICON_QUESTION)
+			annotator=dialog.GetStringSelection()
+			dialog1=wx.MessageDialog(self,'Delete '+str(annotator)+'?','CANNOT be restored!',wx.YES_NO|wx.ICON_QUESTION)
 			if dialog1.ShowModal()==wx.ID_YES:
-				shutil.rmtree(os.path.join(self.detector_path,detector))
+				shutil.rmtree(os.path.join(self.annotator_path,annotator))
 			dialog1.Destroy()
 		dialog.Destroy()
 
@@ -1304,10 +1304,10 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 			filename=os.path.splitext(image_name)[0]
 			data[filename]={}
-			for cell_name in self.color_map:
-				data[filename][cell_name]={}
+			for object_name in self.color_map:
+				data[filename][object_name]={}
 				for parameter in parameters:
-					data[filename][cell_name][parameter]=[]
+					data[filename][object_name][parameter]=[]
 
 			image=cv2.imread(os.path.join(parent_path,image_name))
 			image_width=image.shape[1]
@@ -1322,7 +1322,7 @@ class WindowLv2_AnnotateImages(wx.Frame):
 				for j,polygon in enumerate(self.information[image_name]['polygons']):
 
 					mask=np.zeros((image_height,image_width),dtype=np.uint8)
-					cell_name=self.information[image_name]['class_names'][j]
+					object_name=self.information[image_name]['class_names'][j]
 					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
 					cv2.fillPoly(mask,[pts],color=1)
 					if threshold is not None:
@@ -1337,14 +1337,14 @@ class WindowLv2_AnnotateImages(wx.Frame):
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
 						if area>0:
-							data[filename][cell_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
-							data[filename][cell_name]['area'].append(area)
-							data[filename][cell_name]['height'].append(ht)
-							data[filename][cell_name]['width'].append(wd)
-							data[filename][cell_name]['perimeter'].append(perimeter)
-							data[filename][cell_name]['roundness'].append(roundness)
-							data[filename][cell_name]['intensity'].append(intensity)
-							color=(self.color_map[cell_name][2],self.color_map[cell_name][1],self.color_map[cell_name][0])
+							data[filename][object_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
+							data[filename][object_name]['area'].append(area)
+							data[filename][object_name]['height'].append(ht)
+							data[filename][object_name]['width'].append(wd)
+							data[filename][object_name]['perimeter'].append(perimeter)
+							data[filename][object_name]['roundness'].append(roundness)
+							data[filename][object_name]['intensity'].append(intensity)
+							color=(self.color_map[object_name][2],self.color_map[object_name][1],self.color_map[object_name][0])
 							if threshold is None:
 								cv2.drawContours(to_annotate,[cnt],0,color,thickness)
 							else:
@@ -1354,19 +1354,19 @@ class WindowLv2_AnnotateImages(wx.Frame):
 
 		with pd.ExcelWriter(os.path.join(out_path,'measurements.xlsx'),engine='openpyxl') as writer:
 
-			for cell_name in self.color_map:
+			for object_name in self.color_map:
 
 				rows=[]
 				columns=['filename','ID']+parameters
 
 				for name,name_data in data.items():
-					if cell_name in name_data:
-						values=zip(*[name_data[cell_name][parameter] for parameter in parameters])
+					if object_name in name_data:
+						values=zip(*[name_data[object_name][parameter] for parameter in parameters])
 						for idx,value in enumerate(values):
 							rows.append([name,idx+1]+list(value))
 
 				df=pd.DataFrame(rows,columns=columns)
-				df.to_excel(writer,sheet_name=cell_name,float_format='%.2f',index=False)
+				df.to_excel(writer,sheet_name=object_name,float_format='%.2f',index=False)
 
 		wx.MessageBox('Measurements exported successfully.','Success',wx.ICON_INFORMATION)
 
