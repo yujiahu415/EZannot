@@ -511,15 +511,15 @@ class WindowLv1_AnnotationModule(wx.Frame):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 		boxsizer.Add(0,60,0)
 
-		button_manualannotate=wx.Button(panel,label='Train Annotators',size=(300,40))
+		button_manualannotate=wx.Button(panel,label='Manual annotation',size=(300,40))
 		button_manualannotate.Bind(wx.EVT_BUTTON,self.manual_annotate)
-		wx.Button.SetToolTip(button_manualannotate,'The trained Annotators can be used to automatically annotate all the images for you, which saves huge labor.')
+		wx.Button.SetToolTip(button_manualannotate,'Use AI assistance to manually annotate a small set of initial training images for training an Annotator or refine the automatic annotations performed by an Annotator.')
 		boxsizer.Add(button_manualannotate,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,5,0)
 
-		button_autoannotate=wx.Button(panel,label='Test Annotators',size=(300,40))
+		button_autoannotate=wx.Button(panel,label='Automatic annotation',size=(300,40))
 		button_autoannotate.Bind(wx.EVT_BUTTON,self.auto_annotate)
-		wx.Button.SetToolTip(button_autoannotate,'Test trained Annotators on the annotated ground-truth image dataset (similar to the image dataset used for training a Annotator).')
+		wx.Button.SetToolTip(button_autoannotate,'Use a trained Annotators to automatically annotate selected images for you.')
 		boxsizer.Add(button_autoannotate,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,50,0)
 
