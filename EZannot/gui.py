@@ -497,6 +497,46 @@ class WindowLv2_TestAnnotators(wx.Frame):
 
 
 
+class WindowLv1_AnnotationModule(wx.Frame):
+
+	def __init__(self,title):
+
+		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(500,200))
+		self.dispaly_window()
+
+
+	def dispaly_window(self):
+
+		panel=wx.Panel(self)
+		boxsizer=wx.BoxSizer(wx.VERTICAL)
+		boxsizer.Add(0,60,0)
+
+		button_manualannotate=wx.Button(panel,label='Train Annotators',size=(300,40))
+		button_manualannotate.Bind(wx.EVT_BUTTON,self.manual_annotate)
+		wx.Button.SetToolTip(button_manualannotate,'The trained Annotators can be used to automatically annotate all the images for you, which saves huge labor.')
+		boxsizer.Add(button_manualannotate,0,wx.ALIGN_CENTER,10)
+		boxsizer.Add(0,5,0)
+
+		button_autoannotate=wx.Button(panel,label='Test Annotators',size=(300,40))
+		button_autoannotate.Bind(wx.EVT_BUTTON,self.auto_annotate)
+		wx.Button.SetToolTip(button_autoannotate,'Test trained Annotators on the annotated ground-truth image dataset (similar to the image dataset used for training a Annotator).')
+		boxsizer.Add(button_autoannotate,0,wx.ALIGN_CENTER,10)
+		boxsizer.Add(0,50,0)
+
+		panel.SetSizer(boxsizer)
+
+		self.Centre()
+		self.Show(True)
+
+
+	def train_annotators(self,event):
+
+		WindowLv2_TrainAnnotators('Train Annotators')
+
+
+	def test_annotators(self,event):
+
+		WindowLv2_TestAnnotators('Test Annotators')
 
 
 
