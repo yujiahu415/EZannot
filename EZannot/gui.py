@@ -529,14 +529,14 @@ class WindowLv1_AnnotationModule(wx.Frame):
 		self.Show(True)
 
 
-	def train_annotators(self,event):
+	def manual_annotate(self,event):
 
-		WindowLv2_TrainAnnotators('Train Annotators')
+		WindowLv2_ManualAnnotate('Manual Annotate')
 
 
-	def test_annotators(self,event):
+	def auto_annotate(self,event):
 
-		WindowLv2_TestAnnotators('Test Annotators')
+		WindowLv2_AutoAnnotate('Auto Annotate')
 
 
 
