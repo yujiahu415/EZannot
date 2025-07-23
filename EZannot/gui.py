@@ -563,7 +563,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
 		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
-		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. If there is annotationa files in the same folder, EZannot will read the annotation file and show all the existing annotations.')
+		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. If there is an annotation file in the same folder, EZannot will read the annotation file and show all the existing annotations.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -778,11 +778,11 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
 			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
 		else:
-			WindowLv2_AnnotateImages(None,'Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg)
+			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg)
 
 
 
-class WindowLv2_AnnotateImages(wx.Frame):
+class WindowLv3_AnnotateImages(wx.Frame):
 
 	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None):
 
@@ -1457,6 +1457,248 @@ class WindowLv2_AnnotateImages(wx.Frame):
 		new_y=round(sin_theta*x_shifted+cos_theta*y_shifted+cy)
 
 		return max(0,min(image_width-1,new_x)),max(0,min(image_height-1,new_y))
+
+
+
+class WindowLv2_AutoAnnotate(wx.Frame):
+
+	def __init__(self,title):
+
+		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
+		self.path_to_images=None
+		self.result_path=None
+		self.model_cp=None
+		self.model_cfg=None
+		self.color_map={}
+		self.aug_methods=[]
+
+		self.display_window()
+
+
+	def display_window(self):
+
+		panel=wx.Panel(self)
+		boxsizer=wx.BoxSizer(wx.VERTICAL)
+
+		module_input=wx.BoxSizer(wx.HORIZONTAL)
+		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
+		button_input.Bind(wx.EVT_BUTTON,self.select_images)
+		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported.')
+		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,10,0)
+		boxsizer.Add(module_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,5,0)
+
+		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
+		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe annotated images',size=(300,40))
+		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
+		wx.Button.SetToolTip(button_outputfolder,'Copies of images and the annotation file will be stored in this folder.')
+		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_outputfolder.Add(button_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_outputfolder.Add(self.text_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,5,0)
+
+		module_model=wx.BoxSizer(wx.HORIZONTAL)
+		button_model=wx.Button(panel,label='Select a trained Annotator\nfor automatic annotation',size=(300,40))
+		button_model.Bind(wx.EVT_BUTTON,self.select_model)
+		wx.Button.SetToolTip(button_model,'Choose the SAM2 model. If select from a folder, make sure the folder stores a checkpoint (*.pt) file and a corresponding model config (*.yaml) file.')
+		self.text_model=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_model.Add(button_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_model.Add(self.text_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,5,0)
+
+		module_classes=wx.BoxSizer(wx.HORIZONTAL)
+		button_classes=wx.Button(panel,label='Specify the object classes and\ntheir annotation colors',size=(300,40))
+		button_classes.Bind(wx.EVT_BUTTON,self.specify_classes)
+		wx.Button.SetToolTip(button_classes,'Enter the name of each class and specify its annotation color.')
+		self.text_classes=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_classes.Add(button_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_classes.Add(self.text_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,5,0)
+
+		module_augmentation=wx.BoxSizer(wx.HORIZONTAL)
+		button_augmentation=wx.Button(panel,label='Specify the augmentation methods\nfor the annotated images',size=(300,40))
+		button_augmentation.Bind(wx.EVT_BUTTON,self.specify_augmentation)
+		wx.Button.SetToolTip(button_augmentation,'Use augmentation for the annotated images can greatly enhance the training efficiency.')
+		self.text_augmentation=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_augmentation.Add(button_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_augmentation.Add(self.text_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(0,5,0)
+
+		button_startannotation=wx.Button(panel,label='Start to annotate images',size=(300,40))
+		button_startannotation.Bind(wx.EVT_BUTTON,self.start_annotation)
+		wx.Button.SetToolTip(button_startannotation,'Annotate objects in images.')
+		boxsizer.Add(0,5,0)
+		boxsizer.Add(button_startannotation,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
+		boxsizer.Add(0,10,0)
+
+		panel.SetSizer(boxsizer)
+
+		self.Centre()
+		self.Show(True)
+
+
+	def select_images(self,event):
+
+		wildcard='Image files(*.jpg;*.jpeg;*.png;*.tif;*.tiff)|*.jpg;*.jpeg;*.png;*.tif;*.tiff'
+		dialog=wx.FileDialog(self,'Select images(s)','','',wildcard,style=wx.FD_MULTIPLE)
+		if dialog.ShowModal()==wx.ID_OK:
+			self.path_to_images=dialog.GetPaths()
+			self.path_to_images.sort()
+			path=os.path.dirname(self.path_to_images[0])
+			self.text_input.SetLabel('Select: '+str(len(self.path_to_images))+' images in'+str(path)+'.')
+		dialog.Destroy()
+
+
+	def select_outpath(self,event):
+
+		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+		if dialog.ShowModal()==wx.ID_OK:
+			self.result_path=dialog.GetPath()
+			self.text_outputfolder.SetLabel('The annotated images will be in: '+self.result_path+'.')
+		dialog.Destroy()
+
+
+	def select_model(self,event):
+
+		path_to_sam2_model=None
+		sam2_model_path=os.path.join(the_absolute_current_path,'sam2 models')
+		sam2_models=[i for i in os.listdir(sam2_model_path) if os.path.isdir(os.path.join(sam2_model_path,i))]
+		if '__pycache__' in sam2_models:
+			sam2_models.remove('__pycache__')
+		if '__init__' in sam2_models:
+			sam2_models.remove('__init__')
+		if '__init__.py' in sam2_models:
+			sam2_models.remove('__init__.py')
+		sam2_models.sort()
+		if 'Choose a new directory of the SAM2 model' not in sam2_models:
+			sam2_models.append('Choose a new directory of the SAM2 model')
+
+		dialog=wx.SingleChoiceDialog(self,message='Select a SAM2 model for AI-assisted annotation.',caption='Select a SAM2 model',choices=sam2_models)
+		if dialog.ShowModal()==wx.ID_OK:
+			sam2_model=dialog.GetStringSelection()
+			if sam2_model=='Choose a new directory of the SAM2 model':
+				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+				if dialog1.ShowModal()==wx.ID_OK:
+					path_to_sam2_model=dialog1.GetPath()
+				else:
+					path_to_sam2_model=None
+				dialog1.Destroy()
+			else:
+				path_to_sam2_model=os.path.join(sam2_model_path,sam2_model)
+		dialog.Destroy()
+
+		if path_to_sam2_model is None:
+			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
+			self.text_model.SetLabel('No SAM2 model is set up. The AI assistance function is OFF.')
+		else:
+			for i in os.listdir(path_to_sam2_model):
+				if i.endswith('.pt') and i.split('sam')[0]!='._':
+					self.model_cp=os.path.join(path_to_sam2_model,i)
+				if i.endswith('.yaml') and i.split('sam')[0]!='._':
+					self.model_cfg=os.path.join(path_to_sam2_model,i)
+			if self.model_cp is None:
+				self.text_model.SetLabel('Missing checkpoint file.')
+			elif self.model_cfg is None:
+				self.text_model.SetLabel('Missing config file.')
+			else:
+				self.text_model.SetLabel('Checkpoint: '+str(os.path.basename(self.model_cp))+'; Config: '+str(os.path.basename(self.model_cfg))+'.')
+
+
+	def specify_classes(self,event):
+
+		if self.path_to_images is None:
+
+			wx.MessageBox('No input images(s).','Error',wx.OK|wx.ICON_ERROR)
+
+		else:
+
+			annotation_file=None
+			color_map={}
+			classnames=''
+			entry=None
+			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
+				if i.endswith('.json'):
+					annotation_file=os.path.join(os.path.dirname(self.path_to_images[0]),i)
+
+			if annotation_file and os.path.exists(annotation_file):
+				annotation=json.load(open(annotation_file))
+				for i in annotation['categories']:
+					if i['id']>0:
+						classnames=classnames+i['name']+','
+				classnames=classnames[:-1]
+
+				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
+				if dialog.ShowModal()==wx.ID_YES:
+
+					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=classnames)
+					if dialog1.ShowModal()==wx.ID_OK:
+						entry=dialog1.GetValue()
+					dialog1.Destroy()
+				else:
+					entry=classnames
+				dialog.Destroy()
+			else:
+				dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
+				if dialog.ShowModal()==wx.ID_OK:
+					entry=dialog.GetValue()
+				dialog.Destroy()
+
+			if entry:
+				try:
+					for i in entry.split(','):
+						color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+				except:
+					color_map={}
+					wx.MessageBox('Please enter the object class names in\ncorrect format! For example: apple,orange,pear','Error',wx.OK|wx.ICON_ERROR)
+
+			if len(color_map)>0:
+				for classname in color_map:
+					dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
+					if dialog.ShowModal()==wx.ID_OK:
+						(r,b,g,_)=dialog.color_picker.GetColour()
+						self.color_map[classname]=(r,b,g)
+					dialog.Destroy()
+				self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
+			else:
+				self.text_classes.SetLabel('None.')
+
+
+	def specify_augmentation(self,event):
+
+		aug_methods=['random rotation','horizontal flipping','vertical flipping','random brightening','random dimming','random blurring']
+		selected=''
+		dialog=wx.MultiChoiceDialog(self,message='Data augmentation methods',caption='Augmentation methods',choices=aug_methods)
+		if dialog.ShowModal()==wx.ID_OK:
+			self.aug_methods=[aug_methods[i] for i in dialog.GetSelections()]
+			for i in self.aug_methods:
+				if selected=='':
+					selected=selected+i
+				else:
+					selected=selected+','+i
+		else:
+			self.aug_methods=[]
+			selected='none'
+		dialog.Destroy()
+
+		if len(self.aug_methods)<=0:
+			selected='none'
+
+		self.text_augmentation.SetLabel('Augmentation methods: '+selected+'.')	
+
+
+	def start_annotation(self,event):
+
+		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
+			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
+		else:
+			
 
 
 
