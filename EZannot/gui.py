@@ -540,14 +540,11 @@ class WindowLv1_AnnotationModule(wx.Frame):
 
 
 
-
-
-
-class WindowLv1_AnnotationModule(wx.Frame):
+class WindowLv2_ManualAnnotate(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(1000,370))
+		super(WindowLv2_ManualAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
 		self.path_to_images=None
 		self.result_path=None
 		self.model_cp=None
