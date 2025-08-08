@@ -1557,38 +1557,41 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 
 	def select_model(self,event):
 
-		path_to_sam2_model=None
-		sam2_model_path=os.path.join(the_absolute_current_path,'sam2 models')
-		sam2_models=[i for i in os.listdir(sam2_model_path) if os.path.isdir(os.path.join(sam2_model_path,i))]
-		if '__pycache__' in sam2_models:
-			sam2_models.remove('__pycache__')
-		if '__init__' in sam2_models:
-			sam2_models.remove('__init__')
-		if '__init__.py' in sam2_models:
-			sam2_models.remove('__init__.py')
-		sam2_models.sort()
-		if 'Choose a new directory of the SAM2 model' not in sam2_models:
-			sam2_models.append('Choose a new directory of the SAM2 model')
+		path_to_annotator=None
+		annotator_path=os.path.join(the_absolute_current_path,'annotators')
+		annotators=[i for i in os.listdir(annotator_path) if os.path.isdir(os.path.join(annotator_path,i))]
+		if '__pycache__' in annotators:
+			annotators.remove('__pycache__')
+		if '__init__' in annotators:
+			annotators.remove('__init__')
+		if '__init__.py' in annotators:
+			annotators.remove('__init__.py')
+		annotators.sort()
+		if 'Choose a new directory of the Annotator' not in annotators:
+			annotators.append('Choose a new directory of the Annotator')
 
-		dialog=wx.SingleChoiceDialog(self,message='Select a SAM2 model for AI-assisted annotation.',caption='Select a SAM2 model',choices=sam2_models)
+		dialog=wx.SingleChoiceDialog(self,message='Select an Annotator for automatic annotation.',caption='Select an Annotator',choices=annotators)
 		if dialog.ShowModal()==wx.ID_OK:
-			sam2_model=dialog.GetStringSelection()
-			if sam2_model=='Choose a new directory of the SAM2 model':
+			annotator=dialog.GetStringSelection()
+			if annotator=='Choose a new directory of the Annotator':
 				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
 				if dialog1.ShowModal()==wx.ID_OK:
-					path_to_sam2_model=dialog1.GetPath()
+					path_to_annotator=dialog1.GetPath()
 				else:
-					path_to_sam2_model=None
+					path_to_annotator=None
 				dialog1.Destroy()
 			else:
-				path_to_sam2_model=os.path.join(sam2_model_path,sam2_model)
+				path_to_annotator=os.path.join(annotator_path,annotator)
 		dialog.Destroy()
 
-		if path_to_sam2_model is None:
-			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
-			self.text_model.SetLabel('No SAM2 model is set up. The AI assistance function is OFF.')
+		if path_to_annotator is None:
+			wx.MessageBox('No Annotator is selected.','No Annotator',wx.ICON_INFORMATION)
+			self.text_model.SetLabel('No Annotator is selected.')
+
+
+
 		else:
-			for i in os.listdir(path_to_sam2_model):
+			for i in os.listdir(path_to_annotator):
 				if i.endswith('.pt') and i.split('sam')[0]!='._':
 					self.model_cp=os.path.join(path_to_sam2_model,i)
 				if i.endswith('.yaml') and i.split('sam')[0]!='._':
