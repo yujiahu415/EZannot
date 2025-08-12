@@ -9,6 +9,8 @@ import torch
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import matplotlib as mpl
+import matplotlib.cm as cm
 from scipy.ndimage import rotate
 from PIL import Image
 from screeninfo import get_monitors
@@ -1467,10 +1469,12 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
 		self.path_to_images=None
 		self.result_path=None
-		self.model_cp=None
-		self.model_cfg=None
+		self.path_to_annotator=None
+		self.inferencing_framesize=None
+		self.object_kinds=None
+		self.black_background=True
 		self.color_map={}
-		self.aug_methods=[]
+		self.detection_threshold={}
 
 		self.display_window()
 
@@ -1511,16 +1515,6 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 		boxsizer.Add(module_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		module_classes=wx.BoxSizer(wx.HORIZONTAL)
-		button_classes=wx.Button(panel,label='Specify the colors that\nrepresent the objects',size=(300,40))
-		button_classes.Bind(wx.EVT_BUTTON,self.specify_classes)
-		wx.Button.SetToolTip(button_classes,'Specify the colors to represent different objects.')
-		self.text_classes=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_classes.Add(button_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_classes.Add(self.text_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(0,5,0)
-
 		button_startannotation=wx.Button(panel,label='Start to annotate images',size=(300,40))
 		button_startannotation.Bind(wx.EVT_BUTTON,self.start_annotation)
 		wx.Button.SetToolTip(button_startannotation,'Automatically annotate objects in images.')
@@ -1557,7 +1551,6 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 
 	def select_model(self,event):
 
-		path_to_annotator=None
 		annotator_path=os.path.join(the_absolute_current_path,'annotators')
 		annotators=[i for i in os.listdir(annotator_path) if os.path.isdir(os.path.join(annotator_path,i))]
 		if '__pycache__' in annotators:
@@ -1576,114 +1569,52 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 			if annotator=='Choose a new directory of the Annotator':
 				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
 				if dialog1.ShowModal()==wx.ID_OK:
-					path_to_annotator=dialog1.GetPath()
+					self.path_to_annotator=dialog1.GetPath()
 				else:
-					path_to_annotator=None
+					self.path_to_annotator=None
 				dialog1.Destroy()
 			else:
-				path_to_annotator=os.path.join(annotator_path,annotator)
+				self.path_to_annotator=os.path.join(annotator_path,annotator)
+			with open(os.path.join(self.path_to_annotator,'model_parameters.txt')) as f:
+				model_parameters=f.read()
+			object_names=json.loads(model_parameters)['object_names']
+			self.inferencing_framesize=int(json.loads(model_parameters)['inferencing_framesize'])
+			if int(json.loads(model_parameters)['black_background'])==0:
+				self.black_background=True
+			else:
+				self.black_background=False
+			if len(object_names)>1:
+				dialog1=wx.MultiChoiceDialog(self,message='Specify which obejct to annotate',
+					caption='Object kind',choices=object_names)
+				if dialog1.ShowModal()==wx.ID_OK:
+					self.object_kinds=[object_names[i] for i in dialog1.GetSelections()]
+				else:
+					self.object_kinds=object_names
+				dialog1.Destroy()
+			else:
+				self.object_kinds=object_names
+			colors=[str(hex_code) for hex_code in mpl.colors.cnames.values()]
+			for color,object_name in zip(colors,self.object_kinds):
+				self.color_map[object_name]=color
+			for object_name in self.object_kinds:
+				dialog1=ColorPicker(self,f'Color for annotating {object_name}',[object_name,self.color_map[object_name]])
+				if dialog1.ShowModal()==wx.ID_OK:
+					(r,b,g,_)=dialog1.color_picker.GetColour()
+					new_color='#%02x%02x%02x'%(r,b,g)
+					self.color_map[object_name]=new_color
+				dialog1.Destroy()
+				dialog1=wx.NumberEntryDialog(self,'Detection threshold for '+str(object_name),'Enter an number between 0 and 100','Detection threshold for '+str(object_name),0,0,100)
+				if dialog1.ShowModal()==wx.ID_OK:
+					self.detection_threshold[object_name]=int(dialog1.GetValue())/100
+				else:
+					self.detection_threshold[object_name]=0
+				dialog1.Destroy()
+			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'.')
 		dialog.Destroy()
 
 		if path_to_annotator is None:
 			wx.MessageBox('No Annotator is selected.','No Annotator',wx.ICON_INFORMATION)
 			self.text_model.SetLabel('No Annotator is selected.')
-
-
-
-		else:
-			for i in os.listdir(path_to_annotator):
-				if i.endswith('.pt') and i.split('sam')[0]!='._':
-					self.model_cp=os.path.join(path_to_sam2_model,i)
-				if i.endswith('.yaml') and i.split('sam')[0]!='._':
-					self.model_cfg=os.path.join(path_to_sam2_model,i)
-			if self.model_cp is None:
-				self.text_model.SetLabel('Missing checkpoint file.')
-			elif self.model_cfg is None:
-				self.text_model.SetLabel('Missing config file.')
-			else:
-				self.text_model.SetLabel('Checkpoint: '+str(os.path.basename(self.model_cp))+'; Config: '+str(os.path.basename(self.model_cfg))+'.')
-
-
-	def specify_classes(self,event):
-
-		if self.path_to_images is None:
-
-			wx.MessageBox('No input images(s).','Error',wx.OK|wx.ICON_ERROR)
-
-		else:
-
-			annotation_file=None
-			color_map={}
-			classnames=''
-			entry=None
-			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
-				if i.endswith('.json'):
-					annotation_file=os.path.join(os.path.dirname(self.path_to_images[0]),i)
-
-			if annotation_file and os.path.exists(annotation_file):
-				annotation=json.load(open(annotation_file))
-				for i in annotation['categories']:
-					if i['id']>0:
-						classnames=classnames+i['name']+','
-				classnames=classnames[:-1]
-
-				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
-				if dialog.ShowModal()==wx.ID_YES:
-
-					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=classnames)
-					if dialog1.ShowModal()==wx.ID_OK:
-						entry=dialog1.GetValue()
-					dialog1.Destroy()
-				else:
-					entry=classnames
-				dialog.Destroy()
-			else:
-				dialog=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names')
-				if dialog.ShowModal()==wx.ID_OK:
-					entry=dialog.GetValue()
-				dialog.Destroy()
-
-			if entry:
-				try:
-					for i in entry.split(','):
-						color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
-				except:
-					color_map={}
-					wx.MessageBox('Please enter the object class names in\ncorrect format! For example: apple,orange,pear','Error',wx.OK|wx.ICON_ERROR)
-
-			if len(color_map)>0:
-				for classname in color_map:
-					dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
-					if dialog.ShowModal()==wx.ID_OK:
-						(r,b,g,_)=dialog.color_picker.GetColour()
-						self.color_map[classname]=(r,b,g)
-					dialog.Destroy()
-				self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
-			else:
-				self.text_classes.SetLabel('None.')
-
-
-	def specify_augmentation(self,event):
-
-		aug_methods=['random rotation','horizontal flipping','vertical flipping','random brightening','random dimming','random blurring']
-		selected=''
-		dialog=wx.MultiChoiceDialog(self,message='Data augmentation methods',caption='Augmentation methods',choices=aug_methods)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.aug_methods=[aug_methods[i] for i in dialog.GetSelections()]
-			for i in self.aug_methods:
-				if selected=='':
-					selected=selected+i
-				else:
-					selected=selected+','+i
-		else:
-			self.aug_methods=[]
-			selected='none'
-		dialog.Destroy()
-
-		if len(self.aug_methods)<=0:
-			selected='none'
-
-		self.text_augmentation.SetLabel('Augmentation methods: '+selected+'.')	
 
 
 	def start_annotation(self,event):
