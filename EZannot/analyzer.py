@@ -10,7 +10,7 @@ from skimage import exposure
 
 
 
-class AnalyzeAnnotation():
+class OutputAnnotation():
 
 	def __init__(self,path_to_files,results_path,path_to_annotator,object_kinds,names_colors,detection_threshold=None,filters={}):
 
