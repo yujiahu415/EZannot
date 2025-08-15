@@ -249,15 +249,13 @@ class AutoAnnotation():
 		for image_id,image_path in enumerate(self.image_paths):
 
 			image_name=os.path.basename(image_path)
+			self.information[image_name]={'segmentations':[],'class_names':[]}
 
 			if os.path.splitext(image_name)[1] in ['.jpg','.JPG','.png','.PNG']:
 				image=cv2.imread(self.path_to_file)
 			else:
 				image=imread(self.path_to_file)
 				image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
-
-			width=image.shape[1]
-			height=image.shape[0]
 
 			output=self.annotator.inference([{'image':torch.as_tensor(image.astype('float32').transpose(2,0,1))}])
 			instances=output[0]['instances'].to('cpu')
@@ -289,8 +287,6 @@ class AutoAnnotation():
 
 									for mask in goodmasks:
 										mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
-										if self.expansion is not None:
-											mask=cv2.dilate(mask,np.ones((5,5),np.uint8),iterations=self.expansion)
 										cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 										if len(cnts)>0:
 											cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
@@ -298,8 +294,6 @@ class AutoAnnotation():
 											perimeter=cv2.arcLength(cnt,closed=True)
 											roundness=(4*np.pi*area)/(perimeter*perimeter)
 											(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
-											intensity=np.sum(analysis_fov*cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR))/max(area,1)
-											cnt=cnt+offset
 											segmentation=cnt.flatten().tolist()
 											if 'area' in self.filters:
 												if area<self.filters['area'][0] or area>self.filters['area'][1]:
@@ -317,24 +311,8 @@ class AutoAnnotation():
 												if wd<self.filters['width'][0] or wd>self.filters['width'][1]:
 													continue
 											if area>0:
-												cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])+int(w*self.fov_dim)
-												cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])+int(h*self.fov_dim)
-												data[object_name]['center'].append((cx,cy))
-												data[object_name]['area'].append(area)
-												data[object_name]['height'].append(ht)
-												data[object_name]['width'].append(wd)
-												data[object_name]['perimeter'].append(perimeter)
-												data[object_name]['roundness'].append(roundness)
-												data[object_name]['intensity'].append(intensity)
-												annotation['segmentations'].append(segmentation)
-												annotation['class_names'].append(object_name)
-												cv2.drawContours(to_annotate,[cnt],0,color,thickness)
-												if self.show_ids:
-													cv2.putText(to_annotate,str(len(data[object_name]['center'])),(cx,cy),cv2.FONT_HERSHEY_SIMPLEX,thickness,color,thickness)
-												data[object_name]['total_object_area']+=area
-
-
-
+												self.information['segmentations'].append(segmentation)
+												self.information['class_names'].append(object_name)
 
 
 			annotation_id=0
