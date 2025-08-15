@@ -217,13 +217,11 @@ class Annotator():
 
 class AutoAnnotation():
 
-	def __init__(self,path_to_files,results_path,path_to_annotator,object_kinds,names_colors,detection_threshold=None,filters={}):
+	def __init__(self,image_paths,path_to_annotator,object_kinds,names_colors,detection_threshold=None,filters={}):
 
-		self.path_to_files=path_to_files
-		self.path_to_annotation=os.path.join(results_path,'annotation')
-		os.makedirs(self.path_to_annotation,exist_ok=True)
-		self.path_to_measurement=os.path.join(results_path,'measurement')
-		os.makedirs(self.path_to_measurement,exist_ok=True)
+		self.image_paths=image_paths
+		self.information={}
+		self.annotation_path=os.path.dirname(self.image_paths[0])
 
 
 		self.results_path=os.path.join(results_path,os.path.splitext(os.path.basename(self.path_to_file))[0])
@@ -245,7 +243,15 @@ class AutoAnnotation():
 		self.information={}
 
 
-	def analyze_annotation(self):
+	def annotate_images(self):
+
+		coco_format={'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},'licenses':[],'categories':[],'images':[],'annotations':[]}
+
+		for i,object_name in enumerate(self.object_kinds):
+			coco_format['categories'].append({
+				'id':i+1,
+				'name':object_name,
+				'supercategory':'none'})
 
 		data={}
 		annotation={'segmentations':[],'class_names':[]}
@@ -409,13 +415,7 @@ class AutoAnnotation():
 				dfs=pd.DataFrame(dfs,index=['value'])
 				dfs.to_excel(writer,sheet_name=object_name,float_format='%.6f')
 
-		coco_format={'info':{'year':'','version':'1','description':'objectan annotations','contributor':'','url':'https://github.com/yujiahu415/objectan','date_created':''},'licenses':[],'categories':[],'images':[],'annotations':[]}
 
-		for i,object_name in enumerate(self.object_kinds):
-			coco_format['categories'].append({
-				'id':i+1,
-				'name':object_name,
-				'supercategory':'none'})
 
 		annotation_id=0
 		imwrite(os.path.join(self.results_path,image_name),cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
