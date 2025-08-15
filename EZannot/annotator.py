@@ -217,30 +217,19 @@ class Annotator():
 
 class AutoAnnotation():
 
-	def __init__(self,image_paths,path_to_annotator,object_kinds,names_colors,detection_threshold=None,filters={}):
+	def __init__(self,image_paths,path_to_annotator,object_kinds,detection_threshold=None,filters={}):
 
 		self.image_paths=image_paths
-		self.information={}
 		self.annotation_path=os.path.dirname(self.image_paths[0])
-		for image_path in self.image_paths:
-			self.information[]={}
-
-
-		self.results_path=os.path.join(results_path,os.path.splitext(os.path.basename(self.path_to_file))[0])
-
-
 		self.annotator=Annotator()
 		self.annotator.load(path_to_annotator,object_kinds)
 		self.object_kinds=object_kinds
 		self.object_mapping=self.annotator.object_mapping
-		self.names_colors=names_colors
 		self.detection_threshold=detection_threshold
 		if self.detection_threshold is None:
 			self.detection_threshold={}
 			for object_name in self.object_kinds:
 				self.detection_threshold[object_name]=0
-		self.fov_dim=self.annotator.inferencing_framesize
-		self.black_background=self.annotator.black_background
 		self.filters=filters
 		self.information={}
 
@@ -280,10 +269,6 @@ class AutoAnnotation():
 			if len(masks)>0:
 
 				for object_name in self.object_kinds:
-
-					hex_color=self.names_colors[object_name].lstrip('#')
-					color=tuple(int(hex_color[i:i+2],16) for i in (0,2,4))
-					color=color[::-1]
 
 					object_masks=[masks[a] for a,name in enumerate(classes) if name==object_name]
 					object_scores=[scores[a] for a,name in enumerate(classes) if name==object_name]
