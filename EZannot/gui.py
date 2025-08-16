@@ -1643,6 +1643,7 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 		else:
 			
 			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters)
+			AA.annotate_images()
 
 
 
