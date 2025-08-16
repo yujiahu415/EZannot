@@ -1598,7 +1598,7 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'.')
 		dialog.Destroy()
 
-		if path_to_annotator is None:
+		if self.path_to_annotator is None:
 			wx.MessageBox('No Annotator is selected.','No Annotator',wx.ICON_INFORMATION)
 			self.text_model.SetLabel('No Annotator is selected.')
 
