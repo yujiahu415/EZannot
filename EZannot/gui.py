@@ -4,6 +4,7 @@ import wx
 import wx.lib.agw.hyperlink as hl
 import json
 import random
+import shutil
 import itertools
 import torch
 import numpy as np
