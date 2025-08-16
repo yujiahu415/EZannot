@@ -357,7 +357,7 @@ class AutoAnnotation():
 
 				annotation_id+=1
 
-		with open(os.path.join(self.results_path,'annotations.json'),'w') as json_file:
+		with open(os.path.join(self.annotation_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
 
 		print('Auto annotation completed!')
