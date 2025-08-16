@@ -983,7 +983,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 					cx=int((x_max+x_min)/2)
 					cy=int((y_max+y_min)/2)
 					dc.SetTextForeground(wx.Colour(*color))
-					dc.SetFont(wx.FontInfo(20).FaceName('Arial'))
+					dc.SetFont(wx.Font(wx.FontInfo(15).FaceName('Arial')))
 					dc.DrawText(str(class_names[i]),cx,cy)
 
 		if len(self.current_polygon)>0:
