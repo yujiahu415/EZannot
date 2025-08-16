@@ -975,6 +975,16 @@ class WindowLv3_AnnotateImages(wx.Frame):
 					dc.SetBrush(brush)
 					for x,y in polygon:
 						dc.DrawCircle(x,y,4)
+				if self.show_name:
+					x_max=max(x for x,y in polygon)
+					x_min=min(x for x,y in polygon)
+					y_max=max(y for x,y in polygon)
+					y_min=min(y for x,y in polygon)
+					cx=int((x_max+x_min)/2)
+					cy=int((y_max+y_min)/2)
+					dc.SetTextForeground(wx.Colour(*color))
+					dc.SetFont(wx.FontInfo(20).FaceName('Arial'))
+					dc.DrawText(str(class_names[i]),cx,cy)
 
 		if len(self.current_polygon)>0:
 			current_polygon=[i for i in self.current_polygon]
