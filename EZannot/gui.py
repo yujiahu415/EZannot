@@ -802,6 +802,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.background_points=[]
 		self.selected_point=None
 		self.start_modify=False
+		self.show_name=False
 		self.AI_help=False
 
 		annotation_files=[]
@@ -1091,6 +1092,12 @@ class WindowLv3_AnnotateImages(wx.Frame):
 				self.start_modify=False
 			else:
 				self.start_modify=True
+			self.canvas.Refresh()
+		elif event.GetKeyCode()==wx.WXK_SPACE:
+			if self.show_name:
+				self.show_name=False
+			else:
+				self.show_name=True
 			self.canvas.Refresh()
 		else:
 			event.Skip()
