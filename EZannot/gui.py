@@ -708,7 +708,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 						for i in annotation['categories']:
 							if i['id']>0:
 								classnames=classnames+i['name']+','
-						classnames=classnames[:-1]
+				classnames=classnames[:-1]
 				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
 				if dialog.ShowModal()==wx.ID_YES:
 					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=classnames)
