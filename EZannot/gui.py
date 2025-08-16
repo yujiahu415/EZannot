@@ -702,24 +702,24 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 
 		else:
 
-			annotation_file=None
+			annotation_files=[]
 			color_map={}
 			classnames=''
 			entry=None
 			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
 				if i.endswith('.json'):
-					annotation_file=os.path.join(os.path.dirname(self.path_to_images[0]),i)
+					annotation_files.append(os.path.join(os.path.dirname(self.path_to_images[0]),i))
 
-			if annotation_file and os.path.exists(annotation_file):
-				annotation=json.load(open(annotation_file))
-				for i in annotation['categories']:
-					if i['id']>0:
-						classnames=classnames+i['name']+','
-				classnames=classnames[:-1]
-
+			if len(annotation_files)>0:
+				for annotation_file in annotation_files
+					if os.path.exists(annotation_file):
+						annotation=json.load(open(annotation_file))
+						for i in annotation['categories']:
+							if i['id']>0:
+								classnames=classnames+i['name']+','
+						classnames=classnames[:-1]
 				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
 				if dialog.ShowModal()==wx.ID_YES:
-
 					dialog1=wx.TextEntryDialog(self,'Enter the names of objects to annotate\n(use "," to separate each name)','Object class names',value=classnames)
 					if dialog1.ShowModal()==wx.ID_OK:
 						entry=dialog1.GetValue()
@@ -812,19 +812,21 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.start_modify=False
 		self.AI_help=False
 
-		annotation_file=None
+		annotation_files=[]
 		for i in os.listdir(os.path.dirname(self.image_paths[0])):
 			if i.endswith('.json'):
-				annotation_file=os.path.join(os.path.dirname(self.image_paths[0]),i)
-		if annotation_file and os.path.exists(annotation_file):
-			annotation=json.load(open(annotation_file))
-			for i in annotation['images']:
-				self.information[i['file_name']]={'polygons':[],'class_names':[]}
-			for i in annotation['annotations']:
-				image_name=annotation['images'][int(i['image_id'])]['file_name']
-				classname=list(self.color_map.keys())[int(i['category_id'])-1]
-				self.information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
-				self.information[image_name]['class_names'].append(classname)
+				annotation_files.append(os.path.join(os.path.dirname(self.image_paths[0]),i))
+		if len(annotation_files)>0:
+			for annotation_file in annotation_files:
+				if os.path.exists(annotation_file):
+					annotation=json.load(open(annotation_file))
+					for i in annotation['images']:
+						self.information[i['file_name']]={'polygons':[],'class_names':[]}
+					for i in annotation['annotations']:
+						image_name=annotation['images'][int(i['image_id'])]['file_name']
+						classname=list(self.color_map.keys())[int(i['category_id'])-1]
+						self.information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
+						self.information[image_name]['class_names'].append(classname)
 
 		self.init_ui()
 		self.load_current_image()
