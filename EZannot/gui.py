@@ -606,7 +606,8 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 		module_augmentation=wx.BoxSizer(wx.HORIZONTAL)
 		button_augmentation=wx.Button(panel,label='Specify the augmentation methods\nfor the annotated images',size=(300,40))
 		button_augmentation.Bind(wx.EVT_BUTTON,self.specify_augmentation)
-		wx.Button.SetToolTip(button_augmentation,'Use augmentation for the annotated images can greatly enhance the training efficiency.')
+		wx.Button.SetToolTip(button_augmentation,
+			'Augmentation can greatly enhance the training efficiency. But for the first time of annotating an image set, you can skip this to build an unaugmented, origianl annotated image set and import it to EZannot later to perform the augmentation.')
 		self.text_augmentation=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_augmentation.Add(button_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_augmentation.Add(self.text_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
