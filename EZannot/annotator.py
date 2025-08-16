@@ -326,16 +326,16 @@ class AutoAnnotation():
 				'height':image.shape[0],
 				'file_name':image_name})
 
-			for i,seg in enumerate(annotation['segmentations']):
+			for i,seg in enumerate(self.information[image_name]['segmentations']):
 
-				category_id=self.object_kinds.index(annotation['class_names'][i])+1
+				category_id=self.object_kinds.index(self.information[image_name]['class_names'][i])+1
 				polygon=[(seg[x],seg[x+1]) for x in range(0,len(seg)-1,2)]
 
 				n=len(polygon)
 				area=0
-				for i in range(n):
-					x1,y1=polygon[i]
-					x2,y2=polygon[(i+1)%n]
+				for idx in range(n):
+					x1,y1=polygon[idx]
+					x2,y2=polygon[(idx+1)%n]
 					area+=x1*y2-x2*y1
 				area=abs(area)/2
 
@@ -348,7 +348,7 @@ class AutoAnnotation():
 
 				coco_format['annotations'].append({
 					'id':annotation_id,
-					'image_id':0,
+					'image_id':image_id,
 					'category_id':category_id,
 					'segmentation':[seg],
 					'area':area,
@@ -360,7 +360,6 @@ class AutoAnnotation():
 		with open(os.path.join(self.results_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
 
-		print('Analysis completed!')
-
+		print('Auto annotation completed!')
 
 
