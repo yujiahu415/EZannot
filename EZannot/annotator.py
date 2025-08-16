@@ -236,7 +236,12 @@ class AutoAnnotation():
 
 	def annotate_images(self):
 
-		coco_format={'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},'licenses':[],'categories':[],'images':[],'annotations':[]}
+		coco_format={
+		'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},
+		'licenses':[],
+		'categories':[],
+		'images':[],
+		'annotations':[]}
 
 		for i,object_name in enumerate(self.object_kinds):
 			coco_format['categories'].append({
@@ -311,15 +316,12 @@ class AutoAnnotation():
 												if wd<self.filters['width'][0] or wd>self.filters['width'][1]:
 													continue
 											if area>0:
-												self.information['segmentations'].append(segmentation)
-												self.information['class_names'].append(object_name)
+												self.information[image_name]['segmentations'].append(segmentation)
+												self.information[image_name]['class_names'].append(object_name)
 
-
-			annotation_id=0
-			imwrite(os.path.join(self.results_path,image_name),cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
 
 			coco_format['images'].append({
-				'id':0,
+				'id':image_id,
 				'width':image.shape[1],
 				'height':image.shape[0],
 				'file_name':image_name})
@@ -351,8 +353,7 @@ class AutoAnnotation():
 					'segmentation':[seg],
 					'area':area,
 					'bbox':bbox,
-					'iscrowd':0
-					})
+					'iscrowd':0})
 
 				annotation_id+=1
 
