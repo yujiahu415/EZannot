@@ -1471,13 +1471,10 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 
 		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
 		self.path_to_images=None
-		self.result_path=None
 		self.path_to_annotator=None
-		self.inferencing_framesize=None
 		self.object_kinds=None
-		self.black_background=True
-		self.color_map={}
 		self.detection_threshold={}
+		self.filters={}
 
 		self.display_window()
 
@@ -1543,15 +1540,6 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 		dialog.Destroy()
 
 
-	def select_outpath(self,event):
-
-		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.result_path=dialog.GetPath()
-			self.text_outputfolder.SetLabel('The annotated images will be in: '+self.result_path+'.')
-		dialog.Destroy()
-
-
 	def select_model(self,event):
 
 		annotator_path=os.path.join(the_absolute_current_path,'annotators')
@@ -1581,11 +1569,6 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 			with open(os.path.join(self.path_to_annotator,'model_parameters.txt')) as f:
 				model_parameters=f.read()
 			object_names=json.loads(model_parameters)['object_names']
-			self.inferencing_framesize=int(json.loads(model_parameters)['inferencing_framesize'])
-			if int(json.loads(model_parameters)['black_background'])==0:
-				self.black_background=True
-			else:
-				self.black_background=False
 			if len(object_names)>1:
 				dialog1=wx.MultiChoiceDialog(self,message='Specify which obejct to annotate',
 					caption='Object kind',choices=object_names)
@@ -1596,16 +1579,7 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 				dialog1.Destroy()
 			else:
 				self.object_kinds=object_names
-			colors=[str(hex_code) for hex_code in mpl.colors.cnames.values()]
-			for color,object_name in zip(colors,self.object_kinds):
-				self.color_map[object_name]=color
 			for object_name in self.object_kinds:
-				dialog1=ColorPicker(self,f'Color for annotating {object_name}',[object_name,self.color_map[object_name]])
-				if dialog1.ShowModal()==wx.ID_OK:
-					(r,b,g,_)=dialog1.color_picker.GetColour()
-					new_color='#%02x%02x%02x'%(r,b,g)
-					self.color_map[object_name]=new_color
-				dialog1.Destroy()
 				dialog1=wx.NumberEntryDialog(self,'Detection threshold for '+str(object_name),'Enter an number between 0 and 100','Detection threshold for '+str(object_name),0,0,100)
 				if dialog1.ShowModal()==wx.ID_OK:
 					self.detection_threshold[object_name]=int(dialog1.GetValue())/100
@@ -1620,12 +1594,46 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 			self.text_model.SetLabel('No Annotator is selected.')
 
 
+	def specify_filters(self,event):
+
+		filters_choices=['area','perimeter','roundness','height','width']
+
+		dialog=wx.MultiChoiceDialog(self,message='Select filters to exclude unwanted annotations',caption='Filters',choices=filters_choices)
+		if dialog.ShowModal()==wx.ID_OK:
+			selected_filters=[filters_choices[i] for i in dialog.GetSelections()]
+		else:
+			selected_filters=[]
+		dialog.Destroy()
+
+		for ft in selected_filters:
+			dialog=wx.NumberEntryDialog(self,'The min value for '+str(ft),'The unit is pixel (except for roundness)','The min value for '+str(ft),0,0,100000000000000)
+			values=[0,np.inf]
+			if dialog.ShowModal()==wx.ID_OK:
+				values[0]=int(dialog.GetValue())
+			dialog.Destroy()
+			dialog=wx.NumberEntryDialog(self,'The max value (enter 0 for infinity) for '+str(ft),'The unit is pixel (except for roundness)','The max value for '+str(ft),0,0,100000000000000)
+			if dialog.ShowModal()==wx.ID_OK:
+				value=int(dialog.GetValue())
+				if value>0:
+					values[1]=value
+			dialog.Destroy()
+			self.filters[ft]=values
+
+		if len(self.filters)>0:
+			self.self.text_filters.SetLabel('Filters: '+str(self.filters))
+		else:
+			self.self.text_filters.SetLabel('NO filters selected.')
+
+
 	def start_annotation(self,event):
 
-		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
-			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
+		if self.path_to_images is None or self.path_to_annotator is None:
+
+			wx.MessageBox('No input images(s) / trained Annotator selected.','Error',wx.OK|wx.ICON_ERROR)
+
 		else:
 			
+			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters)
 
 
 
