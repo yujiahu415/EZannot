@@ -711,7 +711,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 					annotation_files.append(os.path.join(os.path.dirname(self.path_to_images[0]),i))
 
 			if len(annotation_files)>0:
-				for annotation_file in annotation_files
+				for annotation_file in annotation_files:
 					if os.path.exists(annotation_file):
 						annotation=json.load(open(annotation_file))
 						for i in annotation['categories']:
