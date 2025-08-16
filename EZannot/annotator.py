@@ -257,9 +257,9 @@ class AutoAnnotation():
 			self.information[image_name]={'segmentations':[],'class_names':[]}
 
 			if os.path.splitext(image_name)[1] in ['.jpg','.JPG','.png','.PNG']:
-				image=cv2.imread(self.path_to_file)
+				image=cv2.imread(image_path)
 			else:
-				image=imread(self.path_to_file)
+				image=imread(image_path)
 				image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
 
 			output=self.annotator.inference([{'image':torch.as_tensor(image.astype('float32').transpose(2,0,1))}])
