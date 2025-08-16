@@ -23,10 +23,10 @@ class Annotator():
 	def __init__(self):
 
 		self.device='cuda' if torch.cuda.is_available() else 'cpu' # whether the GPU is available, if so, use GPU
-		self.object_mapping=None # the objectn categories and names in a annotator
+		self.object_mapping=None # the object categories and names in an Annotator
 		self.inferencing_framesize=None
 		self.black_background=None
-		self.current_annotator=None # the current annotator used for inference
+		self.current_annotator=None # the current Annotator used for inference
 
 
 	def train(self,path_to_annotation,path_to_trainingimages,path_to_annotator,iteration_num,inference_size,num_rois,black_background=0):
@@ -185,15 +185,15 @@ class Annotator():
 		self.inferencing_framesize=int(json.loads(model_parameters)['inferencing_framesize'])
 		bg=int(json.loads(model_parameters)['black_background'])
 
-		print('The total categories of objects in this annotator: '+str(object_names))
-		print('The objects of interest in this annotator: '+str(object_kinds))
-		print('The inferencing framesize of this annotator: '+str(self.inferencing_framesize))
+		print('The total categories of objects in this Annotator: '+str(object_names))
+		print('The objects of interest in this Annotator: '+str(object_kinds))
+		print('The inferencing framesize of this Annotator: '+str(self.inferencing_framesize))
 		if bg==0:
 			self.black_background=True
-			print('The images that can be analyzed by this annotator have black/darker background')
+			print('The images that can be analyzed by this Annotator have black/darker background')
 		else:
 			self.black_background=False
-			print('The images that can be analyzed by this annotator have white/lighter background')
+			print('The images that can be analyzed by this Annotator have white/lighter background')
 
 		cfg=get_cfg()
 		cfg.set_new_allowed(True)
@@ -206,7 +206,7 @@ class Annotator():
 
 	def inference(self,inputs):
 
-		# inputs: images that the current annotator runs on
+		# inputs: images that the current Annotator runs on
 
 		with torch.no_grad():
 			outputs=self.current_annotator(inputs)
