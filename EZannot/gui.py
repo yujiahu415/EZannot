@@ -55,7 +55,7 @@ class InitialWindow(wx.Frame):
 
 	def __init__(self,title):
 
-		super(InitialWindow,self).__init__(parent=None,title=title,size=(750,440))
+		super(InitialWindow,self).__init__(parent=None,title=title,size=(750,450))
 		self.dispaly_window()
 
 
@@ -115,7 +115,7 @@ class WindowLv1_TrainingModule(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv1_TrainingModule,self).__init__(parent=None,title=title,size=(500,200))
+		super(WindowLv1_TrainingModule,self).__init__(parent=None,title=title,size=(500,250))
 		self.dispaly_window()
 
 
@@ -158,7 +158,7 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv2_TrainAnnotators,self).__init__(parent=None,title=title,size=(1000,280))
+		super(WindowLv2_TrainAnnotators,self).__init__(parent=None,title=title,size=(1000,300))
 		self.path_to_trainingimages=None
 		self.path_to_annotation=None
 		self.num_rois=128
@@ -327,7 +327,7 @@ class WindowLv2_TestAnnotators(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv2_TestAnnotators,self).__init__(parent=None,title=title,size=(1000,280))
+		super(WindowLv2_TestAnnotators,self).__init__(parent=None,title=title,size=(1000,300))
 		self.path_to_testingimages=None
 		self.path_to_annotation=None
 		self.annotator_path=os.path.join(the_absolute_current_path,'annotators')
@@ -494,7 +494,7 @@ class WindowLv1_AnnotationModule(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(500,200))
+		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(500,250))
 		self.dispaly_window()
 
 
@@ -537,7 +537,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv2_ManualAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
+		super(WindowLv2_ManualAnnotate,self).__init__(parent=None,title=title,size=(1000,350))
 		self.path_to_images=None
 		self.result_path=None
 		self.model_cp=None
@@ -1460,7 +1460,7 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 
 	def __init__(self,title):
 
-		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,370))
+		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,260))
 		self.path_to_images=None
 		self.path_to_annotator=None
 		self.object_kinds=None
