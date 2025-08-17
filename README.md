@@ -195,7 +195,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
 &nbsp;
 
-## Launch the graphical user interface
+## Launch the user interface
 
 1. Launch EZannot:
 
