@@ -1,4 +1,4 @@
-# EZannot: annotate images and measure the annotated with ease.
+# EZannot: annotate and measure the annotated with ease.
 
 [![PyPI - Version](https://img.shields.io/pypi/v/EZannot)](https://pypi.org/project/EZannot/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/EZannot)](https://pypi.org/project/EZannot/)
@@ -6,29 +6,49 @@
 
 <p>&nbsp;</p>
 
-## What can EZannot do?
+## Key features & Workflow:
 
-**1. Annotates the outline of objects or regions in images with ease (when AI-help enabled).**
+**1. AI ([SAM2](https://github.com/facebookresearch/sam2)) help enables manual annotation of object/region outlines with single mouse clicks.**
 
-   One mouse left click to detect the outline of an object/region, and hit 'enter' to specify its classname:
+**2. The augmentation is up to 135 X for each image and enhances the generalizability of the training.**
+
+**3. Manually annotate a few to train an AI Annotator and use it to automatically annotate the rest.**
+
+**4. Refine the annotations performed by the automatic Annotator and iterate a better Annotator.**
+
+**5. All the annotations can be quantified by diverse measurements such as area and pixel intensity.**
+
+**6. Totally free, and keeps your data private since the annotation is done locally on your computer.**
+
+<p>&nbsp;</p>
+
+## How to use?
+
+**1. Annotate the outline of objects or regions in images with ease (when AI-help enabled).**
+
+   A `Mouse left click` to detect the outline and hit `Enter` to specify the classname to finalize the annotation:
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
 
-   One mouse left click to include an additional area in an annotation:
+   Another `Mouse left click` to include an additional area in an annotation before finalizing it: 
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_include.gif?raw=true)
 
-   Change the classname of an object/region:
+   A `Mouse left click` to select a region and a `Mouse right click` to exclude some areas in an annotation:
    
-   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_change.gif?raw=true)
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_exclude.gif?raw=true)
 
-   One mouse left click to select a region and one right click to exclude an area:
-   
-   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_remove.gif?raw=true)
-
-   Press "shift" to enter/exit the editing mode and modify the annotated polygons:
+   To modify the polygon of an annotation, press `Shift` once to enter or exit the editing mode:
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Shift_modify.gif?raw=true)
+
+   To show the classnames of all annotations, press `Space` once to enter or exit the showing mode:
+
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Space_show.gif?raw=true)
+
+   To delete an annotation, a `Mouse right click` on any area inside the outline of that annotation:
+
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_delete.gif?raw=true)
 
 <p>&nbsp;</p>
 
@@ -41,10 +61,6 @@
 **3. Provides quantitative measures, such as area and pixel intensity, for each annotated object/region.**
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Measurements.png?raw=true)
-
-<p>&nbsp;</p>
-
-**4. Completely free, and keeps your data private since the annotation is done locally on your computer.**
 
 <p>&nbsp;</p>
 
