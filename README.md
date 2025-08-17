@@ -216,5 +216,5 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
 2. There's a hint for each button in the user interface:
 
-   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.png?raw=true)
+   ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.jpg?raw=true)
    
