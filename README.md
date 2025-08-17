@@ -37,7 +37,7 @@
 
 <p>&nbsp;</p>
 
-**<ins>Some demos</ins>:**
+**<ins>Some demo</ins>:**
 
 <p>&nbsp;</p>
 
