@@ -1629,9 +1629,9 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 			self.filters[ft]=values
 
 		if len(self.filters)>0:
-			self.self.text_filters.SetLabel('Filters: '+str(self.filters))
+			self.text_filters.SetLabel('Filters: '+str(self.filters))
 		else:
-			self.self.text_filters.SetLabel('NO filters selected.')
+			self.text_filters.SetLabel('NO filters selected.')
 
 
 	def start_annotation(self,event):
