@@ -1134,6 +1134,20 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			wx.MessageBox('No annotations to export.','Error',wx.ICON_ERROR)
 			return
 
+		self.generate_annotations(self.result_path,self.result_path,self.aug_methods)
+		self.generate_annotations(os.path.dirname(self.image_paths[0]),self.result_path,[])
+
+		wx.MessageBox('Annotations exported successfully.','Success',wx.ICON_INFORMATION)
+
+		self.canvas.SetFocus()
+
+
+	def generate_annotations(self,original_path,result_path,aug_methods):
+
+		if not self.information:
+			wx.MessageBox('No annotations to export.','Error',wx.ICON_ERROR)
+			return
+
 		remove=[]
 
 		all_methods=['','_rot1','_rot2','_rot3','_rot4','_rot5','_rot6','_blur']
@@ -1142,26 +1156,26 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			all_methods.extend([''.join(c) for c in itertools.combinations(options,r)])
 
 		for i in all_methods:
-			if 'random rotation' not in self.aug_methods:
+			if 'random rotation' not in aug_methods:
 				if 'rot' in i:
 					remove.append(i)
-			if 'horizontal flipping' not in self.aug_methods:
+			if 'horizontal flipping' not in aug_methods:
 				if 'flph' in i:
 					remove.append(i)
-			if 'vertical flipping' not in self.aug_methods:
+			if 'vertical flipping' not in aug_methods:
 				if 'flpv' in i:
 					remove.append(i)
-			if 'random brightening' not in self.aug_methods:
+			if 'random brightening' not in aug_methods:
 				if 'brih' in i:
 					remove.append(i)
 				if 'exph' in i:
 					remove.append(i)
-			if 'random dimming' not in self.aug_methods:
+			if 'random dimming' not in aug_methods:
 				if 'bril' in i:
 					remove.append(i)
 				if 'expl' in i:
 					remove.append(i)
-			if 'random blurring' not in self.aug_methods:
+			if 'random blurring' not in aug_methods:
 				if 'blur' in i:
 					remove.append(i)
 
@@ -1258,7 +1272,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 					image=cv2.GaussianBlur(image,(blur,blur),0)
 
 				new_name=image_name.split('.'+image_name.split('.')[-1])[0]+str(m)+'.'+image_name.split('.')[-1]
-				cv2.imwrite(os.path.join(self.result_path,new_name),image)
+				cv2.imwrite(os.path.join(result_path,new_name),image)
 
 				coco_format['images'].append({
 					'id':image_id,
@@ -1332,11 +1346,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 
 				image_id+=1
 
-		with open(os.path.join(self.result_path,'annotations.json'),'w') as json_file:
+		with open(os.path.join(original_path,'annotations.json'),'w') as json_file:
 			json.dump(coco_format,json_file)
-		wx.MessageBox('Annotations exported successfully.','Success',wx.ICON_INFORMATION)
-
-		self.canvas.SetFocus()
 
 
 	def measure_annotations(self,event,threshold=None):

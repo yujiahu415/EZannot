@@ -297,7 +297,7 @@ class AutoAnnotation():
 											cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
 											area=np.sum(np.array(mask),axis=(0,1))
 											perimeter=cv2.arcLength(cnt,closed=True)
-											roundness=(4*np.pi*area)/(perimeter*perimeter)
+											roundness=(perimeter*perimeter)/(4*np.pi*area)
 											(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 											segmentation=cnt.flatten().tolist()
 											if 'area' in self.filters:
