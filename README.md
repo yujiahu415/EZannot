@@ -8,53 +8,95 @@
 
 ## Key features & Workflow:
 
-**1. AI ([SAM2](https://github.com/facebookresearch/sam2)) help enables manual annotation of object/region outlines with single mouse clicks.**
+1. AI ([SAM2](https://github.com/facebookresearch/sam2)) help enables manual annotation of an object/region with a ***single*** `Mouse click`.
 
-**2. The augmentation is up to 135 X for each image and enhances the generalizability of the training.**
+2. The augmentation is up to ***135 X*** for each image and enhances the generalizability of training.
 
-**3. Manually annotate a few to train an AI Annotator and use it to automatically annotate the rest.**
+3. Manually annotate a few to train an AI ***Annotator*** and use it to automatically annotate the rest.
 
-**4. Refine the annotations performed by the automatic Annotator and iterate a better Annotator.**
+4. Refine the annotations performed by the ***automatic Annotator*** and iterate a better Annotator.
 
-**5. All the annotations can be quantified by diverse measurements such as area and pixel intensity.**
+5. All the annotations can be ***quantified by diverse measurements*** such as area and pixel intensity.
 
-**6. Totally free, and keeps your data private since the annotation is done locally on your computer.**
+6. Totally ***free***, and keeps your data ***private*** since the work is done locally on your computer.
 
 <p>&nbsp;</p>
 
 ## How to use?
 
-**1. Annotate the outline of objects or regions in images with ease (when AI-help enabled).**
+**1. Turn on the `AI Help` button to annotate the outline of objects or regions in images with ease.**
 
-   A `Mouse left click` to detect the outline and hit `Enter` to specify the classname to finalize the annotation:
-   
+> [!TIP]
+> To include more images to an annotated dataset, simply put new images inside the folder of the annotated dataset.
+
+> [!TIP]
+> To merge multiple annotated datasets, merge the folders (rename the annotation files to avoid overwriting).
+
+> [!TIP]
+> To visualize or refine the annotations, use EZannot's `Manual Annotation` unit, navigate to the folder that stores the images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
+
+<p>&nbsp;</p>
+
+**<ins>Some demos</ins>:**
+
+<p>&nbsp;</p>
+
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
 
-   Another `Mouse left click` to include an additional area in an annotation before finalizing it: 
-   
+   > [!NOTE]
+   > Click `Mouse left` to detect the outline and hit `Enter` to specify the classname to finalize the annotation.
+
+   > [!TIP]
+   > Speed up by hiting `Enter` instead of using mouse to click "OK" so that no need to move mouse back and forth.
+
+   > [!TIP]
+   > If there is no object of interest in an image, simply don't do any annotation and proceed to the next image.
+   > 
+   > In this way, the 'null' image will be marked as 'null' in the annotation file.
+
+<p>&nbsp;</p>
+
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_include.gif?raw=true)
 
-   A `Mouse left click` to select a region and a `Mouse right click` to exclude some areas in an annotation:
+   > [!NOTE]
+   > Another `Mouse left` click to include an additional area in an annotation before finalizing it.
+
+<p>&nbsp;</p>
    
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_exclude.gif?raw=true)
 
-   To modify the polygon of an annotation, press `Shift` once to enter or exit the editing mode:
+   > [!NOTE]
+   > A `Mouse left` click to select a region and a `Mouse right` click to exclude some areas in an annotation.
 
+<p>&nbsp;</p>
+   
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Shift_modify.gif?raw=true)
 
-   To show the classnames of all annotations, press `Space` once to enter or exit the showing mode:
+   > [!NOTE]
+   > To modify the polygon of an annotation, press `Shift` once to enter or exit the editing mode.
+
+<p>&nbsp;</p>
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Space_show.gif?raw=true)
 
-   To delete an annotation, a `Mouse right click` on any area inside the outline of that annotation:
+   > [!NOTE]
+   > To show the classnames of all annotations, press `Space` once to enter or exit the showing mode.
+
+<p>&nbsp;</p>
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Right_delete.gif?raw=true)
+
+   > [!NOTE]
+   > To delete an annotation, a `Mouse right` click on any area inside the outline of that annotation.
 
 <p>&nbsp;</p>
 
 **2. Augments each annotated image to 134 additional manipulated images to improve the model training.**
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Augmentation.png?raw=true)
+
+> [!TIP]
+> The augmented images and the annotation file for them are stored in the output folder you specified. The annotation file for the original, unaugmented images is stored in the original image folder.
 
 <p>&nbsp;</p>
 
@@ -68,7 +110,8 @@
 
 <p>&nbsp;</p>
 
-**Important**: If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) user, you need to install EZannot under a different version of Python3 or environment. For example, if your LabGym/FluoSA is installed under Python3.10, you need to install EZannot under another version of Python (e.g., Python3.12). This is because LabGym/FluoSA and EZannot use different versions of PyTorch and different versions of PyTorch cannot be installed within the same Python3 or environment. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
+> [!IMPORTANT]
+>  If you are a [LabGym](https://github.com/umyelab/LabGym) or [FluoSA](https://github.com/umyelab/FluoSA) user, you need to install EZannot under a different version of Python3 or environment. For example, if your LabGym/FluoSA is installed under Python3.10, you need to install EZannot under another version of Python (e.g., Python3.12). This is because LabGym/FluoSA and EZannot use different versions of PyTorch and different versions of PyTorch cannot be installed within the same Python3 or environment. You can use commands like `py -3.10` and `py -3.11` to activate different versions of Python3.
 
 <p>&nbsp;</p>
 
@@ -152,7 +195,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
 &nbsp;
 
-## Usage
+## Launch the graphical user interface
 
 1. Launch EZannot:
 
@@ -175,11 +218,8 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.png?raw=true)
 
-3. You can specify a new folder for exporting the annotation without performing any augmentation. In this way, you will have an 'origin' dataset that stores the annotations on all original images. You may perform augmentation on the 'origin' dataset at any time later.
-
-4. You can load the annotated images to the user interface, EZannot automatically looks for the annotation file in json format in the same folder where the images are stored, and reads the annotations and displays them in images within the user interface.
 
 5. You can include more images to an existing annotated dataset. Simply put new images and old ones, as well as the annotation file for the old ones in the same folder, select all the images, specify a new folder to export the annotation, and start to annotate. The previous annotations will be shown in old images.
    
-6. If there is no object of interest in an image (a 'null' image), simply don't do any annotation and proceed to the next image and the 'null' image will be marked as 'null' in the annotation file.
+
 
