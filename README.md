@@ -217,9 +217,4 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 2. There's a hint for each button in the user interface:
 
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/User_interface.png?raw=true)
-
-
-5. You can include more images to an existing annotated dataset. Simply put new images and old ones, as well as the annotation file for the old ones in the same folder, select all the images, specify a new folder to export the annotation, and start to annotate. The previous annotations will be shown in old images.
    
-
-
