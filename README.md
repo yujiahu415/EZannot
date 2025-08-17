@@ -24,7 +24,7 @@
 
 ## How to use?
 
-**1. Turn on the `AI Help` button to annotate the outline of objects or regions in images with ease.**
+**1. For manual annotation, turn on the `AI Help` button to annotate the outlines of objects or regions with ease.**
 
 > [!TIP]
 > To include more images to an annotated dataset, simply put new images inside the folder of the annotated dataset.
@@ -33,7 +33,7 @@
 > To merge multiple annotated datasets, merge the folders (rename the annotation files to avoid overwriting).
 
 > [!TIP]
-> To visualize or refine the annotations, use EZannot's `Manual Annotation` unit, navigate to the folder that stores the images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
+> To visualize or refine the annotations, use `Manual Annotation` unit, navigate to the folder that stores the images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
 
 <p>&nbsp;</p>
 
