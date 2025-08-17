@@ -1384,7 +1384,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 						cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
 						area=np.sum(np.array(mask),axis=(0,1))
 						perimeter=cv2.arcLength(cnt,closed=True)
-						roundness=(4*np.pi*area)/(perimeter*perimeter)
+						roundness=(perimeter*perimeter)/(4*np.pi*area)
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
 						if area>0:
