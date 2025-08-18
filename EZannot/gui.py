@@ -735,7 +735,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 
 			if len(color_map)>0:
 				for classname in color_map:
-					dialog=ColorPicker(self,f'Color for annotating {classname}',[classname,color_map[classname]])
+					dialog=ColorPicker(self,f'{classname}',[classname,color_map[classname]])
 					if dialog.ShowModal()==wx.ID_OK:
 						(r,b,g,_)=dialog.color_picker.GetColour()
 						self.color_map[classname]=(r,b,g)
