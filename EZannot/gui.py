@@ -696,6 +696,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 
 			annotation_files=[]
 			color_map={}
+			self.color_map={}
 			classnames=''
 			entry=None
 			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
