@@ -185,7 +185,7 @@ class PanelLv2_TrainAnnotators(wx.Panel):
 
 	def dispaly_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_selectimages=wx.BoxSizer(wx.HORIZONTAL)
@@ -514,7 +514,7 @@ class PanelLv1_AnnotationModule(wx.Panel):
 
 	def dispaly_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 		boxsizer.Add(0,60,0)
 
@@ -538,20 +538,25 @@ class PanelLv1_AnnotationModule(wx.Panel):
 
 	def manual_annotate(self,event):
 
-		WindowLv2_ManualAnnotate('Manual Annotate')
+		panel=PanelLv2_ManualAnnotate(self.notebook)
+		title='Manual Annotate'
+		self.notebook.AddPage(panel,title,select=True)
 
 
 	def auto_annotate(self,event):
 
-		WindowLv2_AutoAnnotate('Auto Annotate')
+		panel=PanelLv2_AutoAnnotate(self.notebook)
+		title='MAuto Annotate'
+		self.notebook.AddPage(panel,title,select=True)
 
 
 
-class WindowLv2_ManualAnnotate(wx.Frame):
+class PanelLv2_ManualAnnotate(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(WindowLv2_ManualAnnotate,self).__init__(parent=None,title=title,size=(1000,350))
+		super().__init__(parent)
+		self.notebook=parent
 		self.path_to_images=None
 		self.result_path=None
 		self.model_cp=None
@@ -564,7 +569,7 @@ class WindowLv2_ManualAnnotate(wx.Frame):
 
 	def display_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
