@@ -63,7 +63,7 @@ class InitialPanel(wx.Panel):
 
 	def dispaly_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		self.text_welcome=wx.StaticText(panel,label='Welcome to EZannot!',style=wx.ALIGN_CENTER|wx.ST_ELLIPSIZE_END)
@@ -86,10 +86,10 @@ class InitialPanel(wx.Panel):
 
 		module_modules=wx.BoxSizer(wx.HORIZONTAL)
 		button_train=wx.Button(panel,label='Training Module',size=(200,40))
-		button_train.Bind(wx.EVT_BUTTON,self.window_train)
+		button_train.Bind(wx.EVT_BUTTON,self.panel_train)
 		wx.Button.SetToolTip(button_train,'You can train and test an Annotator here. Annotators can automatically annotate all the images for you, which saves huge labor. Depending on the annotation precision, you may or may not need to do manual corrections.')
 		button_annotate=wx.Button(panel,label='Annotation Module',size=(200,40))
-		button_annotate.Bind(wx.EVT_BUTTON,self.window_annotate)
+		button_annotate.Bind(wx.EVT_BUTTON,self.panel_annotate)
 		wx.Button.SetToolTip(button_annotate,'You can use a trained Annotator for automatic annotation. You can also perform AI-assisted semi-manual annotations to get a small set of initial training data for training an Annotator, or correct the annotations done by an Annotator.')
 		module_modules.Add(button_train,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_modules.Add(button_annotate,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -102,28 +102,33 @@ class InitialPanel(wx.Panel):
 		self.Show(True)
 
 
-	def window_train(self,event):
+	def panel_train(self,event):
 
-		WindowLv1_TrainingModule('Training Module')
-
-
-	def window_annotate(self,event):
-
-		WindowLv1_AnnotationModule('Annotation Module')
+		panel=PanelLv1_TrainingModule(self.notebook)
+		title='Training Module'
+		self.notebook.AddPage(panel,title,select=True)
 
 
+	def panel_annotate(self,event):
 
-class WindowLv1_TrainingModule(wx.Frame):
+		panel=PanelLv1_AnnotationModule(self.notebook)
+		title='Annotation Module'
+		self.notebook.AddPage(panel,title,select=True)
 
-	def __init__(self,title):
 
-		super(WindowLv1_TrainingModule,self).__init__(parent=None,title=title,size=(500,250))
+
+class PanelLv1_TrainingModule(wx.Panel):
+
+	def __init__(self,parent):
+
+		super().__init__(parent)
+		self.notebook=parent
 		self.dispaly_window()
 
 
 	def dispaly_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 		boxsizer.Add(0,60,0)
 
@@ -147,20 +152,25 @@ class WindowLv1_TrainingModule(wx.Frame):
 
 	def train_annotators(self,event):
 
-		WindowLv2_TrainAnnotators('Train Annotators')
+		panel=PanelLv2_TrainAnnotators(self.notebook)
+		title='Train Annotators'
+		self.notebook.AddPage(panel,title,select=True)
 
 
 	def test_annotators(self,event):
 
-		WindowLv2_TestAnnotators('Test Annotators')
+		panel=PanelLv2_TestAnnotators(self.notebook)
+		title='Test Annotators'
+		self.notebook.AddPage(panel,title,select=True)
 
 
 
-class WindowLv2_TrainAnnotators(wx.Frame):
+class PanelLv2_TrainAnnotators(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(WindowLv2_TrainAnnotators,self).__init__(parent=None,title=title,size=(1000,300))
+		super().__init__(parent)
+		self.notebook=parent
 		self.path_to_trainingimages=None
 		self.path_to_annotation=None
 		self.num_rois=128
@@ -325,11 +335,12 @@ class WindowLv2_TrainAnnotators(wx.Frame):
 
 
 
-class WindowLv2_TestAnnotators(wx.Frame):
+class PanelLv2_TestAnnotators(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(WindowLv2_TestAnnotators,self).__init__(parent=None,title=title,size=(1000,300))
+		super().__init__(parent)
+		self.notebook=parent
 		self.path_to_testingimages=None
 		self.path_to_annotation=None
 		self.annotator_path=os.path.join(the_absolute_current_path,'annotators')
@@ -341,7 +352,7 @@ class WindowLv2_TestAnnotators(wx.Frame):
 
 	def dispaly_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_selectannotator=wx.BoxSizer(wx.HORIZONTAL)
@@ -492,11 +503,12 @@ class WindowLv2_TestAnnotators(wx.Frame):
 
 
 
-class WindowLv1_AnnotationModule(wx.Frame):
+class PanelLv1_AnnotationModule(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(WindowLv1_AnnotationModule,self).__init__(parent=None,title=title,size=(500,250))
+		super().__init__(parent)
+		self.notebook=parent
 		self.dispaly_window()
 
 
