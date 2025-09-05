@@ -1504,11 +1504,12 @@ class WindowLv3_AnnotateImages(wx.Frame):
 
 
 
-class WindowLv2_AutoAnnotate(wx.Frame):
+class PanelLv2_AutoAnnotate(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(WindowLv2_AutoAnnotate,self).__init__(parent=None,title=title,size=(1000,260))
+		super().__init__(parent)
+		self.notebook=parent
 		self.path_to_images=None
 		self.path_to_annotator=None
 		self.object_kinds=None
@@ -1520,7 +1521,7 @@ class WindowLv2_AutoAnnotate(wx.Frame):
 
 	def display_window(self):
 
-		panel=wx.Panel(self)
+		panel=self
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
