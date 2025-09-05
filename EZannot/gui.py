@@ -1683,7 +1683,7 @@ class MainFrame(wx.Frame):
 
 	def __init__(self):
 		super().__init__(None,title=f'EZannot v{__version__}')
-		self.SetSize((800, 600))
+		self.SetSize((1000,500))
 
 		self.aui_manager=wx.aui.AuiManager()
 		self.aui_manager.SetManagedWindow(self)
