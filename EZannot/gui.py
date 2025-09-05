@@ -52,11 +52,12 @@ class ColorPicker(wx.Dialog):
 
 
 
-class InitialWindow(wx.Frame):
+class InitialPanel(wx.Panel):
 
-	def __init__(self,title):
+	def __init__(self,parent):
 
-		super(InitialWindow,self).__init__(parent=None,title=title,size=(750,450))
+		super().__init__(parent)
+		self.notebook=parent
 		self.dispaly_window()
 
 
