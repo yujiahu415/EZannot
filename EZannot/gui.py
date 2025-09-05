@@ -546,7 +546,7 @@ class PanelLv1_AnnotationModule(wx.Panel):
 	def auto_annotate(self,event):
 
 		panel=PanelLv2_AutoAnnotate(self.notebook)
-		title='MAuto Annotate'
+		title='Auto Annotate'
 		self.notebook.AddPage(panel,title,select=True)
 
 
@@ -1678,10 +1678,36 @@ class PanelLv2_AutoAnnotate(wx.Panel):
 
 
 
+class MainFrame(wx.Frame):
+
+	def __init__(self):
+		super().__init__(None,title=f'EZannot v{__version__}')
+		self.SetSize((800, 600))
+
+		self.aui_manager=wx.aui.AuiManager()
+		self.aui_manager.SetManagedWindow(self)
+
+		self.notebook=wx.aui.AuiNotebook(self)
+		self.aui_manager.AddPane(self.notebook,wx.aui.AuiPaneInfo().CenterPane())
+
+		panel=InitialPanel(self.notebook)
+		title='Welcome'
+		self.notebook.AddPage(panel,title,select=True)
+
+		sizer=wx.BoxSizer(wx.VERTICAL)
+		sizer.Add(self.notebook,1,wx.EXPAND)
+		self.SetSizer(sizer)
+
+		self.aui_manager.Update()
+		self.Centre()
+		self.Show()
+
+
+
 def main_window():
 
 	app=wx.App()
-	InitialWindow(f'EZannot v{__version__}')
+	MainFrame()
 	print('The user interface initialized!')
 	app.MainLoop()
 
