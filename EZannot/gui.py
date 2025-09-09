@@ -86,10 +86,10 @@ class InitialPanel(wx.Panel):
 		boxsizer.Add(0,50,0)
 
 		module_modules=wx.BoxSizer(wx.HORIZONTAL)
-		button_train=wx.Button(panel,label='Training Module',size=(200,40))
+		button_train=wx.Button(panel,label='Training Module',size=(250,40))
 		button_train.Bind(wx.EVT_BUTTON,self.panel_train)
 		wx.Button.SetToolTip(button_train,'You can train and test an Annotator here. Annotators can automatically annotate all the images for you, which saves huge labor. Depending on the annotation precision, you may or may not need to do manual corrections.')
-		button_annotate=wx.Button(panel,label='Annotation Module',size=(200,40))
+		button_annotate=wx.Button(panel,label='Annotation Module',size=(250,40))
 		button_annotate.Bind(wx.EVT_BUTTON,self.panel_annotate)
 		wx.Button.SetToolTip(button_annotate,'You can use a trained Annotator for automatic annotation. You can also perform AI-assisted semi-manual annotations to get a small set of initial training data for training an Annotator, or correct the annotations done by an Annotator.')
 		module_modules.Add(button_train,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
