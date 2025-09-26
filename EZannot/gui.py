@@ -564,6 +564,7 @@ class PanelLv2_ManualAnnotate(wx.Panel):
 		self.model_cfg=None
 		self.color_map={}
 		self.aug_methods=[]
+		self.show_ids=False
 
 		self.display_window()
 
@@ -764,6 +765,13 @@ class PanelLv2_ManualAnnotate(wx.Panel):
 			else:
 				self.text_classes.SetLabel('None.')
 
+			dialog=wx.MessageDialog(self,'Show the IDs for all the annotated\nwhen exporting the measurements?','Show IDs?',wx.YES_NO|wx.ICON_QUESTION)
+			if dialog.ShowModal()==wx.ID_YES:
+				self.show_ids=True
+			else:
+				self.show_ids=False
+			dialog.Destroy()
+
 
 	def specify_augmentation(self,event):
 
@@ -793,13 +801,13 @@ class PanelLv2_ManualAnnotate(wx.Panel):
 		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
 			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
 		else:
-			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg)
+			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg,show_ids=self.show_ids)
 
 
 
 class WindowLv3_AnnotateImages(wx.Frame):
 
-	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None):
+	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None,show_ids=False):
 
 		monitor=get_monitors()[0]
 		monitor_w,monitor_h=monitor.width,monitor.height
@@ -812,6 +820,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.aug_methods=aug_methods
 		self.model_cp=model_cp
 		self.model_cfg=model_cfg
+		self.show_ids=show_ids
 		self.current_image_id=0
 		self.current_image=None
 		self.current_segmentation=None
