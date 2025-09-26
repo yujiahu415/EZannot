@@ -1428,7 +1428,9 @@ class WindowLv3_AnnotateImages(wx.Frame):
 						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
 						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
 						if area>0:
-							data[filename][object_name]['center'].append((int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00']),int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])))
+							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])
+							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])
+							data[filename][object_name]['center'].append((cx,cy))
 							data[filename][object_name]['area'].append(area)
 							data[filename][object_name]['height'].append(ht)
 							data[filename][object_name]['width'].append(wd)
@@ -1440,6 +1442,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 								cv2.drawContours(to_annotate,[cnt],0,color,thickness)
 							else:
 								cv2.drawContours(to_annotate,sorted(cnts,key=cv2.contourArea,reverse=True)[:min(2,len(cnts))],-1,color,thickness)
+							if self.show_ids:
+								cv2.putText(to_annotate,str(len(data[filename][object_name]['center'])),(cx,cy),cv2.FONT_HERSHEY_SIMPLEX,thickness,color,thickness)
 
 			cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
 
