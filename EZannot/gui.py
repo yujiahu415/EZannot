@@ -906,6 +906,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.canvas.Bind(wx.EVT_RIGHT_DOWN,self.on_right_click)
 		self.canvas.Bind(wx.EVT_MOTION,self.on_left_move)
 		self.canvas.Bind(wx.EVT_LEFT_UP,self.on_left_up)
+		self.canvas.Bind(wx.EVT_MOUSEWHEEL,self.on_mousewheel)
 
 		self.scrolled_canvas.SetSizer(wx.BoxSizer(wx.VERTICAL))
 		self.scrolled_canvas.GetSizer().Add(self.canvas,proportion=1,flag=wx.EXPAND|wx.ALL,border=5)
