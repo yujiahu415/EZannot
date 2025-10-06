@@ -1162,6 +1162,23 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.selected_point=None
 
 
+	def on_mousewheel(self,event):
+
+		if self.current_image is None:
+			return
+
+		rotation=event.GetWheelRotation()
+		if rotation>0:
+			self.scale=min(self.scale*self.zoom_step,self.max_scale)
+		else:
+			self.scale=max(self.scale/self.zoom_step,self.min_scale)
+
+		new_w=int(self.current_image.GetWidth()*self.scale)
+		new_h=int(self.current_image.GetHeight()*self.scale)
+		self.canvas.SetVirtualSize((new_w,new_h))
+		self.canvas.Refresh()
+
+
 	def export_annotations(self,event):
 
 		if not self.information:
