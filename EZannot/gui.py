@@ -833,6 +833,10 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.start_modify=False
 		self.show_name=False
 		self.AI_help=False
+		self.scale=1.0
+		self.min_scale=0.25
+		self.max_scale=8.0
+		self.zoom_step=1.25
 
 		annotation_files=[]
 		for i in os.listdir(os.path.dirname(self.image_paths[0])):
