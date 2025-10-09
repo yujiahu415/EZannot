@@ -1008,7 +1008,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 				color=self.color_map[class_names[i]]
 				pen=wx.Pen(wx.Colour(*color),width=2)
 				dc.SetPen(pen)
-				dc.DrawLines(polygon)
+				dc.DrawLines([(int(x*self.scale),int(y*self.scale)) for x,y in polygon])
 				if self.start_modify:
 					brush=wx.Brush(wx.Colour(*color))
 					dc.SetBrush(brush)
@@ -1032,10 +1032,10 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			brush=wx.Brush(wx.Colour(*color))
 			dc.SetBrush(brush)
 			for x,y in current_polygon:
-				dc.DrawCircle(x,y,4)
+				dc.DrawCircle(int(x*self.scale),int(y*self.scale),4)
 			pen=wx.Pen(wx.Colour(*color),width=2)
 			dc.SetPen(pen)
-			dc.DrawLines(current_polygon)
+			dc.DrawLines([(int(x*self.scale),int(y*self.scale)) for x,y in current_polygon])
 
 
 	def on_left_click(self,event):
@@ -1061,7 +1061,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 				mask=masks[np.argsort(scores)[::-1]][0]
 				self.current_polygon=self.mask_to_polygon(mask)
 			else:
-				self.current_polygon.append((x,y))
+				self.current_polygon.append((int(x/self.scale),int(y/self.scale)))
 
 		self.canvas.Refresh()
 
