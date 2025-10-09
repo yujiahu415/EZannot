@@ -1143,6 +1143,11 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			else:
 				self.show_name=True
 			self.canvas.Refresh()
+		elif event.GetKeyCode()==wx.WXK_ESCAPE:
+			self.current_polygon=[]
+			self.foreground_points=[]
+			self.background_points=[]
+			self.canvas.Refresh()
 		else:
 			event.Skip()
 
