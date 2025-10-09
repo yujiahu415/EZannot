@@ -951,6 +951,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			if image_name not in self.information:
 				self.information[image_name]={'polygons':[],'class_names':[]}
 			self.current_polygon=[]
+			self.foreground_points=[]
+			self.background_points=[]
 			self.canvas.Refresh()
 
 			if self.AI_help:
@@ -1180,7 +1182,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 
 		new_w=int(self.current_image.GetWidth()*self.scale)
 		new_h=int(self.current_image.GetHeight()*self.scale)
-		self.canvas.SetVirtualSize((new_w,new_h))
+		self.scrolled_canvas.SetVirtualSize((new_w,new_h))
 		self.canvas.Refresh()
 
 
