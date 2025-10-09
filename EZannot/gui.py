@@ -953,6 +953,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			self.current_polygon=[]
 			self.foreground_points=[]
 			self.background_points=[]
+			self.scale=1.0
 			self.canvas.Refresh()
 
 			if self.AI_help:
@@ -995,7 +996,9 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			return
 
 		dc=wx.PaintDC(self.canvas)
-		dc.DrawBitmap(wx.Bitmap(self.current_image),0,0,True)
+		w,h=self.current_image.GetSize()
+		scaled_image=self.current_image.Scale(int(w*self.scale),int(h*self.scale),wx.IMAGE_QUALITY_HIGH)
+		dc.DrawBitmap(wx.Bitmap(scaled_image),0,0,True)
 		image_name=os.path.basename(self.image_paths[self.current_image_id])
 		polygons=self.information[image_name]['polygons']
 		class_names=self.information[image_name]['class_names']
