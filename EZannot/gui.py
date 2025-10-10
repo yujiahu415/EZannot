@@ -899,7 +899,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
 		self.scrolled_canvas.SetScrollRate(10,10)
 		self.canvas=wx.Panel(self.scrolled_canvas,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
-		self.canvas.SetBackgroundColour('black')
+		self.scrolled_canvas.SetBackgroundColour('black')
 
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
 		self.canvas.Bind(wx.EVT_LEFT_DOWN,self.on_left_click)
