@@ -1047,7 +1047,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			for i,polygon in enumerate(self.information[image_name]['polygons']):
 				for j,(px,py) in enumerate(polygon):
-					if abs(px-x)<5 and abs(py-y)<5:
+					if abs(px-int(x/self.scale))<5 and abs(py-int(y/self.scale))<5:
 						self.selected_point=(polygon,j,i)
 						return
 
@@ -1161,7 +1161,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 
 		if self.selected_point is not None and event.Dragging() and event.LeftIsDown():
 			polygon,j,i=self.selected_point
-			polygon[j]=event.GetPosition()
+			x,y=event.GetX(),event.GetY()
+			polygon[j]=(int(x/self.scale),int(y/self.scale))
 			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			self.information[image_name]['polygons'][i]=polygon
 			self.canvas.Refresh()
