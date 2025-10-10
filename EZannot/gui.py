@@ -1079,7 +1079,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			if len(self.current_polygon)>0:
 
 				if self.AI_help:
-					self.background_points.append([x,y])
+					self.background_points.append([int(x/self.scale),int(y/self.scale)])
 					points=self.foreground_points+self.background_points
 					labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
 					masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
@@ -1100,7 +1100,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 						x_min=min(x for x,y in polygon)
 						y_max=max(y for x,y in polygon)
 						y_min=min(y for x,y in polygon)
-						if x_min<=x<=x_max and y_min<=y<=y_max:
+						if x_min<=int(x/self.scale)<=x_max and y_min<=int(y/self.scale)<=y_max:
 							to_delete.append(i)
 				if len(to_delete)>0:
 					for i in sorted(to_delete,reverse=True):
