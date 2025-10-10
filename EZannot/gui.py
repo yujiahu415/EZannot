@@ -1054,13 +1054,12 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		else:
 
 			if self.AI_help:
-				self.foreground_points.append([x,y])
+				self.foreground_points.append([int(x/self.scale),int(y/self.scale)])
 				points=self.foreground_points+self.background_points
 				labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
 				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
 				mask=masks[np.argsort(scores)[::-1]][0]
 				self.current_polygon=self.mask_to_polygon(mask)
-				self.current_polygon=[(int(x/self.scale),int(y/self.scale)) for x,y in self.current_polygon]
 			else:
 				self.current_polygon.append((int(x/self.scale),int(y/self.scale)))
 
