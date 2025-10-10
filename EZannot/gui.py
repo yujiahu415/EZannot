@@ -1013,12 +1013,12 @@ class WindowLv3_AnnotateImages(wx.Frame):
 					brush=wx.Brush(wx.Colour(*color))
 					dc.SetBrush(brush)
 					for x,y in polygon:
-						dc.DrawCircle(x,y,4)
+						dc.DrawCircle(int(x*self.scale),int(y*self.scale),4)
 				if self.show_name:
-					x_max=max(x for x,y in polygon)
-					x_min=min(x for x,y in polygon)
-					y_max=max(y for x,y in polygon)
-					y_min=min(y for x,y in polygon)
+					x_max=int(max(x for x,y in polygon)*self.scale)
+					x_min=int(min(x for x,y in polygon)*self.scale)
+					y_max=int(max(y for x,y in polygon)*self.scale)
+					y_min=int(min(y for x,y in polygon)*self.scale)
 					cx=int((x_max+x_min)/2)
 					cy=int((y_max+y_min)/2)
 					dc.SetTextForeground(wx.Colour(*color))
@@ -1060,6 +1060,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
 				mask=masks[np.argsort(scores)[::-1]][0]
 				self.current_polygon=self.mask_to_polygon(mask)
+				self.current_polygon=[(int(x*self.scale),int(y*self.scale)) for x,y in self.current_polygon]
 			else:
 				self.current_polygon.append((int(x/self.scale),int(y/self.scale)))
 
