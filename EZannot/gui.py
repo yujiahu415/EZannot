@@ -1178,6 +1178,9 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		if self.current_image is None:
 			return
 
+		if self.start_modify:
+			return
+
 		rotation=event.GetWheelRotation()
 		if rotation>0:
 			self.scale=min(self.scale*self.zoom_step,self.max_scale)
