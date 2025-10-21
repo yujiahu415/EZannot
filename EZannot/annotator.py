@@ -2,6 +2,7 @@ import os
 import cv2
 import json
 import torch
+from torchvision.ops import nms
 import numpy as np
 import pandas as pd
 from tifffile import imread,imwrite
@@ -225,6 +226,7 @@ class AutoAnnotation():
 		self.annotator.load(path_to_annotator,object_kinds)
 		self.object_kinds=object_kinds
 		self.object_mapping=self.annotator.object_mapping
+		self.inferencing_framesize=self.annotator.inferencing_framesize
 		self.detection_threshold=detection_threshold
 		if self.detection_threshold is None:
 			self.detection_threshold={}
@@ -285,12 +287,41 @@ class AutoAnnotation():
 				image=imread(image_path)
 				image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
 
-			output=self.annotator.inference([{'image':torch.as_tensor(image.astype('float32').transpose(2,0,1))}])
-			instances=output[0]['instances'].to('cpu')
-			masks=instances.pred_masks.numpy().astype(np.uint8)
-			classes=instances.pred_classes.numpy()
-			classes=[self.object_mapping[str(x)] for x in classes]
-			scores=instances.scores.numpy()
+			results=[]
+
+			for (x,y,crop) in self.sliding_window(image,self.inferencing_framesize,overlap=self.overlap):
+
+				output=self.annotator.inference([{'image':torch.as_tensor(crop.astype('float32').transpose(2,0,1))}])
+				instances=output[0]['instances'].to('cpu')
+				masks=instances.pred_masks.numpy().astype(np.uint8)
+				boxes=instances.pred_boxes.tensor.numpy()
+				classes=instances.pred_classes.numpy()
+				classes=[self.object_mapping[str(x)] for x in classes]
+				scores=instances.scores.numpy()
+
+				for i in range(len(masks)):
+					full_mask=np.zeros(image.shape[:2],dtype=np.uint8)
+					mask=masks[i].astype(np.uint8)
+					h_m,w_m=mask.shape
+					full_mask[y:y+h_m,x:x+w_m]=np.maximum(full_mask[y:y+h_m,x:x+w_m],mask)
+					results.append({'mask':full_mask,'score':scores[i],'class':classes[i],'box':boxes[i]+np.array([x,y,x,y])})
+
+			temp_boxes=np.array([r['box'] for r in results])
+			temp_scores=np.array([r['score'] for r in results])
+			temp_classes=np.array([r['class'] for r in results])
+
+			masks,scores,classes=[],[],[]
+
+			for cls in np.unique(temp_classes):
+				cls_inds=np.where(temp_classes==cls)[0]
+				boxes_cls=torch.tensor(temp_boxes[cls_inds],dtype=torch.float32)
+				scores_cls=torch.tensor(temp_scores[cls_inds],dtype=torch.float32)
+				keep=nms(boxes_cls,scores_cls,iou_threshold=0.5)
+
+				for k in keep:
+					masks.append(results[cls_inds[k]]['mask'])
+					scores.append(results[cls_inds[k]]['score'])
+					classes.append(results[cls_inds[k]]['class'])
 
 			if len(masks)>0:
 
