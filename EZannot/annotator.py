@@ -234,6 +234,29 @@ class AutoAnnotation():
 		self.information={}
 
 
+	def sliding_window(image,inferencing_framesize,overlap=0.2):
+
+		h,w=image.shape[:2]
+		win_w,win_h=inferencing_framesize
+
+		step_w=int(win_w*(1-overlap))
+		step_h=int(win_h*(1-overlap))
+
+		for y in range(0,h-win_h+1,step_h):
+			for x in range(0,w-win_w+1,step_w):
+				crop=image[y:y+win_h,x:x+win_w]
+				yield (x,y,crop)
+
+		if (h-win_h)%step_h!=0:
+			for x in range(0,w-win_w+1,step_w):
+				yield (x,h-win_h,image[h-win_h:h,x:x+win_w])
+		if (w-win_w)%step_w!=0:
+			for y in range(0,h-win_h+1,step_h):
+				yield (w-win_w,y,image[y:y+win_h,w-win_w:w])
+		if (h-win_h)%step_h!=0 and (w-win_w)%step_w!=0:
+			yield (w-win_w,h-win_h,image[h-win_h:h,w-win_w:w])
+
+
 	def annotate_images(self):
 
 		coco_format={
