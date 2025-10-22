@@ -21,6 +21,7 @@ from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from EZannot import __version__
 from .gui_training import PanelLv1_TrainingModule
 from .gui_annotating import PanelLv1_AnnotationModule
+from .gui_processing import PanelLv1_ProcessingModule
 from .annotator import Annotator,AutoAnnotation
 from .tools import read_annotation,generate_annotation,measure_annotation
 
@@ -124,8 +125,8 @@ class InitialPanel(wx.Panel):
 
 	def panel_process(self,event):
 
-		panel=PanelLv1_ProcessModule(self.notebook)
-		title='Process Module'
+		panel=PanelLv1_ProcessingModule(self.notebook)
+		title='Processing Module'
 		self.notebook.AddPage(panel,title,select=True)
 
 
