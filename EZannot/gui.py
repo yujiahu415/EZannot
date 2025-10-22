@@ -1192,144 +1192,16 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.canvas.SetFocus()
 
 
-	def measure_annotations(self,event,threshold=None):
+	def measure_annotations(self,event):
 
 		if not self.information:
 			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
 			return
 
-		measure_annotation()
+		measure_annotation(os.path.dirname(self.image_paths[0]),self.out_path,self.information,self.color_map,show_ids=self.show_ids,threshold=None)
 
-		data={}
-		parameters=['center','area','height','width','perimeter','roundness','intensity']
-		parent_path=os.path.dirname(self.image_paths[0])
-		out_path=os.path.join(self.result_path,'Measurements')
-		os.makedirs(out_path,exist_ok=True)
-
-		for image_name in self.information:
-
-			filename=os.path.splitext(image_name)[0]
-			data[filename]={}
-			for object_name in self.color_map:
-				data[filename][object_name]={}
-				for parameter in parameters:
-					data[filename][object_name][parameter]=[]
-
-			image=cv2.imread(os.path.join(parent_path,image_name))
-			image_width=image.shape[1]
-			image_height=image.shape[0]
-			thickness=max(1,round(max(image_width,image_height)/960))
-			to_annotate=image
-
-			polygons=self.information[image_name]['polygons']
-
-			if len(polygons)>0:
-
-				for j,polygon in enumerate(self.information[image_name]['polygons']):
-
-					mask=np.zeros((image_height,image_width),dtype=np.uint8)
-					object_name=self.information[image_name]['class_names'][j]
-					pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
-					cv2.fillPoly(mask,[pts],color=1)
-					if threshold is not None:
-						excluded_pixels=np.all(image>threshold,axis=2)
-						mask[excluded_pixels]=0
-					cnts,_=cv2.findContours((mask*255).astype(np.uint8),cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
-					if len(cnts)>0:
-						cnt=sorted(cnts,key=cv2.contourArea,reverse=True)[0]
-						area=np.sum(np.array(mask),axis=(0,1))
-						perimeter=cv2.arcLength(cnt,closed=True)
-						roundness=(perimeter*perimeter)/(4*np.pi*area)
-						(_,_),(wd,ht),_=cv2.minAreaRect(cnt)
-						intensity=(np.sum(image*cv2.cvtColor(mask*255,cv2.COLOR_GRAY2BGR))/3)/max(area,1)
-						if area>0:
-							cx=int(cv2.moments(cnt)['m10']/cv2.moments(cnt)['m00'])
-							cy=int(cv2.moments(cnt)['m01']/cv2.moments(cnt)['m00'])
-							data[filename][object_name]['center'].append((cx,cy))
-							data[filename][object_name]['area'].append(area)
-							data[filename][object_name]['height'].append(ht)
-							data[filename][object_name]['width'].append(wd)
-							data[filename][object_name]['perimeter'].append(perimeter)
-							data[filename][object_name]['roundness'].append(roundness)
-							data[filename][object_name]['intensity'].append(intensity)
-							color=(self.color_map[object_name][2],self.color_map[object_name][1],self.color_map[object_name][0])
-							if threshold is None:
-								cv2.drawContours(to_annotate,[cnt],0,color,thickness)
-							else:
-								cv2.drawContours(to_annotate,sorted(cnts,key=cv2.contourArea,reverse=True)[:min(2,len(cnts))],-1,color,thickness)
-							if self.show_ids:
-								cv2.putText(to_annotate,str(len(data[filename][object_name]['center'])),(cx,cy),cv2.FONT_HERSHEY_SIMPLEX,thickness,color,thickness)
-
-			cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
-
-		with pd.ExcelWriter(os.path.join(out_path,'measurements.xlsx'),engine='openpyxl') as writer:
-
-			for object_name in self.color_map:
-
-				rows=[]
-				columns=['filename','ID']+parameters
-
-				for name,name_data in data.items():
-					if object_name in name_data:
-						values=zip(*[name_data[object_name][parameter] for parameter in parameters])
-						for idx,value in enumerate(values):
-							rows.append([name,idx+1]+list(value))
-
-				df=pd.DataFrame(rows,columns=columns)
-				df.to_excel(writer,sheet_name=object_name,float_format='%.2f',index=False)
-
-		wx.MessageBox('Measurements exported successfully.','Success',wx.ICON_INFORMATION)
 
 		self.canvas.SetFocus()
-
-
-	def mask_to_polygon(self,mask):
-
-		contours,_=cv2.findContours(mask.astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-		if not contours:
-			return []
-
-		max_contour=max(contours,key=cv2.contourArea)
-		epsilon=0.005*cv2.arcLength(max_contour,True)
-		approx=cv2.approxPolyDP(max_contour,epsilon,True)
-
-		return [tuple(point[0]) for point in approx]
-
-
-	def compute_area(self,polygon):
-
-		n=len(polygon)
-		area=0
-
-		for i in range(n):
-			x1,y1=polygon[i]
-			x2,y2=polygon[(i+1)%n]
-			area+=x1*y2-x2*y1
-
-		return abs(area)/2
-
-
-	def compute_bbox(self,polygon):
-
-		x_coords,y_coords=zip(*polygon)
-		x_min=int(min(x_coords))
-		y_min=int(min(y_coords))
-		x_max=int(max(x_coords))
-		y_max=int(max(y_coords))
-
-		return [x_min,y_min,x_max-x_min,y_max-y_min]
-
-
-	def rotate_point(self,x,y,cx,cy,angle,image_width,image_height):
-
-		angle_rad=np.radians(-angle)
-		cos_theta=np.cos(angle_rad)
-		sin_theta=np.sin(angle_rad)
-		x_shifted,y_shifted=x-cx,y-cy
-		new_x=round(cos_theta*x_shifted-sin_theta*y_shifted+cx)
-		new_y=round(sin_theta*x_shifted+cos_theta*y_shifted+cy)
-
-		return max(0,min(image_width-1,new_x)),max(0,min(image_height-1,new_y))
 
 
 
