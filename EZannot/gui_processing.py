@@ -56,7 +56,7 @@ class ColorPicker(wx.Dialog):
 
 
 
-class PanelLv1_ProcessModule(wx.Panel):
+class PanelLv1_ProcessingModule(wx.Panel):
 
 	def __init__(self,parent):
 
