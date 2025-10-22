@@ -6,7 +6,7 @@ import shutil
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from .annotator import Annotator,AutoAnnotation
+from .annotator import Annotator
 
 
 
