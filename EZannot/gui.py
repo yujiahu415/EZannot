@@ -93,7 +93,7 @@ class InitialPanel(wx.Panel):
 		wx.Button.SetToolTip(button_annotate,'You can use a trained Annotator for automatic annotation. You can also perform AI-assisted semi-manual annotations to get a small set of initial training data for training an Annotator, or correct the annotations done by an Annotator.')
 		button_process=wx.Button(panel,label='Process Module',size=(250,40))
 		button_process.Bind(wx.EVT_BUTTON,self.panel_process)
-		wx.Button.SetToolTip(button_process,'You can automatically measure all the annotated objects. You can also divide large annotated images into smaller tiles.')
+		wx.Button.SetToolTip(button_process,'You can automatically measure all the annotated objects. You can also divide large annotated images into smaller tiles and preserve the annotations.')
 		module_modules.Add(button_train,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_modules.Add(button_annotate,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_modules.Add(button_process,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
