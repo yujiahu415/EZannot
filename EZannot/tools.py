@@ -43,6 +43,8 @@ def read_annotation(annotation_path,color_map):
 					information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
 					information[image_name]['class_names'].append(classname)
 
+	return information
+
 
 
 
