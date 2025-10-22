@@ -51,7 +51,7 @@ def read_annotation(annotation_path,color_map):
 
 
 
-	def generate_annotations(original_path,result_path,aug_methods,color_map):
+	def generate_annotation(original_path,result_path,aug_methods,color_map):
 
 		if not self.information:
 			wx.MessageBox('No annotations to export.','Error',wx.ICON_ERROR)
@@ -259,7 +259,7 @@ def read_annotation(annotation_path,color_map):
 			json.dump(coco_format,json_file)
 
 
-	def measure_annotations(self,event,threshold=None):
+	def measure_annotation(self,event,threshold=None):
 
 		if not self.information:
 			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
