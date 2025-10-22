@@ -46,9 +46,53 @@ def read_annotation(annotation_path,color_map):
 	return information
 
 
+def mask_to_polygon(mask):
+
+	contours,_=cv2.findContours(mask.astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	if not contours:
+		return []
+
+	max_contour=max(contours,key=cv2.contourArea)
+	epsilon=0.005*cv2.arcLength(max_contour,True)
+	approx=cv2.approxPolyDP(max_contour,epsilon,True)
+
+	return [tuple(point[0]) for point in approx]
 
 
+def compute_area(polygon):
 
+	n=len(polygon)
+	area=0
+
+	for i in range(n):
+		x1,y1=polygon[i]
+		x2,y2=polygon[(i+1)%n]
+		area+=x1*y2-x2*y1
+
+	return abs(area)/2
+
+
+def compute_bbox(polygon):
+
+	x_coords,y_coords=zip(*polygon)
+	x_min=int(min(x_coords))
+	y_min=int(min(y_coords))
+	x_max=int(max(x_coords))
+	y_max=int(max(y_coords))
+
+	return [x_min,y_min,x_max-x_min,y_max-y_min]
+
+
+def rotate_point(x,y,cx,cy,angle,image_width,image_height):
+
+	angle_rad=np.radians(-angle)
+	cos_theta=np.cos(angle_rad)
+	sin_theta=np.sin(angle_rad)
+	x_shifted,y_shifted=x-cx,y-cy
+	new_x=round(cos_theta*x_shifted-sin_theta*y_shifted+cx)
+	new_y=round(sin_theta*x_shifted+cos_theta*y_shifted+cy)
+
+	return max(0,min(image_width-1,new_x)),max(0,min(image_height-1,new_y))
 
 
 def generate_annotation(path_to_images,information,original_path,result_path,aug_methods,color_map):
@@ -192,8 +236,8 @@ def generate_annotation(path_to_images,information,original_path,result_path,aug
 
 					category_id=sorted(list(color_map.keys())).index(information[image_name]['class_names'][j])+1
 					segmentation=[np.array(polygon).flatten().tolist()]
-					area=self.compute_area(polygon)
-					bbox=self.compute_bbox(polygon)
+					area=compute_area(polygon)
+					bbox=compute_bbox(polygon)
 
 					if code is not None or angle is not None:
 
@@ -214,7 +258,7 @@ def generate_annotation(path_to_images,information,original_path,result_path,aug
 									x=seg[i]
 									y=seg[i+1]
 								if angle is not None:
-									x,y=self.rotate_point(x,y,image_width/2,image_height/2,angle,image_width,image_height)
+									x,y=rotate_point(x,y,image_width/2,image_height/2,angle,image_width,image_height)
 								transformed_seg.extend([int(x),int(y)])
 							new_segmentation.append(transformed_seg)
 						segmentation=new_segmentation
@@ -229,7 +273,7 @@ def generate_annotation(path_to_images,information,original_path,result_path,aug
 							y=image_height-(y+h)
 						if angle is not None:
 							box_points=np.array([[x,y],[x+w,y],[x,y+h],[x+w,y+h]])
-							rotated_box=np.array([self.rotate_point(px,py,image_width/2,image_height/2,angle,image_width,image_height) for px,py in box_points])
+							rotated_box=np.array([rotate_point(px,py,image_width/2,image_height/2,angle,image_width,image_height) for px,py in box_points])
 							x,y=rotated_box.min(axis=0)
 							x_max,y_max=rotated_box.max(axis=0)
 							w=x_max-x
@@ -343,52 +387,6 @@ def measure_annotation(self,event,threshold=None):
 	self.canvas.SetFocus()
 
 
-def mask_to_polygon(self,mask):
 
-	contours,_=cv2.findContours(mask.astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-	if not contours:
-		return []
-
-	max_contour=max(contours,key=cv2.contourArea)
-	epsilon=0.005*cv2.arcLength(max_contour,True)
-	approx=cv2.approxPolyDP(max_contour,epsilon,True)
-
-	return [tuple(point[0]) for point in approx]
-
-
-def compute_area(self,polygon):
-
-	n=len(polygon)
-	area=0
-
-	for i in range(n):
-		x1,y1=polygon[i]
-		x2,y2=polygon[(i+1)%n]
-		area+=x1*y2-x2*y1
-
-	return abs(area)/2
-
-
-def compute_bbox(self,polygon):
-
-	x_coords,y_coords=zip(*polygon)
-	x_min=int(min(x_coords))
-	y_min=int(min(y_coords))
-	x_max=int(max(x_coords))
-	y_max=int(max(y_coords))
-
-	return [x_min,y_min,x_max-x_min,y_max-y_min]
-
-
-def rotate_point(self,x,y,cx,cy,angle,image_width,image_height):
-
-	angle_rad=np.radians(-angle)
-	cos_theta=np.cos(angle_rad)
-	sin_theta=np.sin(angle_rad)
-	x_shifted,y_shifted=x-cx,y-cy
-	new_x=round(cos_theta*x_shifted-sin_theta*y_shifted+cx)
-	new_y=round(sin_theta*x_shifted+cos_theta*y_shifted+cy)
-
-	return max(0,min(image_width-1,new_x)),max(0,min(image_height-1,new_y))
 
 
