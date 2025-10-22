@@ -298,41 +298,34 @@ def generate_annotation(path_to_images,information,original_path,result_path,aug
 		json.dump(coco_format,json_file)
 
 
-def measure_annotation(self,event,threshold=None):
-
-	if not self.information:
-		wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
-		return
+def measure_annotation(path_to_images,result_path,information,color_map,show_ids=False,threshold=None):
 
 	data={}
 	parameters=['center','area','height','width','perimeter','roundness','intensity']
-	parent_path=os.path.dirname(self.image_paths[0])
-	out_path=os.path.join(self.result_path,'Measurements')
-	os.makedirs(out_path,exist_ok=True)
 
-	for image_name in self.information:
+	for image_name in information:
 
 		filename=os.path.splitext(image_name)[0]
 		data[filename]={}
-		for object_name in self.color_map:
+		for object_name in color_map:
 			data[filename][object_name]={}
 			for parameter in parameters:
 				data[filename][object_name][parameter]=[]
 
-		image=cv2.imread(os.path.join(parent_path,image_name))
+		image=cv2.imread(os.path.join(path_to_images,image_name))
 		image_width=image.shape[1]
 		image_height=image.shape[0]
 		thickness=max(1,round(max(image_width,image_height)/960))
 		to_annotate=image
 
-		polygons=self.information[image_name]['polygons']
+		polygons=information[image_name]['polygons']
 
 		if len(polygons)>0:
 
-			for j,polygon in enumerate(self.information[image_name]['polygons']):
+			for j,polygon in enumerate(information[image_name]['polygons']):
 
 				mask=np.zeros((image_height,image_width),dtype=np.uint8)
-				object_name=self.information[image_name]['class_names'][j]
+				object_name=information[image_name]['class_names'][j]
 				pts=np.array(polygon,dtype=np.int32).reshape((-1,1,2))
 				cv2.fillPoly(mask,[pts],color=1)
 				if threshold is not None:
@@ -356,19 +349,19 @@ def measure_annotation(self,event,threshold=None):
 						data[filename][object_name]['perimeter'].append(perimeter)
 						data[filename][object_name]['roundness'].append(roundness)
 						data[filename][object_name]['intensity'].append(intensity)
-						color=(self.color_map[object_name][2],self.color_map[object_name][1],self.color_map[object_name][0])
+						color=(color_map[object_name][2],color_map[object_name][1],color_map[object_name][0])
 						if threshold is None:
 							cv2.drawContours(to_annotate,[cnt],0,color,thickness)
 						else:
 							cv2.drawContours(to_annotate,sorted(cnts,key=cv2.contourArea,reverse=True)[:min(2,len(cnts))],-1,color,thickness)
-						if self.show_ids:
+						if show_ids:
 							cv2.putText(to_annotate,str(len(data[filename][object_name]['center'])),(cx,cy),cv2.FONT_HERSHEY_SIMPLEX,thickness,color,thickness)
 
-		cv2.imwrite(os.path.join(out_path,filename+'_annotated.jpg'),to_annotate)
+		cv2.imwrite(os.path.join(result_path,filename+'_annotated.jpg'),to_annotate)
 
-	with pd.ExcelWriter(os.path.join(out_path,'measurements.xlsx'),engine='openpyxl') as writer:
+	with pd.ExcelWriter(os.path.join(result_path,'measurements.xlsx'),engine='openpyxl') as writer:
 
-		for object_name in self.color_map:
+		for object_name in color_map:
 
 			rows=[]
 			columns=['filename','ID']+parameters
@@ -383,10 +376,6 @@ def measure_annotation(self,event,threshold=None):
 			df.to_excel(writer,sheet_name=object_name,float_format='%.2f',index=False)
 
 	wx.MessageBox('Measurements exported successfully.','Success',wx.ICON_INFORMATION)
-
-	self.canvas.SetFocus()
-
-
 
 
 
