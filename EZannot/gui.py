@@ -1198,6 +1198,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			wx.MessageBox('No annotations to export.','Error',wx.ICON_ERROR)
 			return
 
+		generate_annotation()
+
 		remove=[]
 
 		all_methods=['','_rot1','_rot2','_rot3','_rot4','_rot5','_rot6','_blur']
@@ -1405,6 +1407,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		if not self.information:
 			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
 			return
+
+		measure_annotation()
 
 		data={}
 		parameters=['center','area','height','width','perimeter','roundness','intensity']
