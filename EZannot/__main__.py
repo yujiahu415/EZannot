@@ -1,6 +1,6 @@
 import requests
 from packaging import version
-from EZannot import __version__,gui
+from EZannot import __version__,gui_main
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
 		
 		pass
 
-	gui.main_window()
+	gui_main.main_window()
 
 
 if __name__=='__main__':
