@@ -20,6 +20,7 @@ from EZannot.sam2.build_sam import build_sam2
 from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from EZannot import __version__
 from .annotator import Annotator,AutoAnnotation
+from .tools import read_annotation
 
 
 
@@ -837,22 +838,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.min_scale=0.25
 		self.max_scale=8.0
 		self.zoom_step=1.25
-
-		annotation_files=[]
-		for i in os.listdir(os.path.dirname(self.image_paths[0])):
-			if i.endswith('.json'):
-				annotation_files.append(os.path.join(os.path.dirname(self.image_paths[0]),i))
-		if len(annotation_files)>0:
-			for annotation_file in annotation_files:
-				if os.path.exists(annotation_file):
-					annotation=json.load(open(annotation_file))
-					for i in annotation['images']:
-						self.information[i['file_name']]={'polygons':[],'class_names':[]}
-					for i in annotation['annotations']:
-						image_name=annotation['images'][int(i['image_id'])]['file_name']
-						classname=list(self.color_map.keys())[int(i['category_id'])-1]
-						self.information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
-						self.information[image_name]['class_names'].append(classname)
+		self.information=read_annotation(os.path.dirname(self.image_paths[0]),self.color_map)
 
 		self.init_ui()
 		self.load_current_image()
