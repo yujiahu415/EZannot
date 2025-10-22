@@ -827,7 +827,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.current_segmentation=None
 		self.current_polygon=[]
 		self.current_classname=list(self.color_map.keys())[0]
-		self.information={}
+		self.information=read_annotation(os.path.dirname(self.image_paths[0]),self.color_map)
 		self.foreground_points=[]
 		self.background_points=[]
 		self.selected_point=None
@@ -838,7 +838,6 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.min_scale=0.25
 		self.max_scale=8.0
 		self.zoom_step=1.25
-		self.information=read_annotation(os.path.dirname(self.image_paths[0]),self.color_map)
 
 		self.init_ui()
 		self.load_current_image()
