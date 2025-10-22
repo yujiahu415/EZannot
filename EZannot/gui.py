@@ -72,9 +72,7 @@ class InitialPanel(wx.Panel):
 		boxsizer.Add(0,60,0)
 		boxsizer.Add(self.text_welcome,0,wx.LEFT|wx.RIGHT|wx.EXPAND,5)
 		boxsizer.Add(0,60,0)
-		self.text_developers=wx.StaticText(panel,
-			label='\nDeveloped by Yujia Hu\n',
-			style=wx.ALIGN_CENTER|wx.ST_ELLIPSIZE_END)
+		self.text_developers=wx.StaticText(panel,label='\nDeveloped by Yujia Hu\n',style=wx.ALIGN_CENTER|wx.ST_ELLIPSIZE_END)
 		boxsizer.Add(self.text_developers,0,wx.LEFT|wx.RIGHT|wx.EXPAND,5)
 		boxsizer.Add(0,60,0)
 		
@@ -93,8 +91,12 @@ class InitialPanel(wx.Panel):
 		button_annotate=wx.Button(panel,label='Annotation Module',size=(250,40))
 		button_annotate.Bind(wx.EVT_BUTTON,self.panel_annotate)
 		wx.Button.SetToolTip(button_annotate,'You can use a trained Annotator for automatic annotation. You can also perform AI-assisted semi-manual annotations to get a small set of initial training data for training an Annotator, or correct the annotations done by an Annotator.')
+		button_process=wx.Button(panel,label='Process Module',size=(250,40))
+		button_process.Bind(wx.EVT_BUTTON,self.panel_process)
+		wx.Button.SetToolTip(button_process,'You can automatically measure all the annotated objects. You can also divide large annotated images into smaller tiles.')
 		module_modules.Add(button_train,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_modules.Add(button_annotate,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_modules.Add(button_process,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(module_modules,0,wx.ALIGN_CENTER,50)
 		boxsizer.Add(0,50,0)
 
@@ -115,6 +117,13 @@ class InitialPanel(wx.Panel):
 
 		panel=PanelLv1_AnnotationModule(self.notebook)
 		title='Annotation Module'
+		self.notebook.AddPage(panel,title,select=True)
+
+
+	def panel_process(self,event):
+
+		panel=PanelLv1_ProcessModule(self.notebook)
+		title='Process Module'
 		self.notebook.AddPage(panel,title,select=True)
 
 
