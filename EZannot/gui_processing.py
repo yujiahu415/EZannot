@@ -246,6 +246,8 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 
 			measure_annotation(self.path_to_images,self.result_path,information,self.color_map,show_ids=self.show_ids,threshold=None)
 
+			wx.MessageBox('Measurements exported successfully.','Success',wx.ICON_INFORMATION)
+
 
 
 class PanelLv2_TileAnnotations(wx.Panel):
