@@ -272,7 +272,9 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 						annotation=json.load(open(annotation_file))
 						for i in annotation['categories']:
 							if i['id']>0:
-								classnames=classnames+i['name']+','
+								classname=i['name']
+								if classname not in classnames:
+									classnames=classnames+classname+','
 				classnames=classnames[:-1]
 				dialog=wx.MessageDialog(self,'Current classnames are: '+classnames+'.\nDo you want to modify the classnames?','Modify classnames?',wx.YES_NO|wx.ICON_QUESTION)
 				if dialog.ShowModal()==wx.ID_YES:
