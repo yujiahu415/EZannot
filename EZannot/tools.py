@@ -24,10 +24,11 @@ from EZannot import __version__
 
 
 
-def read_annotation(annotation_path,color_map):
+def read_annotation(annotation_path,color_map=None):
 
 	annotation_files=[]
 	information={}
+	classnames=[]
 	for i in os.listdir(annotation_path):
 		if i.endswith('.json'):
 			annotation_files.append(os.path.join(annotation_path,i))
@@ -37,9 +38,14 @@ def read_annotation(annotation_path,color_map):
 				annotation=json.load(open(annotation_file))
 				for i in annotation['images']:
 					information[i['file_name']]={'polygons':[],'class_names':[]}
+				for i in annotation['categories']:
+					if i['id']>0:
+						classname=i['name']
+						if classname not in classnames:
+							classnames.append(classname)
 				for i in annotation['annotations']:
 					image_name=annotation['images'][int(i['image_id'])]['file_name']
-					classname=list(color_map.keys())[int(i['category_id'])-1]
+					classname=classnames[int(i['category_id'])-1]
 					information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
 					information[image_name]['class_names'].append(classname)
 
