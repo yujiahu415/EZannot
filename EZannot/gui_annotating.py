@@ -62,13 +62,13 @@ class PanelLv1_AnnotationModule(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 		boxsizer.Add(0,60,0)
 
-		button_manualannotate=wx.Button(panel,label='Manual Annotation',size=(300,40))
+		button_manualannotate=wx.Button(panel,label='Annotate Manually',size=(300,40))
 		button_manualannotate.Bind(wx.EVT_BUTTON,self.manual_annotate)
 		wx.Button.SetToolTip(button_manualannotate,'Use AI assistance to manually annotate a small set of initial training images for training an Annotator or refine the automatic annotations performed by an Annotator.')
 		boxsizer.Add(button_manualannotate,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,5,0)
 
-		button_autoannotate=wx.Button(panel,label='Automatic Annotation',size=(300,40))
+		button_autoannotate=wx.Button(panel,label='Annotate Automatically',size=(300,40))
 		button_autoannotate.Bind(wx.EVT_BUTTON,self.auto_annotate)
 		wx.Button.SetToolTip(button_autoannotate,'Use a trained Annotators to automatically annotate selected images for you.')
 		boxsizer.Add(button_autoannotate,0,wx.ALIGN_CENTER,10)
@@ -83,14 +83,14 @@ class PanelLv1_AnnotationModule(wx.Panel):
 	def manual_annotate(self,event):
 
 		panel=PanelLv2_ManualAnnotation(self.notebook)
-		title='Manual Annotation'
+		title='Annotate Manually'
 		self.notebook.AddPage(panel,title,select=True)
 
 
 	def auto_annotate(self,event):
 
 		panel=PanelLv2_AutoAnnotation(self.notebook)
-		title='Auto Annotation'
+		title='Annotate Automatically'
 		self.notebook.AddPage(panel,title,select=True)
 
 
