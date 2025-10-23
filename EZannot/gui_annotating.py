@@ -371,7 +371,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.current_segmentation=None
 		self.current_polygon=[]
 		self.current_classname=list(self.color_map.keys())[0]
-		self.information=read_annotation(os.path.dirname(self.image_paths[0]),self.color_map)
+		self.information=read_annotation(os.path.dirname(self.image_paths[0]))
 		self.foreground_points=[]
 		self.background_points=[]
 		self.selected_point=None
