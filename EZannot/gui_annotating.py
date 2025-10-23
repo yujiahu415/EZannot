@@ -107,7 +107,6 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 		self.model_cfg=None
 		self.color_map={}
 		self.aug_methods=[]
-		self.show_ids=False
 
 		self.display_window()
 
@@ -310,13 +309,6 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 			else:
 				self.text_classes.SetLabel('None.')
 
-			dialog=wx.MessageDialog(self,'Show the IDs for all the annotated\nwhen exporting the measurements?','Show IDs?',wx.YES_NO|wx.ICON_QUESTION)
-			if dialog.ShowModal()==wx.ID_YES:
-				self.show_ids=True
-			else:
-				self.show_ids=False
-			dialog.Destroy()
-
 
 	def specify_augmentation(self,event):
 
@@ -346,13 +338,13 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
 			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
 		else:
-			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg,show_ids=self.show_ids)
+			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg)
 
 
 
 class WindowLv3_AnnotateImages(wx.Frame):
 
-	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None,show_ids=False):
+	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None):
 
 		monitor=get_monitors()[0]
 		monitor_w,monitor_h=monitor.width,monitor.height
@@ -365,7 +357,6 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.aug_methods=aug_methods
 		self.model_cp=model_cp
 		self.model_cfg=model_cfg
-		self.show_ids=show_ids
 		self.current_image_id=0
 		self.current_image=None
 		self.current_segmentation=None
@@ -400,29 +391,25 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		vbox=wx.BoxSizer(wx.VERTICAL)
 		hbox=wx.BoxSizer(wx.HORIZONTAL)
 
-		self.ai_button=wx.ToggleButton(panel,label='AI Help: OFF',size=(150,30))
+		self.ai_button=wx.ToggleButton(panel,label='AI Help: OFF',size=(200,30))
 		self.ai_button.Bind(wx.EVT_TOGGLEBUTTON,self.toggle_ai)
 		hbox.Add(self.ai_button,flag=wx.ALL,border=2)
 
-		self.prev_button=wx.Button(panel,label='← Prev',size=(150,30))
+		self.prev_button=wx.Button(panel,label='← Prev',size=(200,30))
 		self.prev_button.Bind(wx.EVT_BUTTON,self.previous_image)
 		hbox.Add(self.prev_button,flag=wx.ALL,border=2)
 
-		self.next_button=wx.Button(panel,label='Next →',size=(150,30))
+		self.next_button=wx.Button(panel,label='Next →',size=(200,30))
 		self.next_button.Bind(wx.EVT_BUTTON,self.next_image)
 		hbox.Add(self.next_button,flag=wx.ALL,border=2)
 
-		self.delete_button=wx.Button(panel,label='Delete',size=(150,30))
+		self.delete_button=wx.Button(panel,label='Delete',size=(200,30))
 		self.delete_button.Bind(wx.EVT_BUTTON,self.delete_image)
 		hbox.Add(self.delete_button,flag=wx.ALL,border=2)
 
-		self.export_button=wx.Button(panel,label='Export Annotations',size=(150,30))
+		self.export_button=wx.Button(panel,label='Export Annotations',size=(200,30))
 		self.export_button.Bind(wx.EVT_BUTTON,self.export_annotations)
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
-
-		self.measure_button=wx.Button(panel,label='Measure Annotations',size=(150,30))
-		self.measure_button.Bind(wx.EVT_BUTTON,self.measure_annotations)
-		hbox.Add(self.measure_button,flag=wx.ALL,border=2)
 		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
