@@ -382,4 +382,3 @@ def measure_annotation(path_to_images,result_path,information,color_map,show_ids
 			df.to_excel(writer,sheet_name=object_name,float_format='%.2f',index=False)
 
 
-
