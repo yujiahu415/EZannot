@@ -24,7 +24,7 @@ from EZannot import __version__
 
 
 
-def read_annotation(annotation_path,color_map=None):
+def read_annotation(annotation_path):
 
 	annotation_files=[]
 	information={}
