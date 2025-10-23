@@ -187,6 +187,10 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 
 		else:
 
+			information=read_annotation(os.path.dirname(self.image_paths[0]))
+
+			measure_annotation(path_to_images,result_path,information,color_map,show_ids=False,threshold=None)
+
 			annotation_files=[]
 			color_map={}
 			self.color_map={}
