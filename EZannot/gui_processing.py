@@ -113,7 +113,6 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		self.path_to_images=None
 		self.result_path=None
 		self.color_map={}
-		self.aug_methods=[]
 		self.show_ids=False
 
 		self.display_window()
@@ -125,9 +124,9 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the annotated image(s)\nfor measurements',size=(300,40))
+		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for measurements',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
-		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. You need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
+		wx.Button.SetToolTip(button_input,'Select the folder that stores all the annotated images. You also need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -146,9 +145,9 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		boxsizer.Add(0,5,0)
 
 		module_classes=wx.BoxSizer(wx.HORIZONTAL)
-		button_classes=wx.Button(panel,label='Specify the object classes and\ntheir annotation colors',size=(300,40))
-		button_classes.Bind(wx.EVT_BUTTON,self.specify_classes)
-		wx.Button.SetToolTip(button_classes,'Enter the name of each class and specify its annotation color.')
+		button_classes=wx.Button(panel,label='Specify the colors for\nthe annotated objects',size=(300,40))
+		button_classes.Bind(wx.EVT_BUTTON,self.specify_colors)
+		wx.Button.SetToolTip(button_classes,'Specify the colors that represent the annotated objects and EZannot will output the annotated images.')
 		self.text_classes=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_classes.Add(button_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_classes.Add(self.text_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -187,6 +186,55 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 			self.result_path=dialog.GetPath()
 			self.text_outputfolder.SetLabel('The annotated images will be in: '+self.result_path+'.')
 		dialog.Destroy()
+
+
+	def specify_colors(self,event):
+
+		if self.path_to_images is None:
+
+			wx.MessageBox('No input images(s).','Error',wx.OK|wx.ICON_ERROR)
+
+		else:
+
+			annotation_files=[]
+			color_map={}
+			self.color_map={}
+			classnames=[]
+			entry=None
+			for i in os.listdir(os.path.dirname(self.path_to_images[0])):
+				if i.endswith('.json'):
+					annotation_files.append(os.path.join(os.path.dirname(self.path_to_images[0]),i))
+
+			if len(annotation_files)>0:
+				for annotation_file in annotation_files:
+					if os.path.exists(annotation_file):
+						annotation=json.load(open(annotation_file))
+						for i in annotation['categories']:
+							if i['id']>0:
+								classname=i['name']
+								if classname not in classnames:
+									classnames.append(classname)
+
+			for i in classnames:
+				color_map[i]='#%02x%02x%02x'%(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+
+			if len(color_map)>0:
+				for classname in color_map:
+					dialog=ColorPicker(self,f'{classname}',[classname,color_map[classname]])
+					if dialog.ShowModal()==wx.ID_OK:
+						(r,b,g,_)=dialog.color_picker.GetColour()
+						self.color_map[classname]=(r,b,g)
+					dialog.Destroy()
+				self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
+			else:
+				self.text_classes.SetLabel('None.')
+
+			dialog=wx.MessageDialog(self,'Show the IDs for\nall the annotated objects?','Show IDs?',wx.YES_NO|wx.ICON_QUESTION)
+			if dialog.ShowModal()==wx.ID_YES:
+				self.show_ids=True
+			else:
+				self.show_ids=False
+			dialog.Destroy()
 
 
 	def measure_annotations(self,event):
