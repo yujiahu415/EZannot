@@ -384,3 +384,7 @@ def measure_annotation(path_to_images,result_path,information,color_map,show_ids
 	print('Measurements exported successfully.')
 
 
+def bbox_intersects(bbox,tile_x,tile_y,tile_w,tile_h):
+
+	x,y,w,h=bbox
+	return not (x+w<tile_x or x>tile_x+tile_w or y+h<tile_y or y>tile_y+tile_h)
