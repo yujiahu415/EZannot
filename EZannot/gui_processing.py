@@ -22,7 +22,7 @@ from EZannot import __version__
 from .gui_training import PanelLv1_TrainingModule
 from .gui_annotating import PanelLv1_AnnotationModule
 from .annotator import Annotator,AutoAnnotation
-from .tools import read_annotation,generate_annotation,measure_annotation
+from .tools import read_annotation,measure_annotation
 
 
 
@@ -179,57 +179,11 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		dialog.Destroy()
 
 
-	def select_model(self,event):
+	def measure_annotations(self,event):
 
-		path_to_sam2_model=None
-		sam2_model_path=os.path.join(the_absolute_current_path,'sam2 models')
-		sam2_models=[i for i in os.listdir(sam2_model_path) if os.path.isdir(os.path.join(sam2_model_path,i))]
-		if '__pycache__' in sam2_models:
-			sam2_models.remove('__pycache__')
-		if '__init__' in sam2_models:
-			sam2_models.remove('__init__')
-		if '__init__.py' in sam2_models:
-			sam2_models.remove('__init__.py')
-		sam2_models.sort()
-		if 'Choose a new directory of the SAM2 model' not in sam2_models:
-			sam2_models.append('Choose a new directory of the SAM2 model')
+		if self.path_to_images is None or self.result_path is None:
 
-		dialog=wx.SingleChoiceDialog(self,message='Select a SAM2 model for AI-assisted annotation.',caption='Select a SAM2 model',choices=sam2_models)
-		if dialog.ShowModal()==wx.ID_OK:
-			sam2_model=dialog.GetStringSelection()
-			if sam2_model=='Choose a new directory of the SAM2 model':
-				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
-				if dialog1.ShowModal()==wx.ID_OK:
-					path_to_sam2_model=dialog1.GetPath()
-				else:
-					path_to_sam2_model=None
-				dialog1.Destroy()
-			else:
-				path_to_sam2_model=os.path.join(sam2_model_path,sam2_model)
-		dialog.Destroy()
-
-		if path_to_sam2_model is None:
-			wx.MessageBox('No SAM2 model is set up. The AI assistance function is OFF.','AI assistance OFF',wx.ICON_INFORMATION)
-			self.text_model.SetLabel('No SAM2 model is set up. The AI assistance function is OFF.')
-		else:
-			for i in os.listdir(path_to_sam2_model):
-				if i.endswith('.pt') and i.split('sam')[0]!='._':
-					self.model_cp=os.path.join(path_to_sam2_model,i)
-				if i.endswith('.yaml') and i.split('sam')[0]!='._':
-					self.model_cfg=os.path.join(path_to_sam2_model,i)
-			if self.model_cp is None:
-				self.text_model.SetLabel('Missing checkpoint file.')
-			elif self.model_cfg is None:
-				self.text_model.SetLabel('Missing config file.')
-			else:
-				self.text_model.SetLabel('Checkpoint: '+str(os.path.basename(self.model_cp))+'; Config: '+str(os.path.basename(self.model_cfg))+'.')
-
-
-	def specify_classes(self,event):
-
-		if self.path_to_images is None:
-
-			wx.MessageBox('No input images(s).','Error',wx.OK|wx.ICON_ERROR)
+			wx.MessageBox('No input images(s) / output folder.','Error',wx.OK|wx.ICON_ERROR)
 
 		else:
 
@@ -290,38 +244,6 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 			else:
 				self.show_ids=False
 			dialog.Destroy()
-
-
-	def specify_augmentation(self,event):
-
-		aug_methods=['random rotation','horizontal flipping','vertical flipping','random brightening','random dimming','random blurring']
-		selected=''
-		dialog=wx.MultiChoiceDialog(self,message='Data augmentation methods',caption='Augmentation methods',choices=aug_methods)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.aug_methods=[aug_methods[i] for i in dialog.GetSelections()]
-			for i in self.aug_methods:
-				if selected=='':
-					selected=selected+i
-				else:
-					selected=selected+','+i
-		else:
-			self.aug_methods=[]
-			selected='none'
-		dialog.Destroy()
-
-		if len(self.aug_methods)<=0:
-			selected='none'
-
-		self.text_augmentation.SetLabel('Augmentation methods: '+selected+'.')	
-
-
-	def start_annotation(self,event):
-
-		if self.path_to_images is None or self.result_path is None or len(self.color_map)==0:
-			wx.MessageBox('No input images(s) / output folder / class names.','Error',wx.OK|wx.ICON_ERROR)
-		else:
-			WindowLv3_AnnotateImages(None,'Manually Annotate Images',self.path_to_images,self.result_path,self.color_map,self.aug_methods,model_cp=self.model_cp,model_cfg=self.model_cfg,show_ids=self.show_ids)
-
 
 
 class WindowLv3_AnnotateImages(wx.Frame):
