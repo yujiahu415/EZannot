@@ -112,8 +112,6 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		self.notebook=parent
 		self.path_to_images=None
 		self.result_path=None
-		self.model_cp=None
-		self.model_cfg=None
 		self.color_map={}
 		self.aug_methods=[]
 		self.show_ids=False
@@ -127,9 +125,9 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
+		button_input=wx.Button(panel,label='Select the annotated image(s)\nfor measurements',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
-		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. If there is an annotation file in the same folder, EZannot will read the annotation file and show all the existing annotations.')
+		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. You need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -138,49 +136,18 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		boxsizer.Add(0,5,0)
 
 		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
-		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe annotated images',size=(300,40))
+		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe measurements',size=(300,40))
 		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
-		wx.Button.SetToolTip(button_outputfolder,'Copies of images (including augmented ones) and the annotation file will be stored in this folder. The annotation file for the original (unaugmented) images will be stored in the origianl image folder.')
+		wx.Button.SetToolTip(button_outputfolder,'Copies of annotated images and the quantitative measurements will be stored in this folder.')
 		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_outputfolder.Add(button_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_outputfolder.Add(self.text_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(module_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		module_model=wx.BoxSizer(wx.HORIZONTAL)
-		button_model=wx.Button(panel,label='Set up the SAM2 model for\nAI-assisted annotation',size=(300,40))
-		button_model.Bind(wx.EVT_BUTTON,self.select_model)
-		wx.Button.SetToolTip(button_model,'Choose the SAM2 model. If select from a folder, make sure the folder stores a checkpoint (*.pt) file and a corresponding model config (*.yaml) file.')
-		self.text_model=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_model.Add(button_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_model.Add(self.text_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(0,5,0)
-
-		module_classes=wx.BoxSizer(wx.HORIZONTAL)
-		button_classes=wx.Button(panel,label='Specify the object classes and\ntheir annotation colors',size=(300,40))
-		button_classes.Bind(wx.EVT_BUTTON,self.specify_classes)
-		wx.Button.SetToolTip(button_classes,'Enter the name of each class and specify its annotation color.')
-		self.text_classes=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_classes.Add(button_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_classes.Add(self.text_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_classes,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(0,5,0)
-
-		module_augmentation=wx.BoxSizer(wx.HORIZONTAL)
-		button_augmentation=wx.Button(panel,label='Specify the augmentation methods\nfor the annotated images',size=(300,40))
-		button_augmentation.Bind(wx.EVT_BUTTON,self.specify_augmentation)
-		wx.Button.SetToolTip(button_augmentation,
-			'Augmentation can greatly enhance the training efficiency. But for the first time of annotating an image set, you can skip this to build an unaugmented, origianl annotated image set and import it to EZannot later to perform the augmentation.')
-		self.text_augmentation=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_augmentation.Add(button_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_augmentation.Add(self.text_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(0,5,0)
-
-		button_startannotation=wx.Button(panel,label='Start to annotate images',size=(300,40))
-		button_startannotation.Bind(wx.EVT_BUTTON,self.start_annotation)
-		wx.Button.SetToolTip(button_startannotation,'Manually annotate objects in images.')
+		button_startannotation=wx.Button(panel,label='Measure the annotated',size=(300,40))
+		button_startannotation.Bind(wx.EVT_BUTTON,self.measure_annotations)
+		wx.Button.SetToolTip(button_startannotation,'Calculate diverse quantitative measurements for each annotated object.')
 		boxsizer.Add(0,5,0)
 		boxsizer.Add(button_startannotation,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
 		boxsizer.Add(0,10,0)
