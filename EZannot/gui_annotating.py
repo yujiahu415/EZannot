@@ -736,18 +736,6 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.canvas.SetFocus()
 
 
-	def measure_annotations(self,event):
-
-		if not self.information:
-			wx.MessageBox('No annotations to measure.','Error',wx.ICON_ERROR)
-			return
-
-		measure_annotation(os.path.dirname(self.image_paths[0]),self.out_path,self.information,self.color_map,show_ids=self.show_ids,threshold=None)
-
-
-		self.canvas.SetFocus()
-
-
 
 class PanelLv2_AutoAnnotation(wx.Panel):
 
