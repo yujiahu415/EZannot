@@ -18,7 +18,7 @@ from EZannot import __version__
 from .gui_training import PanelLv1_TrainingModule
 from .gui_annotating import PanelLv1_AnnotationModule
 from .annotator import Annotator,AutoAnnotation
-from .tools import read_annotation,measure_annotation
+from .tools import read_annotation,measure_annotation,tile_annotation
 
 
 
@@ -251,10 +251,10 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		super().__init__(parent)
 		self.notebook=parent
 		self.path_to_images=None
-		self.path_to_annotator=None
-		self.object_kinds=None
-		self.detection_threshold={}
-		self.filters={}
+		self.out_path=None
+		self.tile_size=(640,640)
+		self.overlap_ratio=0.2
+		self.black_background=False
 
 		self.display_window()
 
@@ -265,9 +265,9 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
-		button_input.Bind(wx.EVT_BUTTON,self.select_images)
-		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. An annotation file will be generated in this folder')
+		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for tiling',size=(300,40))
+		button_input.Bind(wx.EVT_BUTTON,self.select_inpath)
+		wx.Button.SetToolTip(button_input,'Select the folder that stores all the annotated images. You also need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_input.Add(button_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_input.Add(self.text_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -275,29 +275,29 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer.Add(module_input,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		module_model=wx.BoxSizer(wx.HORIZONTAL)
-		button_model=wx.Button(panel,label='Select a trained Annotator\nfor automatic annotation',size=(300,40))
-		button_model.Bind(wx.EVT_BUTTON,self.select_model)
-		wx.Button.SetToolTip(button_model,'A trained Annotator can annotate the objects of your interest in images.')
-		self.text_model=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_model.Add(button_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_model.Add(self.text_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_model,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
+		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe tiled annotations',size=(300,40))
+		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
+		wx.Button.SetToolTip(button_outputfolder,'Copies of tiled images and the corresponding annotation file(s) will be stored in this folder.')
+		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_outputfolder.Add(button_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_outputfolder.Add(self.text_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
 		module_filters=wx.BoxSizer(wx.HORIZONTAL)
-		button_filters=wx.Button(panel,label='Specify the filters to\nexclude unwanted annotations',size=(300,40))
-		button_filters.Bind(wx.EVT_BUTTON,self.specify_filters)
-		wx.Button.SetToolTip(button_filters,'Select filters such as area, perimeter, roundness (1 is circle, higer value means less round), height, and width, and specify the minimum and maximum values of these filters.')
-		self.text_filters=wx.StaticText(panel,label='Default: None',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		button_filters=wx.Button(panel,label='Specify the parameters for\ntiling the imagess',size=(300,40))
+		button_filters.Bind(wx.EVT_BUTTON,self.specify_parameters)
+		wx.Button.SetToolTip(button_filters,'Specify the tiling parameters such as tile size, overlapping ratio, and whether the background is black.')
+		self.text_filters=wx.StaticText(panel,label='Default: tile size=(640,640), overlapping ratio=0.2, black background',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_filters.Add(button_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_filters.Add(self.text_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(module_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		button_startannotation=wx.Button(panel,label='Start to annotate images',size=(300,40))
-		button_startannotation.Bind(wx.EVT_BUTTON,self.start_annotation)
-		wx.Button.SetToolTip(button_startannotation,'Automatically annotate objects in images.')
+		button_startannotation=wx.Button(panel,label='Start to tile images',size=(300,40))
+		button_startannotation.Bind(wx.EVT_BUTTON,self.start_tiling)
+		wx.Button.SetToolTip(button_startannotation,'Make the annotated images into smaller tiles.')
 		boxsizer.Add(0,5,0)
 		boxsizer.Add(button_startannotation,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
 		boxsizer.Add(0,10,0)
@@ -308,70 +308,22 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		self.Show(True)
 
 
-	def select_images(self,event):
+	def select_inpath(self,event):
 
-		wildcard='Image files(*.jpg;*.jpeg;*.png;*.tif;*.tiff)|*.jpg;*.jpeg;*.png;*.tif;*.tiff'
-		dialog=wx.FileDialog(self,'Select images(s)','','',wildcard,style=wx.FD_MULTIPLE)
+		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
 		if dialog.ShowModal()==wx.ID_OK:
-			self.path_to_images=dialog.GetPaths()
-			self.path_to_images.sort()
-			path=os.path.dirname(self.path_to_images[0])
-			self.text_input.SetLabel('Select: '+str(len(self.path_to_images))+' images in'+str(path)+'.')
+			self.path_to_images=dialog.GetPath()
+			self.text_input.SetLabel('The folder that stores all the annotated images: '+self.path_to_images+'.')
 		dialog.Destroy()
 
 
-	def select_model(self,event):
+	def select_outpath(self,event):
 
-		annotator_path=os.path.join(the_absolute_current_path,'annotators')
-		annotators=[i for i in os.listdir(annotator_path) if os.path.isdir(os.path.join(annotator_path,i))]
-		if '__pycache__' in annotators:
-			annotators.remove('__pycache__')
-		if '__init__' in annotators:
-			annotators.remove('__init__')
-		if '__init__.py' in annotators:
-			annotators.remove('__init__.py')
-		annotators.sort()
-		if 'Choose a new directory of the Annotator' not in annotators:
-			annotators.append('Choose a new directory of the Annotator')
-
-		dialog=wx.SingleChoiceDialog(self,message='Select an Annotator for automatic annotation.',caption='Select an Annotator',choices=annotators)
+		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
 		if dialog.ShowModal()==wx.ID_OK:
-			annotator=dialog.GetStringSelection()
-			if annotator=='Choose a new directory of the Annotator':
-				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
-				if dialog1.ShowModal()==wx.ID_OK:
-					self.path_to_annotator=dialog1.GetPath()
-				else:
-					self.path_to_annotator=None
-				dialog1.Destroy()
-			else:
-				self.path_to_annotator=os.path.join(annotator_path,annotator)
-			with open(os.path.join(self.path_to_annotator,'model_parameters.txt')) as f:
-				model_parameters=f.read()
-			object_names=json.loads(model_parameters)['object_names']
-			if len(object_names)>1:
-				dialog1=wx.MultiChoiceDialog(self,message='Specify which obejct to annotate',
-					caption='Object kind',choices=object_names)
-				if dialog1.ShowModal()==wx.ID_OK:
-					self.object_kinds=[object_names[i] for i in dialog1.GetSelections()]
-				else:
-					self.object_kinds=object_names
-				dialog1.Destroy()
-			else:
-				self.object_kinds=object_names
-			for object_name in self.object_kinds:
-				dialog1=wx.NumberEntryDialog(self,'Detection threshold for '+str(object_name),'Enter an number between 0 and 100','Detection threshold for '+str(object_name),0,0,100)
-				if dialog1.ShowModal()==wx.ID_OK:
-					self.detection_threshold[object_name]=int(dialog1.GetValue())/100
-				else:
-					self.detection_threshold[object_name]=0
-				dialog1.Destroy()
-			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'.')
+			self.out_path=dialog.GetPath()
+			self.text_outputfolder.SetLabel('The tiled annotated images will be in: '+self.out_path+'.')
 		dialog.Destroy()
-
-		if self.path_to_annotator is None:
-			wx.MessageBox('No Annotator is selected.','No Annotator',wx.ICON_INFORMATION)
-			self.text_model.SetLabel('No Annotator is selected.')
 
 
 	def specify_filters(self,event):
