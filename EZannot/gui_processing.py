@@ -276,7 +276,7 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer.Add(0,5,0)
 
 		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
-		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe tiled annotations',size=(300,40))
+		button_outputfolder=wx.Button(panel,label='Select a folder to store the tiled\nimages and annotations',size=(300,40))
 		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
 		wx.Button.SetToolTip(button_outputfolder,'Copies of tiled images and the corresponding annotation file(s) will be stored in this folder.')
 		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
