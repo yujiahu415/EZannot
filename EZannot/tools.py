@@ -393,7 +393,92 @@ def tiel_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 		for i,a in enumerate(annotation_files):
 
 			with open(a,'r') as f:
-				annot=json.load(f)
+				coco=json.load(f)
+
+			images=coco['images']
+			annotations=coco['annotations']
+			categories=coco['categories']
+
+			new_images=[]
+			new_annotations=[]
+			ann_id=0
+
+			for img_info in images:
+				img_path=os.path.join(path_to_images,img_info['file_name'])
+				image=Image.open(img_path)
+				img_w,img_h=image.size
+
+				tile_w,tile_h=tile_size
+				step_x=int(tile_w*(1-overlap_ratio))
+				step_y=int(tile_h*(1-overlap_ratio))
+
+				for y in range(0,img_h,step_y):
+
+					for x in range(0,img_w,step_x):
+
+						if black_background:
+							tile_box=(x,y,x+tile_w,y+tile_h)
+							tile_crop=image.crop(tile_box)
+						else:
+							tile_box=(x,y,x+tile_w,y+tile_h)
+							tile_crop=Image.new('RGB',(tile_w,tile_h),(255,255,255))
+							left=max(0,x)
+							upper=max(0,y)
+							right=min(img_w,x+tile_w)
+							lower=min(img_h,y+tile_h)
+							crop_region=image.crop((left,upper,right,lower))
+							paste_x=max(0,-x)
+							paste_y=max(0,-y)
+							tile_crop.paste(crop_region,(paste_x,paste_y))
+
+						new_filename=f'{os.path.splitext(img_info['file_name'])[0]}_{x}_{y}.jpg'
+						tile_crop.save(os.path.join(out_path,'images',new_filename))
+
+						new_img_id=len(new_images)
+						new_images.append({'id':new_img_id,'file_name':new_filename,'width':tile_w,'height':tile_h})
+
+						for ann in annotations:
+							if ann['image_id']!=img_info['id']:
+								continue
+
+							if not bbox_intersects(ann['bbox'],x,y,tile_w,tile_h):
+								continue
+
+							ann_copy=ann.copy()
+							ann_copy['id']=ann_id
+							ann_copy['image_id']=new_img_id
+
+							segs=[]
+							if isinstance(ann_copy['segmentation'],list):
+								for seg in ann_copy['segmentation']:
+									seg=np.array(seg).reshape(-1,2)
+									seg[:,0]-=x
+									seg[:,1]-=y
+									seg=seg[(seg[:,0]>=0) & (seg[:,0]<=tile_w) & (seg[:,1]>=0) & (seg[:,1]<=tile_h)]
+									if len(seg)>=3:
+										segs.append(seg.flatten().tolist())
+							elif isinstance(ann_copy['segmentation'],dict):
+								rle=mk.frPyObjects([ann_copy['segmentation']],img_h,img_w)
+								mask=mk.decode(rle)[0][y:y+tile_h,x:x+tile_w]
+								new_rle=mk.encode(np.asfortranarray(mask))
+								new_rle['counts']=new_rle['counts'].decode('ascii')
+								ann_copy['segmentation']=new_rle
+
+							if len(segs)==0 and not isinstance(ann_copy['segmentation'],dict):
+								continue
+
+							ann_copy['segmentation']=segs if len(segs)>0 else ann_copy['segmentation']
+
+							bx,by,bw,bh=ann_copy['bbox']
+							new_bbox=[bx-x,by-y,bw,bh]
+							ann_copy['bbox']=new_bbox
+							new_annotations.append(ann_copy)
+							ann_id+=1
+
+			new_coco={'images':new_images,'annotations':new_annotations,'categories':categories}
+
+			with open(os.path.join(out_path,'annotations','instances_tiled.json'),'w') as f:
+				json.dump(new_coco,f)
 
 
 
