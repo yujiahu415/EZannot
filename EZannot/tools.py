@@ -374,3 +374,15 @@ def bbox_intersects(bbox,tile_x,tile_y,tile_w,tile_h):
 
 	x,y,w,h=bbox
 	return not (x+w<tile_x or x>tile_x+tile_w or y+h<tile_y or y>tile_y+tile_h)
+
+
+def tiel_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.2,black_background=False):
+
+	for i in os.listdir(path_to_images):
+
+		if i.endswith('.json'):
+
+			with open(os.path.join(path_to_images,i),'r') as f:
+
+			annotation_files.append(os.path.join(annotation_path,i))
+
