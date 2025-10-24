@@ -285,21 +285,21 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer.Add(module_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		module_filters=wx.BoxSizer(wx.HORIZONTAL)
-		button_filters=wx.Button(panel,label='Specify the parameters for\ntiling the imagess',size=(300,40))
-		button_filters.Bind(wx.EVT_BUTTON,self.specify_parameters)
-		wx.Button.SetToolTip(button_filters,'Specify the tiling parameters such as tile size, overlapping ratio, and whether the background is black.')
-		self.text_filters=wx.StaticText(panel,label='Default: tile size=(640,640), overlapping ratio=0.2, black background',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_filters.Add(button_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_filters.Add(self.text_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_filters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_parameters=wx.BoxSizer(wx.HORIZONTAL)
+		button_parameters=wx.Button(panel,label='Specify the parameters for\ntiling the imagess',size=(300,40))
+		button_parameters.Bind(wx.EVT_BUTTON,self.specify_parameters)
+		wx.Button.SetToolTip(button_parameters,'Specify the tiling parameters such as tile size, overlapping ratio, and whether the background is black.')
+		self.text_parameters=wx.StaticText(panel,label='Default: tile size=(640,640), overlapping ratio=0.2, black background',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_parameters.Add(button_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_parameters.Add(self.text_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		button_startannotation=wx.Button(panel,label='Start to tile images',size=(300,40))
-		button_startannotation.Bind(wx.EVT_BUTTON,self.start_tiling)
-		wx.Button.SetToolTip(button_startannotation,'Make the annotated images into smaller tiles.')
+		button_starttile=wx.Button(panel,label='Start to tile images',size=(300,40))
+		button_starttile.Bind(wx.EVT_BUTTON,self.start_tiling)
+		wx.Button.SetToolTip(button_starttile,'Make the annotated images into smaller tiles.')
 		boxsizer.Add(0,5,0)
-		boxsizer.Add(button_startannotation,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
+		boxsizer.Add(button_starttile,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
 		boxsizer.Add(0,10,0)
 
 		panel.SetSizer(boxsizer)
@@ -326,85 +326,21 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		dialog.Destroy()
 
 
-	def specify_filters(self,event):
+	def specify_parameters(self,event):
 
-		filters_choices=['area','perimeter','roundness','height','width']
-
-		dialog=wx.MultiChoiceDialog(self,message='Select filters to exclude unwanted annotations',caption='Filters',choices=filters_choices)
-		if dialog.ShowModal()==wx.ID_OK:
-			selected_filters=[filters_choices[i] for i in dialog.GetSelections()]
-		else:
-			selected_filters=[]
-		dialog.Destroy()
-
-		for ft in selected_filters:
-			dialog=wx.NumberEntryDialog(self,'The min value for '+str(ft),'The unit is pixel (except for roundness)','The min value for '+str(ft),0,0,100000000000000)
-			values=[0,np.inf]
-			if dialog.ShowModal()==wx.ID_OK:
-				values[0]=int(dialog.GetValue())
-			dialog.Destroy()
-			dialog=wx.NumberEntryDialog(self,'The max value (enter 0 for infinity) for '+str(ft),'The unit is pixel (except for roundness)','The max value for '+str(ft),0,0,100000000000000)
-			if dialog.ShowModal()==wx.ID_OK:
-				value=int(dialog.GetValue())
-				if value>0:
-					values[1]=value
-			dialog.Destroy()
-			self.filters[ft]=values
-
-		if len(self.filters)>0:
-			self.text_filters.SetLabel('Filters: '+str(self.filters))
-		else:
-			self.text_filters.SetLabel('NO filters selected.')
+		outtext=''
 
 
-	def start_annotation(self,event):
 
-		if self.path_to_images is None or self.path_to_annotator is None:
 
-			wx.MessageBox('No input images(s) / trained Annotator selected.','Error',wx.OK|wx.ICON_ERROR)
+	def start_tiling(self,event):
+
+		if self.path_to_images is None or self.out_path is None:
+
+			wx.MessageBox('No input / output folder.','Error',wx.OK|wx.ICON_ERROR)
 
 		else:
 			
-			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters)
-			AA.annotate_images()
+			tile_annotation(self.path_to_images,self.out_path,tile_size=self.tile_size,overlap_ratio=self.overlap_ratio,black_background=self.black_background)
 
-
-
-class MainFrame(wx.Frame):
-
-	def __init__(self):
-		super().__init__(None,title=f'EZannot v{__version__}')
-		self.SetSize((1000,500))
-
-		self.aui_manager=wx.aui.AuiManager()
-		self.aui_manager.SetManagedWindow(self)
-
-		self.notebook=wx.aui.AuiNotebook(self)
-		self.aui_manager.AddPane(self.notebook,wx.aui.AuiPaneInfo().CenterPane())
-
-		panel=InitialPanel(self.notebook)
-		title='Welcome'
-		self.notebook.AddPage(panel,title,select=True)
-
-		sizer=wx.BoxSizer(wx.VERTICAL)
-		sizer.Add(self.notebook,1,wx.EXPAND)
-		self.SetSizer(sizer)
-
-		self.aui_manager.Update()
-		self.Centre()
-		self.Show()
-
-
-
-def main_window():
-
-	app=wx.App()
-	MainFrame()
-	print('The user interface initialized!')
-	app.MainLoop()
-
-
-if __name__=='__main__':
-
-	main_window()
 
