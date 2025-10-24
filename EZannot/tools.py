@@ -376,7 +376,7 @@ def bbox_intersects(bbox,tile_x,tile_y,tile_w,tile_h):
 	return not (x+w<tile_x or x>tile_x+tile_w or y+h<tile_y or y>tile_y+tile_h)
 
 
-def tiel_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.2,black_background=False):
+def tile_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.2,black_background=False):
 
 	annotation_files=[]
 
