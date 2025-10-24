@@ -431,7 +431,7 @@ def tiel_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 							paste_y=max(0,-y)
 							tile_crop.paste(crop_region,(paste_x,paste_y))
 
-						new_filename=f'{os.path.splitext(img_info['file_name'])[0]}_{x}_{y}.jpg'
+						new_filename=f'{os.path.splitext(img_info['file_name'])[0]}_{x}_{y}{os.path.splitext(img_info['file_name'])[1]}'
 						tile_crop.save(os.path.join(out_path,'images',new_filename))
 
 						new_img_id=len(new_images)
@@ -477,8 +477,7 @@ def tiel_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 
 			new_coco={'images':new_images,'annotations':new_annotations,'categories':categories}
 
-			with open(os.path.join(out_path,'annotations','instances_tiled.json'),'w') as f:
+			with open(os.path.join(out_path,'annotations_'+str(i),'.json'),'w') as f:
 				json.dump(new_coco,f)
-
 
 
