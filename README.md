@@ -27,13 +27,13 @@
 **1. For manual annotation, turn on the `AI Help` button to annotate the outlines of objects or regions with ease.**
 
 > [!TIP]
-> To include more images to an annotated dataset, simply put new images inside the folder of the annotated dataset.
+> To include more images to an annotated dataset, simply put new images inside the folder that stores the annotated images and the annotation file(s).
 
 > [!TIP]
-> To merge multiple annotated datasets, merge the folders (rename the annotation files to avoid overwriting).
+> To merge multiple annotated datasets, merge the folders that stores the annotated images and the annotation files (rename each annotation file to avoid overwriting).
 
 > [!TIP]
-> To visualize or refine the annotations, use `Manual Annotation` unit, navigate to the folder that stores the images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
+> To visualize or refine the annotations, use `Manual Annotation` unit, navigate to the folder that stores the annotated images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
 
 <p>&nbsp;</p>
 
@@ -44,15 +44,16 @@
    ![alt text](https://github.com/yujiahu415/EZannot/blob/main/Examples/Left_select.gif?raw=true)
 
    > [!NOTE]
-   > Click `Mouse left` to detect the outline and hit `Enter` to specify the classname to finalize the annotation.
+   > First, click `Mouse left` to detect the outline, and then hit `Enter` to specify the classname to finalize the annotation, or hit `Esc` to cancel the annotation.
 
    > [!TIP]
    > Speed up by hiting `Enter` instead of using mouse to click "OK" so that no need to move mouse back and forth.
 
    > [!TIP]
-   > If there is no object of interest in an image, simply don't do any annotation and proceed to the next image.
-   > 
-   > In this way, the 'null' image will be marked as 'null' in the annotation file.
+   > If there is no object of interest in an image, simply don't do any annotation and proceed to the next image, and the 'null' image will be marked as 'null' in the annotation file.
+
+   > [!TIP]
+   > You can use `Mouse scroll` to zoom in or out for each image.
 
 <p>&nbsp;</p>
 
