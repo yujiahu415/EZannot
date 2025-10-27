@@ -33,7 +33,7 @@
 > To merge multiple annotated datasets, merge the folders that store the annotated images and the annotation files (rename each annotation file to avoid overwriting).
 
 > [!TIP]
-> To visualize or refine the annotations, use `Manual Annotations` unit, navigate to the folder that stores the annotated images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
+> To visualize or refine the annotations, use `Annotate Manually` unit, navigate to the folder that stores the annotated images and the annotation files, select the images you want to visualize or refine, go through all the buttons, and `Start to annotate images`.
 
 > [!TIP]
 > For large images, you can use `Mouse scroll` to zoom in or out, or use `Tile Annotations` unit, to divide a large, annotated image into smaller annotated tiles.
