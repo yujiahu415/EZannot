@@ -383,7 +383,7 @@ def tile_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 
 	for i in os.listdir(path_to_images):
 		if i.endswith('.json'):
-			annotation_files.append(os.path.join(annotation_path,i))
+			annotation_files.append(os.path.join(path_to_images,i))
 
 	if len(annotation_files)<=0:
 
