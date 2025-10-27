@@ -311,7 +311,7 @@ class PanelLv2_TileAnnotations(wx.Panel):
 
 		outtext='Tile size: '
 
-		dialog=wx.NumberEntryDialog(self,'Input the size\nof each tile','A number divisible by 32 (min 320 max 6400):','Tile size',640,1,6400)
+		dialog=wx.NumberEntryDialog(self,'Input the size\nof each tile','An even number (min: 320, max: 6400):','Tile size',640,1,6400)
 		if dialog.ShowModal()==wx.ID_OK:
 			self.tile_size=(int(dialog.GetValue()),int(dialog.GetValue()))
 		else:
