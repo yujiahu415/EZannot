@@ -313,16 +313,16 @@ class AutoAnnotation():
 
 			masks,scores,classes=[],[],[]
 
-			for cls in np.unique(temp_classes):
-				cls_inds=np.where(temp_classes==cls)[0]
-				boxes_cls=torch.tensor(temp_boxes[cls_inds],dtype=torch.float32)
-				scores_cls=torch.tensor(temp_scores[cls_inds],dtype=torch.float32)
-				keep=nms(boxes_cls,scores_cls,iou_threshold=0.5)
+			for cs in np.unique(temp_classes):
+				cs_inds=np.where(temp_classes==cs)[0]
+				boxes_cs=torch.tensor(temp_boxes[cs_inds],dtype=torch.float32)
+				scores_cs=torch.tensor(temp_scores[cs_inds],dtype=torch.float32)
+				keep=nms(boxes_cs,scores_cs,iou_threshold=0.5)
 
 				for k in keep:
-					masks.append(results[cls_inds[k]]['mask'])
-					scores.append(results[cls_inds[k]]['score'])
-					classes.append(results[cls_inds[k]]['class'])
+					masks.append(results[cs_inds[k]]['mask'])
+					scores.append(results[cs_inds[k]]['score'])
+					classes.append(results[cs_inds[k]]['class'])
 
 			if len(masks)>0:
 
