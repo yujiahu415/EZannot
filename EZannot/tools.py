@@ -478,7 +478,7 @@ def tile_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 
 			new_coco={'images':new_images,'annotations':new_annotations,'categories':categories}
 
-			with open(os.path.join(out_path,'annotations_'+str(i),'.json'),'w') as f:
+			with open(os.path.join(out_path,'annotations_'+str(i)+'.json'),'w') as f:
 				json.dump(new_coco,f)
 
 
