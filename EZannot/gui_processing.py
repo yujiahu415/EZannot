@@ -328,9 +328,34 @@ class PanelLv2_TileAnnotations(wx.Panel):
 
 	def specify_parameters(self,event):
 
-		outtext=''
+		outtext='Tile size: '
 
+		dialog=wx.NumberEntryDialog(self,'Input the size\nof each tile','A number divisible by 32 (min 320 max 6400):','Tile size',640,1,6400)
+		if dialog.ShowModal()==wx.ID_OK:
+			self.tile_size=(int(dialog.GetValue()),int(dialog.GetValue()))
+		else:
+			self.tile_size=(640,640)
+		dialog.Destroy()
+		outtext=outtext+str(self.tile_size)+', overlapping ratio: '
 
+		dialog=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
+		if dialog.ShowModal()==wx.ID_OK:
+			self.overlap_ratio=int(dialog.GetValue())/100
+		else:
+			self.overlap_ratio=0.2
+		dialog.Destroy()
+		outtext=outtext+str(self.overlap_ratio)+', '
+
+		dialog=wx.MessageDialog(self,'Is the background in the images black or darker than foreground?','Darker background?',wx.YES_NO|wx.ICON_QUESTION)
+		if dialog.ShowModal()==wx.ID_YES:
+			self.black_background=True
+			outtext=outtext+'black background'+'.'
+		else:
+			self.black_background=False
+			outtext=outtext+'white background'+'.'
+		dialog.Destroy()
+
+		self.text_parameters.SetLabel(outtext)
 
 
 	def start_tiling(self,event):
