@@ -3,26 +3,7 @@ import cv2
 import wx
 import json
 import random
-import torch
-import numpy as np
-import pandas as pd
-from pathlib import Path
-import matplotlib as mpl
-import matplotlib.cm as cm
-from scipy.ndimage import rotate
-from PIL import Image
-from screeninfo import get_monitors
-from EZannot.sam2.build_sam import build_sam2
-from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
-from EZannot import __version__
-from .gui_training import PanelLv1_TrainingModule
-from .gui_annotating import PanelLv1_AnnotationModule
-from .annotator import Annotator,AutoAnnotation
 from .tools import read_annotation,measure_annotation,tile_annotation
-
-
-
-the_absolute_current_path=str(Path(__file__).resolve().parent)
 
 
 
