@@ -200,11 +200,13 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
 1. Launch EZannot:
 
+   First, open terminal, and then enter:
+
    ```pwsh-session
    EZannot
    ```
    
-   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, which is typcially because the python3 is not added into the 'PATH' environmental variable, you can still make it show up by three lines of code:
+   The user interface may take a few minutes to start up during the first launch. If the user interface fails to initiate with the above method, which is typcially because the python3 is not added into the 'PATH' environmental variable, you can still make it show up by three lines of code in terminal:
    ```pwsh-session
    py -3.12
    ```
