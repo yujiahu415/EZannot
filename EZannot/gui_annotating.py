@@ -735,6 +735,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 		self.object_kinds=None
 		self.detection_threshold={}
 		self.filters={}
+		self.overlap_ratio=0.2
 
 		self.display_window()
 
@@ -846,7 +847,14 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 				else:
 					self.detection_threshold[object_name]=0
 				dialog1.Destroy()
-			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'.')
+
+			dialog1=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
+			if dialog1.ShowModal()==wx.ID_OK:
+				self.overlap_ratio=int(dialog1.GetValue())/100
+			else:
+				self.overlap_ratio=0.2
+			dialog1.Destroy()
+			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+', overlapping ratio: '+str(self.overlap_ratio)+'.')
 		dialog.Destroy()
 
 		if self.path_to_annotator is None:
@@ -893,7 +901,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 
 		else:
 			
-			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters)
+			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters,overlap=self.overlap_ratio)
 			AA.annotate_images()
 
 
