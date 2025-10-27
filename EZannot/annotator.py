@@ -218,7 +218,7 @@ class Annotator():
 
 class AutoAnnotation():
 
-	def __init__(self,image_paths,path_to_annotator,object_kinds,detection_threshold=None,filters={}):
+	def __init__(self,image_paths,path_to_annotator,object_kinds,detection_threshold=None,filters={},overlap=0.2):
 
 		self.image_paths=image_paths
 		self.annotation_path=os.path.dirname(self.image_paths[0])
@@ -234,6 +234,7 @@ class AutoAnnotation():
 				self.detection_threshold[object_name]=0
 		self.filters=filters
 		self.information={}
+		self.overlap=overlap
 
 
 	def sliding_window(image,inferencing_framesize,overlap=0.2):
