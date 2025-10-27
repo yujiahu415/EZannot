@@ -200,7 +200,7 @@ You need to access the terminal. Use `Cmd+Space` to enter Spotlight Search, then
 
 1. Launch EZannot:
 
-   First, open terminal, and then enter:
+   First, open the terminal, and then enter:
 
    ```pwsh-session
    EZannot
