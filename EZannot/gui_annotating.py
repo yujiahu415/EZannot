@@ -13,7 +13,7 @@ from screeninfo import get_monitors
 from EZannot.sam2.build_sam import build_sam2
 from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from .annotator import AutoAnnotation
-from .tools import read_annotation,generate_annotation
+from .tools import read_annotation,mask_to_polygon,generate_annotation
 
 
 
@@ -575,7 +575,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 				labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
 				masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
 				mask=masks[np.argsort(scores)[::-1]][0]
-				self.current_polygon=self.mask_to_polygon(mask)
+				self.current_polygon=mask_to_polygon(mask)
 			else:
 				self.current_polygon.append((int(x/self.scale),int(y/self.scale)))
 
@@ -600,7 +600,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 					labels=[1 for i in range(len(self.foreground_points))]+[0 for i in range(len(self.background_points))]
 					masks,scores,logits=self.sam2.predict(point_coords=np.array(points),point_labels=np.array(labels))
 					mask=masks[np.argsort(scores)[::-1]][0]
-					self.current_polygon=self.mask_to_polygon(mask)
+					self.current_polygon=mask_to_polygon(mask)
 				else:
 					self.current_polygon.pop()
 
