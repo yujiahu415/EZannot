@@ -237,7 +237,7 @@ class AutoAnnotation():
 		self.overlap=overlap
 
 
-	def sliding_window(image,inferencing_framesize,overlap=0.2):
+	def sliding_window(self,image,inferencing_framesize,overlap=0.2):
 
 		h,w=image.shape[:2]
 		win_w,win_h=inferencing_framesize
