@@ -681,13 +681,12 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			polygon[j]=(int(x/self.scale),int(y/self.scale))
 			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			self.information[image_name]['polygons'][i]=polygon
-			#self.canvas.Refresh()
+			self.canvas.Refresh()
 
 
 	def on_left_up(self,event):
 
 		self.selected_point=None
-		self.canvas.Refresh()
 
 
 	def on_mousewheel(self,event):
