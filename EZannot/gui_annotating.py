@@ -563,7 +563,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 			image_name=os.path.basename(self.image_paths[self.current_image_id])
 			for i,polygon in enumerate(self.information[image_name]['polygons']):
 				for j,(px,py) in enumerate(polygon):
-					if abs(int(px/self.scale)-int(x/self.scale))<5 and abs(int(py/self.scale)-int(y/self.scale))<5:
+					if abs(px-int(x/self.scale))<5/self.scale and abs(py-int(y/self.scale))<5/self.scale:
 						self.selected_point=(polygon,j,i)
 						return
 
