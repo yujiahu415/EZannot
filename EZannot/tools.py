@@ -518,6 +518,12 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 				new_w,new_h=int(img_w*scale),int(img_h*scale)
 				image_resized=image.resize((new_w,new_h),Image.Resampling.LANCZOS)
 				image_resized.save(os.path.join(out_path,img_info['file_name']))
+				img_info['width']=new_w
+				img_info['height']=new_h
+
+			for ann in annotations:
+				x,y,w,h=ann['bbox']
+				ann['bbox'][x*scale,y*scale,w*scale,h*scale]
 
 
 
