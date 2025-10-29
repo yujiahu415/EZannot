@@ -524,7 +524,15 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 			for ann in annotations:
 				x,y,w,h=ann['bbox']
 				ann['bbox'][x*scale,y*scale,w*scale,h*scale]
-
+				if isinstance(ann['segmentation'],list):
+					new_segs=[]
+					for seg in ann['segmentation']:
+						new_seg=[]
+						for i in range(0,len(seg),2):
+							new_seg.append(seg[i]*scale)
+					 		new_seg.append(seg[i+1]*scale)
+						new_segs.append(new_seg)
+					ann['segmentation']=new_segs
 
 
 
