@@ -526,7 +526,7 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 						new_seg=[]
 						for s in range(0,len(seg),2):
 							new_seg.append(seg[s]*scale)
-					 		new_seg.append(seg[s+1]*scale)
+							new_seg.append(seg[s+1]*scale)
 						new_segs.append(new_seg)
 					ann['segmentation']=new_segs
 				ann['area']*=(scale*scale)
