@@ -484,3 +484,44 @@ def tile_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 		print('Annotation tiling completed.')
 
 
+def resize_annotation(path_to_images,out_path,scale=0.5):
+
+	annotation_files=[]
+
+	for i in os.listdir(path_to_images):
+		if i.endswith('.json'):
+			annotation_files.append(os.path.join(path_to_images,i))
+
+	if len(annotation_files)<=0:
+
+		print('No annotation files.')
+
+	else:
+
+		for i,a in enumerate(annotation_files):
+
+			with open(a,'r') as f:
+				coco=json.load(f)
+
+			images=coco['images']
+			annotations=coco['annotations']
+			categories=coco['categories']
+
+			new_images=[]
+			new_annotations=[]
+			ann_id=0
+
+			for img_info in images:
+				img_path=os.path.join(path_to_images,img_info['file_name'])
+				image=Image.open(img_path)
+				img_w,img_h=image.size
+				new_w,new_h=int(img_w*scale),int(img_h*scale)
+				image_resized=image.resize((new_w,new_h),Image.Resampling.LANCZOS)
+				image_resized.save(os.path.join(out_path,img_info['file_name']))
+
+
+
+
+
+
+
