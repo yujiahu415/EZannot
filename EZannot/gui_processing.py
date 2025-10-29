@@ -439,7 +439,7 @@ class PanelLv2_ResizeAnnotations(wx.Panel):
 
 	def specify_scale(self,event):
 
-		dialog=wx.NumberEntryDialog(self,'Input the resizing scale','The number is in %:','Resizing scale',50,1,1000000000000)
+		dialog=wx.NumberEntryDialog(self,'Input the resizing scale','The number is in %:','Resizing scale',50,1,100000)
 		if dialog.ShowModal()==wx.ID_OK:
 			self.scale=int(dialog.GetValue())/100
 		else:
