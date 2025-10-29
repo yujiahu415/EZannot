@@ -85,7 +85,7 @@ class InitialPanel(wx.Panel):
 class MainFrame(wx.Frame):
 
 	def __init__(self):
-		super().__init__(None,title=f'EZannot v{__version__}')
+		super().__init__(None,title='EZannot v'+str(__version__))
 		self.SetSize((1000,500))
 
 		self.aui_manager=wx.aui.AuiManager()
