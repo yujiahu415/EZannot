@@ -432,7 +432,7 @@ def tile_annotation(path_to_images,out_path,tile_size=(640,640),overlap_ratio=0.
 							paste_y=max(0,-y)
 							tile_crop.paste(crop_region,(paste_x,paste_y))
 
-						new_filename=f'{os.path.splitext(img_info['file_name'])[0]}_{x}_{y}{os.path.splitext(img_info['file_name'])[1]}'
+						new_filename=os.path.splitext(img_info['file_name'])[0]+'_'+str(x)+'_'+str(y)+os.path.splitext(img_info['file_name'])[1]
 						tile_crop.save(os.path.join(out_path,new_filename))
 
 						new_img_id=len(new_images)
