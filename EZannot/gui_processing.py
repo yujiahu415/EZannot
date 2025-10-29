@@ -194,7 +194,7 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 
 			if len(color_map)>0:
 				for classname in color_map:
-					dialog=ColorPicker(self,f'{classname}',[classname,color_map[classname]])
+					dialog=ColorPicker(self,str(classname),[classname,color_map[classname]])
 					if dialog.ShowModal()==wx.ID_OK:
 						(r,b,g,_)=dialog.color_picker.GetColour()
 						self.color_map[classname]=(r,b,g)
