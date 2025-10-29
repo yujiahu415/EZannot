@@ -168,7 +168,7 @@ class Annotator():
 
 		mAP=evaluator._results['bbox']['AP']
 
-		print(f'The mean average precision (mAP) of the Annotator is: {mAP:.4f}%.')
+		print('The mean average precision (mAP) of the Annotator is: '+str(mAP*100)+'%.')
 		print('Annotator testing completed!')
 
 
