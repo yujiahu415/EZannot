@@ -227,13 +227,9 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 	def measure_annotations(self,event):
 
 		if self.path_to_images is None or self.result_path is None:
-
 			wx.MessageBox('No input / output folder.','Error',wx.OK|wx.ICON_ERROR)
-
 		else:
-
 			information=read_annotation(self.path_to_images)
-
 			measure_annotation(self.path_to_images,self.result_path,information,self.color_map,show_ids=self.show_ids,threshold=None)
 
 
@@ -280,7 +276,7 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer.Add(0,5,0)
 
 		module_parameters=wx.BoxSizer(wx.HORIZONTAL)
-		button_parameters=wx.Button(panel,label='Specify the parameters for\ntiling the imagess',size=(300,40))
+		button_parameters=wx.Button(panel,label='Specify the parameters for\ntiling the images',size=(300,40))
 		button_parameters.Bind(wx.EVT_BUTTON,self.specify_parameters)
 		wx.Button.SetToolTip(button_parameters,'Specify the tiling parameters such as tile size, overlapping ratio, and whether the background is black.')
 		self.text_parameters=wx.StaticText(panel,label='Default: tile size=(640,640), overlapping ratio=0.2, black background',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
@@ -355,11 +351,8 @@ class PanelLv2_TileAnnotations(wx.Panel):
 	def start_tiling(self,event):
 
 		if self.path_to_images is None or self.out_path is None:
-
 			wx.MessageBox('No input / output folder.','Error',wx.OK|wx.ICON_ERROR)
-
 		else:
-			
 			tile_annotation(self.path_to_images,self.out_path,tile_size=self.tile_size,overlap_ratio=self.overlap_ratio,black_background=self.black_background)
 
 
@@ -383,7 +376,7 @@ class PanelLv2_ResizeAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for tiling',size=(300,40))
+		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for resizing',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_inpath)
 		wx.Button.SetToolTip(button_input,'Select the folder that stores all the annotated images. You also need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
@@ -394,30 +387,30 @@ class PanelLv2_ResizeAnnotations(wx.Panel):
 		boxsizer.Add(0,5,0)
 
 		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
-		button_outputfolder=wx.Button(panel,label='Select a folder to store the tiled\nimages and annotations',size=(300,40))
+		button_outputfolder=wx.Button(panel,label='Select a folder to store the resized\nimages and annotations',size=(300,40))
 		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
-		wx.Button.SetToolTip(button_outputfolder,'Copies of tiled images and the corresponding annotation file(s) will be stored in this folder.')
+		wx.Button.SetToolTip(button_outputfolder,'Copies of resized images and the corresponding annotation file(s) will be stored in this folder.')
 		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_outputfolder.Add(button_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_outputfolder.Add(self.text_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(module_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		module_parameters=wx.BoxSizer(wx.HORIZONTAL)
-		button_parameters=wx.Button(panel,label='Specify the parameters for\ntiling the imagess',size=(300,40))
-		button_parameters.Bind(wx.EVT_BUTTON,self.specify_parameters)
-		wx.Button.SetToolTip(button_parameters,'Specify the tiling parameters such as tile size, overlapping ratio, and whether the background is black.')
-		self.text_parameters=wx.StaticText(panel,label='Default: tile size=(640,640), overlapping ratio=0.2, black background',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
-		module_parameters.Add(button_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		module_parameters.Add(self.text_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
-		boxsizer.Add(module_parameters,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_scale=wx.BoxSizer(wx.HORIZONTAL)
+		button_scale=wx.Button(panel,label='Specify the scale for\nresizing the images',size=(300,40))
+		button_scale.Bind(wx.EVT_BUTTON,self.specify_scale)
+		wx.Button.SetToolTip(button_scale,'Specify the resizing scale.')
+		self.text_scale=wx.StaticText(panel,label='Default: 50%',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
+		module_scale.Add(button_scale,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		module_scale.Add(self.text_scale,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
+		boxsizer.Add(module_scale,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(0,5,0)
 
-		button_starttile=wx.Button(panel,label='Start to tile images',size=(300,40))
-		button_starttile.Bind(wx.EVT_BUTTON,self.start_tiling)
-		wx.Button.SetToolTip(button_starttile,'Make the annotated images into smaller tiles.')
+		button_startresize=wx.Button(panel,label='Start to resize images',size=(300,40))
+		button_startresize.Bind(wx.EVT_BUTTON,self.start_resizing)
+		wx.Button.SetToolTip(button_startresize,'Resize the annotated images along with the annotations.')
 		boxsizer.Add(0,5,0)
-		boxsizer.Add(button_starttile,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
+		boxsizer.Add(button_startresize,0,wx.RIGHT|wx.ALIGN_RIGHT,90)
 		boxsizer.Add(0,10,0)
 
 		panel.SetSizer(boxsizer)
@@ -440,50 +433,26 @@ class PanelLv2_ResizeAnnotations(wx.Panel):
 		dialog=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
 		if dialog.ShowModal()==wx.ID_OK:
 			self.out_path=dialog.GetPath()
-			self.text_outputfolder.SetLabel('The tiled annotated images will be in: '+self.out_path+'.')
+			self.text_outputfolder.SetLabel('The resized annotated images will be in: '+self.out_path+'.')
 		dialog.Destroy()
 
 
-	def specify_parameters(self,event):
+	def specify_scale(self,event):
 
-		outtext='Tile size: '
-
-		dialog=wx.NumberEntryDialog(self,'Input the size\nof each tile','An even number (min: 320, max: 6400):','Tile size',640,1,6400)
+		dialog=wx.NumberEntryDialog(self,'Input the resizing scale','The number is in %:','Resizing scale',50,1,1000000000000)
 		if dialog.ShowModal()==wx.ID_OK:
-			self.tile_size=(int(dialog.GetValue()),int(dialog.GetValue()))
+			self.scale=int(dialog.GetValue())/100
 		else:
-			self.tile_size=(640,640)
-		dialog.Destroy()
-		outtext=outtext+str(self.tile_size)+', overlapping ratio: '
-
-		dialog=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
-		if dialog.ShowModal()==wx.ID_OK:
-			self.overlap_ratio=int(dialog.GetValue())/100
-		else:
-			self.overlap_ratio=0.2
-		dialog.Destroy()
-		outtext=outtext+str(self.overlap_ratio)+', '
-
-		dialog=wx.MessageDialog(self,'Is the background in the images black or darker than foreground?','Darker background?',wx.YES_NO|wx.ICON_QUESTION)
-		if dialog.ShowModal()==wx.ID_YES:
-			self.black_background=True
-			outtext=outtext+'black background'+'.'
-		else:
-			self.black_background=False
-			outtext=outtext+'white background'+'.'
+			self.scale=0.5
+		self.text_scale.SetLabel('The resizing scale: '+str(self.scale*100)+'%.')
 		dialog.Destroy()
 
-		self.text_parameters.SetLabel(outtext)
 
-
-	def start_tiling(self,event):
+	def start_resizing(self,event):
 
 		if self.path_to_images is None or self.out_path is None:
-
 			wx.MessageBox('No input / output folder.','Error',wx.OK|wx.ICON_ERROR)
-
 		else:
-			
-			tile_annotation(self.path_to_images,self.out_path,tile_size=self.tile_size,overlap_ratio=self.overlap_ratio,black_background=self.black_background)
+			resize_annotation(self.path_to_images,self.out_path,scale=self.scale)
 
 
