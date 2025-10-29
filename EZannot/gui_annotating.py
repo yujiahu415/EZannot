@@ -300,7 +300,7 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 
 			if len(color_map)>0:
 				for classname in color_map:
-					dialog=ColorPicker(self,f'{classname}',[classname,color_map[classname]])
+					dialog=ColorPicker(self,str(classname),[classname,color_map[classname]])
 					if dialog.ShowModal()==wx.ID_OK:
 						(r,b,g,_)=dialog.color_picker.GetColour()
 						self.color_map[classname]=(r,b,g)
@@ -443,7 +443,10 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		else:
 
 			self.AI_help=self.ai_button.GetValue()
-			self.ai_button.SetLabel(f'AI Help: {"ON" if self.AI_help else "OFF"}')
+			if self.AI_help:
+				self.ai_button.SetLabel('AI Help: ON')
+			else:
+				self.ai_button.SetLabel('AI Help: OFF')
 
 			if self.AI_help:
 				image=Image.open(self.image_paths[self.current_image_id])
