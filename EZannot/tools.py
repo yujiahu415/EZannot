@@ -507,10 +507,6 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 			annotations=coco['annotations']
 			categories=coco['categories']
 
-			new_images=[]
-			new_annotations=[]
-			ann_id=0
-
 			for img_info in images:
 				img_path=os.path.join(path_to_images,img_info['file_name'])
 				image=Image.open(img_path)
@@ -528,11 +524,15 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 					new_segs=[]
 					for seg in ann['segmentation']:
 						new_seg=[]
-						for i in range(0,len(seg),2):
-							new_seg.append(seg[i]*scale)
-					 		new_seg.append(seg[i+1]*scale)
+						for s in range(0,len(seg),2):
+							new_seg.append(seg[s]*scale)
+					 		new_seg.append(seg[s+1]*scale)
 						new_segs.append(new_seg)
 					ann['segmentation']=new_segs
+				ann['area']*=(scale*scale)
+
+			with open(os.path.join(out_path,'annotations_'+str(i)+'.json'),'w') as f:
+				json.dump(coco,f)
 
 
 
