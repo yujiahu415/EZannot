@@ -534,6 +534,8 @@ def resize_annotation(path_to_images,out_path,scale=0.5):
 			with open(os.path.join(out_path,'annotations_'+str(i)+'.json'),'w') as f:
 				json.dump(coco,f)
 
+		print('Annotation resizing completed.')
+
 
 
 
