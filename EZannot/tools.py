@@ -16,6 +16,10 @@ def read_annotation(annotation_path,color_map={}):
 	annotation_files=[]
 	information={}
 	classnames=list(color_map.keys())
+	if len(classnames)>0:
+		modify=True
+	else:
+		modify=False
 	for i in os.listdir(annotation_path):
 		if i.endswith('.json'):
 			annotation_files.append(os.path.join(annotation_path,i))
