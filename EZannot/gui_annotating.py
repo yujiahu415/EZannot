@@ -304,6 +304,8 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 					if dialog.ShowModal()==wx.ID_OK:
 						(r,b,g,_)=dialog.color_picker.GetColour()
 						self.color_map[classname]=(r,b,g)
+					else:
+						self.color_map[classname]=(random.randint(0,255),random.randint(0,255),random.randint(0,255))
 					dialog.Destroy()
 				self.text_classes.SetLabel('Classname:color: '+str(self.color_map)+'.')
 			else:
