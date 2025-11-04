@@ -17,9 +17,9 @@ def read_annotation(annotation_path,color_map={}):
 	information={}
 	classnames=list(color_map.keys())
 	if len(classnames)>0:
-		modify=True
+		read_classnames=False
 	else:
-		modify=False
+		read_classnames=True
 	for i in os.listdir(annotation_path):
 		if i.endswith('.json'):
 			annotation_files.append(os.path.join(annotation_path,i))
@@ -29,18 +29,15 @@ def read_annotation(annotation_path,color_map={}):
 				annotation=json.load(open(annotation_file))
 				for i in annotation['images']:
 					information[i['file_name']]={'polygons':[],'class_names':[]}
-				for i in annotation['categories']:
-					if i['id']>0:
-						classname=i['name']
-						if classname not in classnames:
-							if len(color_map):
-								if classname in color_map:
-									classnames.append(classname)
-							else:
+				if read_classnames:
+					for i in annotation['categories']:
+						if i['id']>0:
+							classname=i['name']
+							if classname not in classnames:
 								classnames.append(classname)
 				for i in annotation['annotations']:
 					image_name=annotation['images'][int(i['image_id'])]['file_name']
-					classname=classnames[int(i['category_id'])-1]
+					classname=classnames[min(int(i['category_id'])-1,len(classnames)-1)]
 					information[image_name]['polygons'].append([(i['segmentation'][0][x],i['segmentation'][0][x+1]) for x in range(0,len(i['segmentation'][0])-1,2)])
 					information[image_name]['class_names'].append(classname)
 
