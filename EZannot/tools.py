@@ -11,11 +11,11 @@ from PIL import Image
 
 
 
-def read_annotation(annotation_path):
+def read_annotation(annotation_path,color_map={}):
 
 	annotation_files=[]
 	information={}
-	classnames=[]
+	classnames=list(color_map.keys())
 	for i in os.listdir(annotation_path):
 		if i.endswith('.json'):
 			annotation_files.append(os.path.join(annotation_path,i))
@@ -29,7 +29,11 @@ def read_annotation(annotation_path):
 					if i['id']>0:
 						classname=i['name']
 						if classname not in classnames:
-							classnames.append(classname)
+							if len(color_map):
+								if classname in color_map:
+									classnames.append(classname)
+							else:
+								classnames.append(classname)
 				for i in annotation['annotations']:
 					image_name=annotation['images'][int(i['image_id'])]['file_name']
 					classname=classnames[int(i['category_id'])-1]
