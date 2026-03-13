@@ -740,6 +740,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 		self.object_kinds=None
 		self.detection_threshold={}
 		self.filters={}
+		self.sliding=False
 		self.overlap_ratio=0.2
 
 		self.display_window()
@@ -853,13 +854,20 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 					self.detection_threshold[object_name]=0
 				dialog1.Destroy()
 
-			dialog1=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
-			if dialog1.ShowModal()==wx.ID_OK:
-				self.overlap_ratio=int(dialog1.GetValue())/100
+			dialog1=wx.MessageDialog(self,'Detect objects with sliding tiles?\n(for images too large to be fit into VRAM)','Tiling the images?',wx.YES_NO|wx.ICON_QUESTION)
+			if dialog1.ShowModal()==wx.ID_YES:
+				self.sliding=True
+				dialog2=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
+				if dialog2.ShowModal()==wx.ID_OK:
+					self.overlap_ratio=int(dialog1.GetValue())/100
+				else:
+					self.overlap_ratio=0.2
+				dialog2.Destroy()
+				self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'; Tile overlapping ratio: '+str(self.overlap_ratio)+'.')
 			else:
-				self.overlap_ratio=0.2
+				self.sliding=False
+				self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+'; No tiling.')
 			dialog1.Destroy()
-			self.text_model.SetLabel('Annotator: '+annotator+'; '+'The object kinds / detection threshold: '+str(self.detection_threshold)+', overlapping ratio: '+str(self.overlap_ratio)+'.')
 		dialog.Destroy()
 
 		if self.path_to_annotator is None:
@@ -907,6 +915,6 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 		else:
 			
 			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters,overlap=self.overlap_ratio)
-			AA.annotate_images()
+			AA.annotate_images(sliding=self.sliding)
 
 
