@@ -218,7 +218,7 @@ class Annotator():
 
 class AutoAnnotation():
 
-	def __init__(self,image_paths,path_to_annotator,object_kinds,detection_threshold=None,filters={},overlap=0.2):
+	def __init__(self,image_paths,path_to_annotator,object_kinds,detection_threshold=None,filters={}):
 
 		self.image_paths=image_paths
 		self.annotation_path=os.path.dirname(self.image_paths[0])
@@ -234,7 +234,6 @@ class AutoAnnotation():
 				self.detection_threshold[object_name]=0
 		self.filters=filters
 		self.information={}
-		self.overlap=overlap
 
 
 	def sliding_window(self,image,inferencing_framesize,overlap=0.2):
@@ -260,7 +259,7 @@ class AutoAnnotation():
 			yield (w-win_w,h-win_h,image[h-win_h:h,w-win_w:w])
 
 
-	def annotate_images(self,sliding=False):
+	def annotate_images(self,sliding=False,overlap=0.2):
 
 		coco_format={
 		'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},
@@ -292,7 +291,7 @@ class AutoAnnotation():
 
 			if sliding:
 
-				for (x,y,crop) in self.sliding_window(image,self.inferencing_framesize,overlap=self.overlap):
+				for (x,y,crop) in self.sliding_window(image,self.inferencing_framesize,overlap=overlap):
 
 					output=self.annotator.inference([{'image':torch.as_tensor(crop.astype('float32').transpose(2,0,1))}])
 					instances=output[0]['instances'].to('cpu')
