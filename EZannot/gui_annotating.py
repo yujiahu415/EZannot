@@ -914,7 +914,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 
 		else:
 			
-			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters,overlap=self.overlap_ratio)
-			AA.annotate_images(sliding=self.sliding)
+			AA=AutoAnnotation(self.path_to_images,self.path_to_annotator,self.object_kinds,detection_threshold=self.detection_threshold,filters=self.filters)
+			AA.annotate_images(sliding=self.sliding,overlap=self.overlap_ratio)
 
 
