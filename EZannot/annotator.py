@@ -389,7 +389,6 @@ class AutoAnnotation():
 												self.information[image_name]['segmentations'].append(segmentation)
 												self.information[image_name]['class_names'].append(object_name)
 
-
 			coco_format['images'].append({
 				'id':image_id,
 				'width':image.shape[1],
