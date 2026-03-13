@@ -260,7 +260,7 @@ class AutoAnnotation():
 			yield (w-win_w,h-win_h,image[h-win_h:h,w-win_w:w])
 
 
-	def annotate_images(self):
+	def annotate_images(self,sliding=False):
 
 		coco_format={
 		'info':{'year':'','version':'1','description':'EZannot annotations','contributor':'','url':'https://github.com/yujiahu415/EZannot','date_created':''},
@@ -290,9 +290,29 @@ class AutoAnnotation():
 
 			results=[]
 
-			for (x,y,crop) in self.sliding_window(image,self.inferencing_framesize,overlap=self.overlap):
+			if sliding:
 
-				output=self.annotator.inference([{'image':torch.as_tensor(crop.astype('float32').transpose(2,0,1))}])
+				for (x,y,crop) in self.sliding_window(image,self.inferencing_framesize,overlap=self.overlap):
+
+					output=self.annotator.inference([{'image':torch.as_tensor(crop.astype('float32').transpose(2,0,1))}])
+					instances=output[0]['instances'].to('cpu')
+					masks=instances.pred_masks.numpy().astype(np.uint8)
+					boxes=instances.pred_boxes.tensor.numpy()
+					classes=instances.pred_classes.numpy()
+					classes=[self.object_mapping[str(x)] for x in classes]
+					scores=instances.scores.numpy()
+
+					for i in range(len(masks)):
+						full_mask=np.zeros(image.shape[:2],dtype=np.uint8)
+						mask=masks[i].astype(np.uint8)
+						h_m,w_m=mask.shape
+						full_mask[y:y+h_m,x:x+w_m]=np.maximum(full_mask[y:y+h_m,x:x+w_m],mask)
+						results.append({'mask':full_mask,'score':scores[i],'class':classes[i],'box':boxes[i]+np.array([x,y,x,y])})
+
+			else:
+
+				output=self.annotator.inference([{'image':torch.as_tensor(image.astype('float32').transpose(2,0,1))}])
+
 				instances=output[0]['instances'].to('cpu')
 				masks=instances.pred_masks.numpy().astype(np.uint8)
 				boxes=instances.pred_boxes.tensor.numpy()
@@ -301,11 +321,7 @@ class AutoAnnotation():
 				scores=instances.scores.numpy()
 
 				for i in range(len(masks)):
-					full_mask=np.zeros(image.shape[:2],dtype=np.uint8)
-					mask=masks[i].astype(np.uint8)
-					h_m,w_m=mask.shape
-					full_mask[y:y+h_m,x:x+w_m]=np.maximum(full_mask[y:y+h_m,x:x+w_m],mask)
-					results.append({'mask':full_mask,'score':scores[i],'class':classes[i],'box':boxes[i]+np.array([x,y,x,y])})
+					results.append({'mask':masks[i],'score':scores[i],'class':classes[i],'box':boxes[i]})
 
 			temp_boxes=np.array([r['box'] for r in results])
 			temp_scores=np.array([r['score'] for r in results])
