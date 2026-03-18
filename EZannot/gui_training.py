@@ -193,6 +193,14 @@ class PanelLv2_TrainAnnotators(wx.Panel):
 
 		else:
 
+			dialog=wx.MessageDialog(self,'Export the trained Annotator to a folder?','Export trained Annotator?',wx.YES_NO|wx.ICON_QUESTION)
+			if dialog.ShowModal()==wx.ID_YES:
+				dialog1=wx.DirDialog(self,'Select a directory','',style=wx.DD_DEFAULT_STYLE)
+				if dialog1.ShowModal()==wx.ID_OK:
+					self.annotator_path=dialog1.GetPath()
+				dialog1.Destroy()
+			dialog.Destroy()
+
 			object_sizes=['Sparse and large (e.g., a few animals in an enclosure)','Median (e.g., tissue areas formed by group of cells)','Small (e.g. sparsely distributed cells)','Dense and small (e.g., dense nuclei)']
 			dialog=wx.SingleChoiceDialog(self,message='How large are the objects to detect\ncompared to the images?',caption='Object size',choices=object_sizes)
 			if dialog.ShowModal()==wx.ID_OK:
