@@ -127,7 +127,7 @@ class PanelLv2_MeasureAnnotations(wx.Panel):
 		module_outputfolder=wx.BoxSizer(wx.HORIZONTAL)
 		button_outputfolder=wx.Button(panel,label='Select a folder to store\nthe measurements',size=(300,40))
 		button_outputfolder.Bind(wx.EVT_BUTTON,self.select_outpath)
-		wx.Button.SetToolTip(button_outputfolder,'Copies of annotated images and the quantitative measurements will be stored in this folder.')
+		wx.Button.SetToolTip(button_outputfolder,'Copies of annotated images and the quantitative measurements will be output into this folder.')
 		self.text_outputfolder=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_outputfolder.Add(button_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_outputfolder.Add(self.text_outputfolder,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -255,7 +255,7 @@ class PanelLv2_TileAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for tiling',size=(300,40))
+		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images to be tiled',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_inpath)
 		wx.Button.SetToolTip(button_input,'Select the folder that stores all the annotated images. You also need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
@@ -376,7 +376,7 @@ class PanelLv2_ResizeAnnotations(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images for resizing',size=(300,40))
+		button_input=wx.Button(panel,label='Select the folder that stores\nannotated images to resize',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_inpath)
 		wx.Button.SetToolTip(button_input,'Select the folder that stores all the annotated images. You also need to put the annotation file(s) in the same folder, and EZannot will decode the annotations in the annotation file(s) automatically.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
