@@ -70,7 +70,7 @@ class PanelLv1_AnnotationModule(wx.Panel):
 
 		button_autoannotate=wx.Button(panel,label='Annotate Automatically',size=(300,40))
 		button_autoannotate.Bind(wx.EVT_BUTTON,self.auto_annotate)
-		wx.Button.SetToolTip(button_autoannotate,'Use a trained Annotators to automatically annotate selected images for you.')
+		wx.Button.SetToolTip(button_autoannotate,'Use a trained Annotator to automatically annotate selected images for you.')
 		boxsizer.Add(button_autoannotate,0,wx.ALIGN_CENTER,10)
 		boxsizer.Add(0,50,0)
 
@@ -117,7 +117,7 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
+		button_input=wx.Button(panel,label='Select the image(s)\nto annotate',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
 		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. If there is an annotation file in the same folder, EZannot will read the annotation file and show all the existing annotations.')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
@@ -161,7 +161,7 @@ class PanelLv2_ManualAnnotation(wx.Panel):
 		button_augmentation=wx.Button(panel,label='Specify the augmentation methods\nfor the annotated images',size=(300,40))
 		button_augmentation.Bind(wx.EVT_BUTTON,self.specify_augmentation)
 		wx.Button.SetToolTip(button_augmentation,
-			'Augmentation can greatly enhance the training efficiency. But for the first time of annotating an image set, you can skip this to build an unaugmented, origianl annotated image set and import it to EZannot later to perform the augmentation.')
+			'Augmentation can greatly enhance the training efficiency. But for the first time of annotating an image set, you can skip this to keep an unaugmented, origianl annotated image set and import it to EZannot later to perform augmentation.')
 		self.text_augmentation=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
 		module_augmentation.Add(button_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		module_augmentation.Add(self.text_augmentation,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
@@ -752,7 +752,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 		boxsizer=wx.BoxSizer(wx.VERTICAL)
 
 		module_input=wx.BoxSizer(wx.HORIZONTAL)
-		button_input=wx.Button(panel,label='Select the image(s)\nfor annotation',size=(300,40))
+		button_input=wx.Button(panel,label='Select the image(s)\nto annotate',size=(300,40))
 		button_input.Bind(wx.EVT_BUTTON,self.select_images)
 		wx.Button.SetToolTip(button_input,'Select one or more images. Common image formats (jpg, png, tif) are supported. An annotation file will be generated in this folder')
 		self.text_input=wx.StaticText(panel,label='None.',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_END)
