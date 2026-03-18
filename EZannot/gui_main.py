@@ -32,7 +32,7 @@ class InitialPanel(wx.Panel):
 		
 		links=wx.BoxSizer(wx.HORIZONTAL)
 		homepage=hl.HyperLinkCtrl(panel,0,'Home Page',URL='https://github.com/yujiahu415/EZannot')
-		userguide=hl.HyperLinkCtrl(panel,0,'Extended Guide',URL='')
+		userguide=hl.HyperLinkCtrl(panel,0,'Extended Guide',URL='https://github.com/yujiahu415/EZannot/blob/master/EZannot_extended_user_guide.pdf')
 		links.Add(homepage,0,wx.LEFT|wx.EXPAND,10)
 		links.Add(userguide,0,wx.LEFT|wx.RIGHT|wx.EXPAND,10)
 		boxsizer.Add(links,0,wx.ALIGN_CENTER,50)
