@@ -859,7 +859,7 @@ class PanelLv2_AutoAnnotation(wx.Panel):
 				self.sliding=True
 				dialog2=wx.NumberEntryDialog(self,'Input the overlapping ratio\nbetween adjacent tiles','A number between 1 and 100:','Overlapping ratio',20,1,100)
 				if dialog2.ShowModal()==wx.ID_OK:
-					self.overlap_ratio=int(dialog1.GetValue())/100
+					self.overlap_ratio=int(dialog2.GetValue())/100
 				else:
 					self.overlap_ratio=0.2
 				dialog2.Destroy()
