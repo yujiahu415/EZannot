@@ -5,6 +5,8 @@ import torch
 from torchvision.ops import nms
 import numpy as np
 import pandas as pd
+
+from scipy.sparse import csr_matrix
 from tifffile import imread,imwrite
 from skimage import exposure
 from EZannot.detectron2 import model_zoo
@@ -350,7 +352,9 @@ class AutoAnnotation():
 
 						mask_area=np.sum(np.array(object_masks),axis=(1,2))
 						exclusion_mask=np.zeros(len(object_masks),dtype=bool)
-						exclusion_mask[np.where((np.sum(np.logical_and(np.array(object_masks)[:,None],object_masks),axis=(2,3))/mask_area[:,None]>0.8) & (mask_area[:,None]<mask_area[None,:]))[0]]=True
+						flat = csr_matrix(np.asarray(object_masks, dtype=np.uint8).reshape(len(object_masks),-1))
+						inter = np.asarray((flat @ flat.T).todense())
+						exclusion_mask[np.where((inter / mask_area[:, None] > 0.8) & (mask_area[:, None] < mask_area[None, :]))[0]] = True
 						object_masks=[m for m,exclude in zip(object_masks,exclusion_mask) if not exclude]
 						object_scores=[s for s,exclude in zip(object_scores,exclusion_mask) if not exclude]
 
