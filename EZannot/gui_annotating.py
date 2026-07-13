@@ -20,6 +20,37 @@ from .gui_main import open_or_select_page
 
 the_absolute_current_path=str(Path(__file__).resolve().parent)
 
+FILENAME_INFO_TEXT=(
+	'If you are using images exported by LabGym, filenames look like:\n'
+	'\n'
+	'  trial01_2000.jpg\n'
+	'  │       │\n'
+	'  │       └─ frame number (count within the generation window)\n'
+	'  └─ video name\n'
+	'\n'
+	'Most users generate frames from the beginning of the video to the end.\n'
+	'In that case, start time is 0 and you can convert frame to time with:\n'
+	'\n'
+	'  time (seconds) ≈ frame ÷ fps\n'
+	'\n'
+	'Example (from the start, 30 fps): trial01_2000.jpg → about 66.7 s.\n'
+	'\n'
+	'If generation did not start at the beginning of the video, add the\n'
+	'LabGym start time:\n'
+	'\n'
+	'  time (seconds) ≈ start_t + (frame ÷ fps)\n'
+	'\n'
+	'Example (start_t = 10 s, 30 fps): trial01_2000.jpg → about 76.7 s.\n'
+	'\n'
+	'EZannot may append tags after the frame number (ignore them when\n'
+	'reading the frame index):\n'
+	'  • augmentation: _rot…, _flph/_flpv, _brih/_bril, _exph/_expl, _blur\n'
+	'  • measurement: _annotated\n'
+	'  • tiles: _x_y\n'
+	'\n'
+	'Example: trial01_2000_rot3.jpg → still frame 2000.'
+)
+
 
 
 class ColorPicker(wx.Dialog):
@@ -346,9 +377,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None):
 
 		monitor=get_monitors()[0]
-		monitor_w,monitor_h=monitor.width,monitor.height
-
-		super().__init__(parent,title=title,pos=(10,50),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
+		# Leave room below the menu bar (y=50) and above the dock / screen edge.
+		super().__init__(parent,title=title,pos=(10,50),size=(monitor.width-20,monitor.height-120))
 
 		self.image_paths=path_to_images
 		self.result_path=result_path
@@ -409,14 +439,23 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.export_button=wx.Button(panel,label='Export Annotations',size=(200,30))
 		self.export_button.Bind(wx.EVT_BUTTON,self.export_annotations)
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
+		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
+
+		filename_row=wx.BoxSizer(wx.HORIZONTAL)
+		self.filename_info_button=wx.Button(panel,label='i',size=(22,22))
+		self.filename_info_button.Bind(wx.EVT_BUTTON,self.show_filename_info)
+		wx.Button.SetToolTip(self.filename_info_button,'About this filename')
+		filename_row.Add(self.filename_info_button,0,wx.ALIGN_CENTER_VERTICAL|wx.RIGHT,6)
 
 		self.text_filename=wx.StaticText(panel,label='',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_MIDDLE)
-		hbox.Add(self.text_filename,flag=wx.ALL|wx.ALIGN_CENTER_VERTICAL,border=2)
-		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
+		self.text_filename.SetMinSize((280,-1))
+		self.text_filename.SetMaxSize((480,-1))
+		filename_row.Add(self.text_filename,0,wx.ALIGN_CENTER_VERTICAL)
+		vbox.Add(filename_row,0,wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM,1)
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
 		self.scrolled_canvas.SetScrollRate(10,10)
-		self.canvas=wx.Panel(self.scrolled_canvas,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
+		self.canvas=wx.Panel(self.scrolled_canvas,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-120))
 		self.scrolled_canvas.SetBackgroundColour('black')
 
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
@@ -462,10 +501,27 @@ class WindowLv3_AnnotateImages(wx.Frame):
 	def update_filename_label(self):
 
 		if not self.image_paths:
-			self.text_filename.SetLabel('No images')
+			self.text_filename.SetLabel('Filename: No images')
 			return
 		name=os.path.basename(self.image_paths[self.current_image_id])
-		self.text_filename.SetLabel(f'{name} ({self.current_image_id+1} / {len(self.image_paths)})')
+		self.text_filename.SetLabel(f'Filename: {name} ({self.current_image_id+1} / {len(self.image_paths)})')
+
+
+	def show_filename_info(self,event):
+
+		dialog=wx.Dialog(self,title='About this filename')
+		sizer=wx.BoxSizer(wx.VERTICAL)
+		text=wx.StaticText(dialog,label=FILENAME_INFO_TEXT)
+		text.Wrap(360)
+		sizer.Add(text,0,wx.ALL,16)
+		ok_button=wx.Button(dialog,wx.ID_OK,label='OK')
+		sizer.Add(ok_button,0,wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM,16)
+		dialog.SetSizer(sizer)
+		dialog.Fit()
+		dialog.CentreOnParent()
+		dialog.ShowModal()
+		dialog.Destroy()
+		self.canvas.SetFocus()
 
 
 	def fit_image_to_view(self):
