@@ -471,6 +471,28 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.text_filename.SetLabel(f'{name} ({self.current_image_id+1} / {len(self.image_paths)})')
 
 
+	def fit_image_to_view(self):
+
+		if self.current_image is None:
+			return
+
+		img_width,img_height=self.current_image.GetSize()
+		# Drop previous virtual size so scrollbars clear and client size is the full view for this image.
+		self.scrolled_canvas.SetVirtualSize((1,1))
+		self.scrolled_canvas.Layout()
+		cw,ch=self.scrolled_canvas.GetClientSize()
+		if cw>0 and ch>0 and img_width>0 and img_height>0:
+			self.scale=max(min(cw/img_width,ch/img_height,1.0),self.min_scale)
+		else:
+			self.scale=1.0
+		new_w=int(img_width*self.scale)
+		new_h=int(img_height*self.scale)
+		self.scrolled_canvas.SetVirtualSize((new_w,new_h))
+		self.canvas.SetSize((new_w,new_h))
+		self.scrolled_canvas.Scroll(0,0)
+		self.canvas.Refresh()
+
+
 	def load_current_image(self):
 
 		if not self.image_paths:
@@ -484,18 +506,17 @@ class WindowLv3_AnnotateImages(wx.Frame):
 
 		path=self.image_paths[self.current_image_id]
 		self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
-		img_width,img_height=self.current_image.GetSize()
-		self.scrolled_canvas.SetVirtualSize((img_width,img_height))
-		self.canvas.SetSize((img_width,img_height))
-		self.scrolled_canvas.Scroll(0,0)
 		image_name=os.path.basename(path)
 		if image_name not in self.information:
 			self.information[image_name]={'polygons':[],'class_names':[]}
 		self.current_polygon=[]
 		self.foreground_points=[]
 		self.background_points=[]
-		self.scale=1.0
-		self.canvas.Refresh()
+		self.fit_image_to_view()
+		# First open can happen before layout; re-fit once the scroll view has a real size.
+		cw,ch=self.scrolled_canvas.GetClientSize()
+		if cw<=0 or ch<=0:
+			wx.CallAfter(self.fit_image_to_view)
 
 		if self.AI_help:
 			image=Image.open(path)
