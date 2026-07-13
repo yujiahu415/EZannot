@@ -351,7 +351,7 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		monitor=get_monitors()[0]
 		monitor_w,monitor_h=monitor.width,monitor.height
 
-		super().__init__(parent,title=title,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
+		super().__init__(parent,title=title,pos=(10,50),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
 
 		self.image_paths=path_to_images
 		self.result_path=result_path
