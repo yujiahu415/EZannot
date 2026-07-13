@@ -412,6 +412,9 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.export_button=wx.Button(panel,label='Export Annotations',size=(200,30))
 		self.export_button.Bind(wx.EVT_BUTTON,self.export_annotations)
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
+
+		self.text_filename=wx.StaticText(panel,label='',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_MIDDLE)
+		hbox.Add(self.text_filename,flag=wx.ALL|wx.ALIGN_CENTER_VERTICAL,border=2)
 		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
 
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
@@ -459,29 +462,48 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.canvas.SetFocus()
 
 
+	def update_filename_label(self):
+
+		if not self.image_paths:
+			self.text_filename.SetLabel('No images')
+			return
+		name=os.path.basename(self.image_paths[self.current_image_id])
+		self.text_filename.SetLabel(f'{name} ({self.current_image_id+1} / {len(self.image_paths)})')
+
+
 	def load_current_image(self):
 
-		if self.image_paths:
-			path=self.image_paths[self.current_image_id]
-			self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
-			img_width,img_height=self.current_image.GetSize()
-			self.scrolled_canvas.SetVirtualSize((img_width,img_height))
-			self.canvas.SetSize((img_width,img_height))
-			self.scrolled_canvas.Scroll(0,0)
-			image_name=os.path.basename(path)
-			if image_name not in self.information:
-				self.information[image_name]={'polygons':[],'class_names':[]}
-			self.current_polygon=[]
-			self.foreground_points=[]
-			self.background_points=[]
-			self.scale=1.0
+		if not self.image_paths:
+			self.current_image=None
+			self.update_filename_label()
 			self.canvas.Refresh()
+			return
 
-			if self.AI_help:
-				image=Image.open(path)
-				image=np.array(image.convert('RGB'))
-				self.sam2=self.sam2_model()
-				self.sam2.set_image(image)
+		if self.current_image_id>=len(self.image_paths):
+			self.current_image_id=len(self.image_paths)-1
+
+		path=self.image_paths[self.current_image_id]
+		self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
+		img_width,img_height=self.current_image.GetSize()
+		self.scrolled_canvas.SetVirtualSize((img_width,img_height))
+		self.canvas.SetSize((img_width,img_height))
+		self.scrolled_canvas.Scroll(0,0)
+		image_name=os.path.basename(path)
+		if image_name not in self.information:
+			self.information[image_name]={'polygons':[],'class_names':[]}
+		self.current_polygon=[]
+		self.foreground_points=[]
+		self.background_points=[]
+		self.scale=1.0
+		self.canvas.Refresh()
+
+		if self.AI_help:
+			image=Image.open(path)
+			image=np.array(image.convert('RGB'))
+			self.sam2=self.sam2_model()
+			self.sam2.set_image(image)
+
+		self.update_filename_label()
 
 
 	def previous_image(self,event):
