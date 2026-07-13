@@ -14,6 +14,7 @@ from EZannot.sam2.build_sam import build_sam2
 from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from .annotator import AutoAnnotation
 from .tools import read_annotation,mask_to_polygon,generate_annotation
+from .gui_main import open_or_select_page
 
 
 
@@ -82,16 +83,12 @@ class PanelLv1_AnnotationModule(wx.Panel):
 
 	def manual_annotate(self,event):
 
-		panel=PanelLv2_ManualAnnotation(self.notebook)
-		title='Annotate Manually'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Annotate Manually',lambda:PanelLv2_ManualAnnotation(self.notebook))
 
 
 	def auto_annotate(self,event):
 
-		panel=PanelLv2_AutoAnnotation(self.notebook)
-		title='Annotate Automatically'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Annotate Automatically',lambda:PanelLv2_AutoAnnotation(self.notebook))
 
 
 
