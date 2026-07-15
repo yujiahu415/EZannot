@@ -2,6 +2,30 @@ import wx
 import wx.aui
 import wx.lib.agw.hyperlink as hl
 from EZannot import __version__
+
+
+HOME_TAB_TITLE='Welcome'
+
+
+def find_page_index(notebook,title):
+
+	for i in range(notebook.GetPageCount()):
+		if notebook.GetPageText(i)==title:
+			return i
+	return None
+
+
+def open_or_select_page(notebook,title,panel_factory):
+
+	idx=find_page_index(notebook,title)
+	if idx is not None:
+		notebook.SetSelection(idx)
+		return notebook.GetPage(idx)
+	panel=panel_factory()
+	notebook.AddPage(panel,title,select=True)
+	return panel
+
+
 from .gui_training import PanelLv1_TrainingModule
 from .gui_annotating import PanelLv1_AnnotationModule
 from .gui_processing import PanelLv1_ProcessingModule
@@ -62,23 +86,17 @@ class InitialPanel(wx.Panel):
 
 	def panel_train(self,event):
 
-		panel=PanelLv1_TrainingModule(self.notebook)
-		title='Training Module'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Training Module',lambda:PanelLv1_TrainingModule(self.notebook))
 
 
 	def panel_annotate(self,event):
 
-		panel=PanelLv1_AnnotationModule(self.notebook)
-		title='Annotation Module'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Annotation Module',lambda:PanelLv1_AnnotationModule(self.notebook))
 
 
 	def panel_process(self,event):
 
-		panel=PanelLv1_ProcessingModule(self.notebook)
-		title='Processing Module'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Processing Module',lambda:PanelLv1_ProcessingModule(self.notebook))
 
 
 
@@ -93,10 +111,10 @@ class MainFrame(wx.Frame):
 
 		self.notebook=wx.aui.AuiNotebook(self)
 		self.aui_manager.AddPane(self.notebook,wx.aui.AuiPaneInfo().CenterPane())
+		self.notebook.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSE,self.on_page_close)
 
 		panel=InitialPanel(self.notebook)
-		title='Welcome'
-		self.notebook.AddPage(panel,title,select=True)
+		self.notebook.AddPage(panel,HOME_TAB_TITLE,select=True)
 
 		sizer=wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.notebook,1,wx.EXPAND)
@@ -105,6 +123,14 @@ class MainFrame(wx.Frame):
 		self.aui_manager.Update()
 		self.Centre()
 		self.Show()
+
+
+	def on_page_close(self,event):
+
+		if self.notebook.GetPageText(event.GetSelection())==HOME_TAB_TITLE:
+			event.Veto()
+			return
+		event.Skip()
 
 
 
@@ -119,4 +145,3 @@ def main_window():
 if __name__=='__main__':
 
 	main_window()
-

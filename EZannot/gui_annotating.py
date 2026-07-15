@@ -14,10 +14,42 @@ from EZannot.sam2.build_sam import build_sam2
 from EZannot.sam2.sam2_image_predictor import SAM2ImagePredictor
 from .annotator import AutoAnnotation
 from .tools import read_annotation,mask_to_polygon,generate_annotation
+from .gui_main import open_or_select_page
 
 
 
 the_absolute_current_path=str(Path(__file__).resolve().parent)
+
+FILENAME_INFO_TEXT=(
+	'If you are using images exported by LabGym, filenames look like:\n'
+	'\n'
+	'  trial01_2000.jpg\n'
+	'  │       │\n'
+	'  │       └─ frame number (count within the generation window)\n'
+	'  └─ video name\n'
+	'\n'
+	'Most users generate frames from the beginning of the video to the end.\n'
+	'In that case, start time is 0 and you can convert frame to time with:\n'
+	'\n'
+	'  time (seconds) ≈ frame ÷ fps\n'
+	'\n'
+	'Example (from the start, 30 fps): trial01_2000.jpg → about 66.7 s.\n'
+	'\n'
+	'If generation did not start at the beginning of the video, add the\n'
+	'LabGym start time:\n'
+	'\n'
+	'  time (seconds) ≈ start_t + (frame ÷ fps)\n'
+	'\n'
+	'Example (start_t = 10 s, 30 fps): trial01_2000.jpg → about 76.7 s.\n'
+	'\n'
+	'EZannot may append tags after the frame number (ignore them when\n'
+	'reading the frame index):\n'
+	'  • augmentation: _rot…, _flph/_flpv, _brih/_bril, _exph/_expl, _blur\n'
+	'  • measurement: _annotated\n'
+	'  • tiles: _x_y\n'
+	'\n'
+	'Example: trial01_2000_rot3.jpg → still frame 2000.'
+)
 
 
 
@@ -82,16 +114,12 @@ class PanelLv1_AnnotationModule(wx.Panel):
 
 	def manual_annotate(self,event):
 
-		panel=PanelLv2_ManualAnnotation(self.notebook)
-		title='Annotate Manually'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Annotate Manually',lambda:PanelLv2_ManualAnnotation(self.notebook))
 
 
 	def auto_annotate(self,event):
 
-		panel=PanelLv2_AutoAnnotation(self.notebook)
-		title='Annotate Automatically'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Annotate Automatically',lambda:PanelLv2_AutoAnnotation(self.notebook))
 
 
 
@@ -349,9 +377,8 @@ class WindowLv3_AnnotateImages(wx.Frame):
 	def __init__(self,parent,title,path_to_images,result_path,color_map,aug_methods,model_cp=None,model_cfg=None):
 
 		monitor=get_monitors()[0]
-		monitor_w,monitor_h=monitor.width,monitor.height
-
-		super().__init__(parent,title=title,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
+		# Leave room below the menu bar (y=50) and above the dock / screen edge.
+		super().__init__(parent,title=title,pos=(10,50),size=(monitor.width-20,monitor.height-120))
 
 		self.image_paths=path_to_images
 		self.result_path=result_path
@@ -414,9 +441,21 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		hbox.Add(self.export_button,flag=wx.ALL,border=2)
 		vbox.Add(hbox,flag=wx.ALIGN_CENTER|wx.TOP,border=5)
 
+		filename_row=wx.BoxSizer(wx.HORIZONTAL)
+		self.filename_info_button=wx.Button(panel,label='i',size=(22,22))
+		self.filename_info_button.Bind(wx.EVT_BUTTON,self.show_filename_info)
+		wx.Button.SetToolTip(self.filename_info_button,'About this filename')
+		filename_row.Add(self.filename_info_button,0,wx.ALIGN_CENTER_VERTICAL|wx.RIGHT,6)
+
+		self.text_filename=wx.StaticText(panel,label='',style=wx.ALIGN_LEFT|wx.ST_ELLIPSIZE_MIDDLE)
+		self.text_filename.SetMinSize((280,-1))
+		self.text_filename.SetMaxSize((480,-1))
+		filename_row.Add(self.text_filename,0,wx.ALIGN_CENTER_VERTICAL)
+		vbox.Add(filename_row,0,wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM,1)
+
 		self.scrolled_canvas=wx.ScrolledWindow(panel,style=wx.VSCROLL|wx.HSCROLL)
 		self.scrolled_canvas.SetScrollRate(10,10)
-		self.canvas=wx.Panel(self.scrolled_canvas,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-50))
+		self.canvas=wx.Panel(self.scrolled_canvas,pos=(10,0),size=(get_monitors()[0].width-20,get_monitors()[0].height-120))
 		self.scrolled_canvas.SetBackgroundColour('black')
 
 		self.canvas.Bind(wx.EVT_PAINT,self.on_paint)
@@ -459,29 +498,86 @@ class WindowLv3_AnnotateImages(wx.Frame):
 		self.canvas.SetFocus()
 
 
+	def update_filename_label(self):
+
+		if not self.image_paths:
+			self.text_filename.SetLabel('Filename: No images')
+			return
+		name=os.path.basename(self.image_paths[self.current_image_id])
+		self.text_filename.SetLabel(f'Filename: {name} ({self.current_image_id+1} / {len(self.image_paths)})')
+
+
+	def show_filename_info(self,event):
+
+		dialog=wx.Dialog(self,title='About this filename')
+		sizer=wx.BoxSizer(wx.VERTICAL)
+		text=wx.StaticText(dialog,label=FILENAME_INFO_TEXT)
+		text.Wrap(360)
+		sizer.Add(text,0,wx.ALL,16)
+		ok_button=wx.Button(dialog,wx.ID_OK,label='OK')
+		sizer.Add(ok_button,0,wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM,16)
+		dialog.SetSizer(sizer)
+		dialog.Fit()
+		dialog.CentreOnParent()
+		dialog.ShowModal()
+		dialog.Destroy()
+		self.canvas.SetFocus()
+
+
+	def fit_image_to_view(self):
+
+		if self.current_image is None:
+			return
+
+		img_width,img_height=self.current_image.GetSize()
+		# Drop previous virtual size so scrollbars clear and client size is the full view for this image.
+		self.scrolled_canvas.SetVirtualSize((1,1))
+		self.scrolled_canvas.Layout()
+		cw,ch=self.scrolled_canvas.GetClientSize()
+		if cw>0 and ch>0 and img_width>0 and img_height>0:
+			self.scale=max(min(cw/img_width,ch/img_height,1.0),self.min_scale)
+		else:
+			self.scale=1.0
+		new_w=int(img_width*self.scale)
+		new_h=int(img_height*self.scale)
+		self.scrolled_canvas.SetVirtualSize((new_w,new_h))
+		self.canvas.SetSize((new_w,new_h))
+		self.scrolled_canvas.Scroll(0,0)
+		self.canvas.Refresh()
+
+
 	def load_current_image(self):
 
-		if self.image_paths:
-			path=self.image_paths[self.current_image_id]
-			self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
-			img_width,img_height=self.current_image.GetSize()
-			self.scrolled_canvas.SetVirtualSize((img_width,img_height))
-			self.canvas.SetSize((img_width,img_height))
-			self.scrolled_canvas.Scroll(0,0)
-			image_name=os.path.basename(path)
-			if image_name not in self.information:
-				self.information[image_name]={'polygons':[],'class_names':[]}
-			self.current_polygon=[]
-			self.foreground_points=[]
-			self.background_points=[]
-			self.scale=1.0
+		if not self.image_paths:
+			self.current_image=None
+			self.update_filename_label()
 			self.canvas.Refresh()
+			return
 
-			if self.AI_help:
-				image=Image.open(path)
-				image=np.array(image.convert('RGB'))
-				self.sam2=self.sam2_model()
-				self.sam2.set_image(image)
+		if self.current_image_id>=len(self.image_paths):
+			self.current_image_id=len(self.image_paths)-1
+
+		path=self.image_paths[self.current_image_id]
+		self.current_image=wx.Image(path,wx.BITMAP_TYPE_ANY)
+		image_name=os.path.basename(path)
+		if image_name not in self.information:
+			self.information[image_name]={'polygons':[],'class_names':[]}
+		self.current_polygon=[]
+		self.foreground_points=[]
+		self.background_points=[]
+		self.fit_image_to_view()
+		# First open can happen before layout; re-fit once the scroll view has a real size.
+		cw,ch=self.scrolled_canvas.GetClientSize()
+		if cw<=0 or ch<=0:
+			wx.CallAfter(self.fit_image_to_view)
+
+		if self.AI_help:
+			image=Image.open(path)
+			image=np.array(image.convert('RGB'))
+			self.sam2=self.sam2_model()
+			self.sam2.set_image(image)
+
+		self.update_filename_label()
 
 
 	def previous_image(self,event):

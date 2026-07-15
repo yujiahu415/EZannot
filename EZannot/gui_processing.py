@@ -4,6 +4,7 @@ import wx
 import json
 import random
 from .tools import read_annotation,measure_annotation,tile_annotation,resize_annotation
+from .gui_main import open_or_select_page
 
 
 
@@ -74,23 +75,17 @@ class PanelLv1_ProcessingModule(wx.Panel):
 
 	def measure_annotations(self,event):
 
-		panel=PanelLv2_MeasureAnnotations(self.notebook)
-		title='Measure Annotations'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Measure Annotations',lambda:PanelLv2_MeasureAnnotations(self.notebook))
 
 
 	def tile_annotations(self,event):
 
-		panel=PanelLv2_TileAnnotations(self.notebook)
-		title='Tile Annotations'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Tile Annotations',lambda:PanelLv2_TileAnnotations(self.notebook))
 
 
 	def resize_annotations(self,event):
 
-		panel=PanelLv2_ResizeAnnotations(self.notebook)
-		title='Resize Annotations'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Resize Annotations',lambda:PanelLv2_ResizeAnnotations(self.notebook))
 
 
 

@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from .annotator import Annotator
+from .gui_main import open_or_select_page
 
 
 
@@ -49,16 +50,12 @@ class PanelLv1_TrainingModule(wx.Panel):
 
 	def train_annotators(self,event):
 
-		panel=PanelLv2_TrainAnnotators(self.notebook)
-		title='Train Annotators'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Train Annotators',lambda:PanelLv2_TrainAnnotators(self.notebook))
 
 
 	def test_annotators(self,event):
 
-		panel=PanelLv2_TestAnnotators(self.notebook)
-		title='Test Annotators'
-		self.notebook.AddPage(panel,title,select=True)
+		open_or_select_page(self.notebook,'Test Annotators',lambda:PanelLv2_TestAnnotators(self.notebook))
 
 
 
